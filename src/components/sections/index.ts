@@ -1,0 +1,8 @@
+export { default as HeroSection } from './HeroSection';
+export { default as FeaturesSection } from './FeaturesSection';
+export { default as PopularPesantrenSection } from './PopularPesantrenSection';
+export { default as VideoSection } from './VideoSection';
+export { default as TrustedSection } from './TrustedSection';
+export { default as FilterPortalSection } from './FilterPortalSection';
+export { default as NewsSection } from './NewsSection';
+export { default as PortalSection } from './PortalSection';
