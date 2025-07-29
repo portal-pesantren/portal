@@ -1,26 +1,32 @@
+'use client';
+
 interface CTASectionProps {
   className?: string;
 }
 
 export default function CTASection({ className = '' }: CTASectionProps) {
+  const handleSearchClick = () => {
+    // Scroll to FilterPortalSection or navigate to search page
+    const filterSection = document.getElementById('filter-portal');
+    if (filterSection) {
+      filterSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section className={`py-20 bg-[#042558] ${className}`}>
+    <section className={`py-20 bg-gradient-to-r from-blue-50 to-indigo-50 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#042558] mb-8">
             Siap temukan Pondok Pesantren Ideal?
           </h2>
-          <p className="text-xl text-green-100 mb-8 max-w-3xl mx-auto">
-            Bergabunglah dengan ribuan keluarga yang telah mempercayakan pendidikan anak mereka melalui platform kami.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-[#042558] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-              Mulai Pencarian
-            </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#042558] transition-colors">
-              Konsultasi Gratis
-            </button>
-          </div>
+          
+          <button
+            onClick={handleSearchClick}
+            className="inline-flex items-center px-8 py-4 bg-[#042558] text-white font-semibold rounded-full hover:bg-[#031a3d] transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            Cari Pondok Sekarang
+          </button>
         </div>
       </div>
     </section>

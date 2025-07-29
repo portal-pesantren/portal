@@ -6,7 +6,8 @@ import {
   TrustedSection,
   FilterPortalSection,
   PortalSection,
-  NewsSection
+  NewsSection,
+  CTASection
 } from '@/components';
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
       <FilterPortalSection />
       <PortalSection />
       <NewsSection />
+      <CTASection />
       <Footer />
     </main>
   );

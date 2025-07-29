@@ -53,7 +53,7 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
   };
 
   return (
-    <section className={`py-8 bg-gray-50 ${className}`}>
+    <section id="filter-portal" className={`py-8 bg-gray-50 ${className}`}>
       <div className="container mx-auto px-4">
         {/* Main Filter Row */}
         <div className="flex flex-col lg:flex-row items-center justify-center gap-3 max-w-5xl mx-auto mb-6">

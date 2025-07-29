@@ -6,3 +6,4 @@ export { default as TrustedSection } from './TrustedSection';
 export { default as FilterPortalSection } from './FilterPortalSection';
 export { default as NewsSection } from './NewsSection';
 export { default as PortalSection } from './PortalSection';
+export { default as CTASection } from './CTASection';
