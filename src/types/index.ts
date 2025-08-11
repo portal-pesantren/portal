@@ -33,10 +33,23 @@ export interface Feature {
 export interface Review {
   id: number;
   pesantrenId: number;
-  authorName: string;
+  userId: number;
+  userName: string;
+  userAvatar?: string;
   rating: number;
-  comment: string;
-  date: string;
+  title: string;
+  content: string;
+  pros?: string[];
+  cons?: string[];
+  recommendation?: boolean;
+  helpfulCount?: number;
+  createdAt: string;
+  updatedAt: string;
+  isVerified?: boolean;
+  // Legacy fields for backward compatibility
+  authorName?: string;
+  comment?: string;
+  date?: string;
   verified?: boolean;
 }
 
@@ -49,11 +62,25 @@ export interface SearchFilters {
 }
 
 export interface User {
-  id: number;
+  id: string;
+  created_at: string;
+  updated_at: string;
   name: string;
   email: string;
   phone?: string;
   role: 'parent' | 'admin' | 'pesantren_admin';
+  profile_picture?: string;
+  address?: string;
+  date_of_birth?: string;
+  gender?: string;
+  occupation?: string;
+  is_active: boolean;
+  is_verified: boolean;
+  email_verified: boolean;
+  phone_verified: boolean;
+  last_login?: string;
+  login_count: number;
+  // Legacy field for backward compatibility
   avatar?: string;
 }
 
@@ -118,4 +145,44 @@ export interface ConsultationFormData {
   preferredPrograms?: string[];
   budget?: number;
   additionalNotes?: string;
+}
+
+// Authentication types
+export interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+  phone: string;
+  terms_accepted: boolean;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+}
+
+export interface AuthTokens {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  token_type: string;
+}
+
+export interface RegisterResponse {
+  user: User;
+  verification_token: string;
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  token_type: string;
+}
+
+export interface LoginResponse {
+  user: User;
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  token_type: string;
 }

@@ -13,3 +13,6 @@ export * from './forms';
 
 // Card Components
 export * from './cards';
+
+// Export specific form components
+export { default as RegisterForm } from './forms/RegisterForm';

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 interface HeaderProps {
   className?: string;
@@ -70,12 +71,12 @@ export default function Header({ className = '' }: HeaderProps) {
           
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <button className="bg-[#042558] hover:bg-[#031a3d] text-white px-6 py-2 rounded-full transition-colors font-medium">
-              Sign in
-            </button>
-            <button className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-full transition-colors font-medium">
-              Log in
-            </button>
+            <Link href="/register" className="bg-[#042558] hover:bg-[#031a3d] text-white px-6 py-2 rounded-full transition-colors font-medium inline-block">
+              Daftar
+            </Link>
+            <Link href="/login" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-full transition-colors font-medium inline-block">
+              Masuk
+            </Link>
           </div>
           
           {/* Mobile menu button */}
@@ -134,12 +135,12 @@ export default function Header({ className = '' }: HeaderProps) {
                 Tentang kami
               </a>
               <div className="flex flex-col space-y-2 pt-4">
-                <button className="bg-[#042558] hover:bg-[#031a3d] text-white px-4 py-2 rounded-full transition-colors font-medium">
-                  Sign in
-                </button>
-                <button className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-full transition-colors font-medium">
-                  Log in
-                </button>
+                <Link href="/register" className="bg-[#042558] hover:bg-[#031a3d] text-white px-4 py-2 rounded-full transition-colors font-medium text-center">
+                  Daftar
+                </Link>
+                <Link href="/login" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-full transition-colors font-medium text-center">
+                  Masuk
+                </Link>
               </div>
             </div>
           </div>

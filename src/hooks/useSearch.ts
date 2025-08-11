@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { SearchFilters, Pesantren } from '@/types';
 import { debounce } from '@/lib/utils';
+import { pesantrenService } from '@/services/pesantrenService';
 
 interface UseSearchReturn {
   searchQuery: string;
@@ -92,15 +93,31 @@ export function useSearch(): UseSearchReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Mock search function
+  // API search function
   const performSearch = useCallback(async (query: string, searchFilters: SearchFilters) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Prepare search parameters
+      const searchParams = {
+        search: query.trim() || undefined,
+        province: searchFilters.location || undefined,
+        programs: searchFilters.programs?.join(',') || undefined,
+        min_rating: searchFilters.minRating || undefined,
+        max_monthly_fee: searchFilters.maxFees || undefined,
+        facilities: searchFilters.facilities?.join(',') || undefined,
+        page: 1,
+        limit: 20
+      };
 
+      // Call API service
+       const response = await pesantrenService.getPesantren(searchParams);
+       setResults(response.data);
+    } catch (err: any) {
+      // Fallback to mock data if API fails
+      console.warn('API search failed, using mock data:', err.message);
+      
       let filteredResults = mockPesantrenData;
 
       // Filter by search query
@@ -158,9 +175,7 @@ export function useSearch(): UseSearchReturn {
       }
 
       setResults(filteredResults);
-    } catch (err) {
-      setError('Terjadi kesalahan saat mencari pesantren. Silakan coba lagi.');
-      console.error('Search error:', err);
+      setError('Menggunakan data offline. Periksa koneksi internet Anda.');
     } finally {
       setIsLoading(false);
     }

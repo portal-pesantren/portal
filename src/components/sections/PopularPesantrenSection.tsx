@@ -1,13 +1,46 @@
 'use client';
 
+import { useState } from 'react';
 import PesantrenCard from '@/components/cards/PesantrenCard';
+import { useFeaturedPesantren } from '@/hooks/usePesantren';
 import { Pesantren } from '@/types';
+
+// Loading skeleton component
+const PesantrenCardSkeleton = () => (
+  <div className="bg-white rounded-lg shadow-md p-6 animate-pulse">
+    <div className="h-48 bg-gray-200 rounded-lg mb-4"></div>
+    <div className="h-6 bg-gray-200 rounded mb-2"></div>
+    <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
+    <div className="h-4 bg-gray-200 rounded mb-4 w-1/2"></div>
+    <div className="h-10 bg-gray-200 rounded"></div>
+  </div>
+);
+
+// Error component
+const ErrorMessage = ({ onRetry }: { onRetry: () => void }) => (
+  <div className="text-center py-12">
+    <div className="text-red-500 mb-4">
+      <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h3 className="text-lg font-semibold mb-2">Gagal memuat data pesantren</h3>
+      <p className="text-gray-600 mb-4">Terjadi kesalahan saat mengambil data. Silakan coba lagi.</p>
+      <button 
+        onClick={onRetry}
+        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Coba Lagi
+      </button>
+    </div>
+  </div>
+);
 
 interface PopularPesantrenSectionProps {
   className?: string;
 }
 
-const pesantrenData: Pesantren[] = [
+// Data dummy sebagai fallback
+const fallbackData: Pesantren[] = [
   {
     id: 1,
     name: "Nama Pesantren Pesantren",
@@ -106,6 +139,65 @@ const pesantrenData: Pesantren[] = [
 
 
 export default function PopularPesantrenSection({ className = '' }: PopularPesantrenSectionProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  
+  // Fetch featured pesantren data
+  const { data: pesantrenData, isLoading, error, refetch } = useFeaturedPesantren();
+  
+  // Use fallback data if API fails
+  const displayData = pesantrenData || fallbackData;
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(displayData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPesantren = displayData.slice(startIndex, endIndex);
+  
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <section id="pesantren" className={`py-20 bg-white ${className}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#042558] mb-4">
+              Lihat Berita Pondok Pesantren terkini
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Temukan pesantren terbaik yang telah dipercaya ribuan keluarga untuk pendidikan anak-anak mereka.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <PesantrenCardSkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+  
+  // Handle error state
+  if (error) {
+    return (
+      <section id="pesantren" className={`py-20 bg-white ${className}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#042558] mb-4">
+              Lihat Berita Pondok Pesantren terkini
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Temukan pesantren terbaik yang telah dipercaya ribuan keluarga untuk pendidikan anak-anak mereka.
+            </p>
+          </div>
+          
+          <ErrorMessage onRetry={() => refetch()} />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="pesantren" className={`py-20 bg-white ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -121,7 +213,7 @@ export default function PopularPesantrenSection({ className = '' }: PopularPesan
         
         {/* Pesantren Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {pesantrenData.map((pesantren) => (
+          {currentPesantren.map((pesantren) => (
             <div key={pesantren.id} className="relative">
               <PesantrenCard 
                 pesantren={pesantren}
@@ -135,21 +227,39 @@ export default function PopularPesantrenSection({ className = '' }: PopularPesan
         </div>
         
         {/* Pagination */}
-        <div className="flex justify-center items-center space-x-2">
-          <button className="w-8 h-8 rounded-full bg-[#042558] text-white flex items-center justify-center">
-            1
-          </button>
-          <button className="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-300">
-            2
-          </button>
-          <button className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600">
-            3
-          </button>
-          <span className="text-gray-400">...</span>
-          <button className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600">
-            →
-          </button>
-        </div>
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center space-x-2">
+            <button 
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              ←
+            </button>
+            
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button 
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentPage === page 
+                    ? 'bg-[#042558] text-white' 
+                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            
+            <button 
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              →
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

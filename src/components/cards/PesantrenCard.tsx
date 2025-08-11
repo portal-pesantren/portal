@@ -1,7 +1,11 @@
 import React from 'react';
 import { Card, CardContent, CardFooter, Button } from '@/components/ui';
 import { Pesantren } from '@/types';
-import { formatNumber } from '@/lib/utils';
+
+// Helper function to format numbers with thousand separators
+const formatNumber = (num: number): string => {
+  return new Intl.NumberFormat('id-ID').format(num);
+};
 
 interface PesantrenCardProps {
   pesantren: Pesantren;
@@ -100,7 +104,7 @@ export default function PesantrenCard({
         {/* Title and Action Icons */}
         <div className="flex items-start justify-between mb-4">
           <h3 className="text-xl font-bold text-gray-900 flex-1 pr-4">
-            Nama Pondok Pesantren
+            {pesantren.name}
           </h3>
           <div className="flex items-center space-x-3">
             {/* Heart Icon */}
@@ -120,25 +124,46 @@ export default function PesantrenCard({
         
         {/* Categories */}
         <div className="flex items-center text-gray-600 text-sm mb-3">
-          <span>Boarding School</span>
-          <span className="mx-2">|</span>
-          <span>Pondok Putri</span>
+          <span>📍 {pesantren.location}</span>
+          {pesantren.programs.length > 0 && (
+            <>
+              <span className="mx-2">|</span>
+              <span>{pesantren.programs.slice(0, 2).join(', ')}</span>
+            </>
+          )}
         </div>
         
         {/* Rating */}
         <div className="flex items-center mb-4">
           {[1, 2, 3, 4, 5].map((star) => (
-            <svg key={star} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+            <svg 
+              key={star} 
+              className={`w-5 h-5 fill-current ${
+                star <= Math.floor(pesantren.rating) ? 'text-yellow-400' : 'text-gray-300'
+              }`} 
+              viewBox="0 0 24 24"
+            >
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
           ))}
-          <span className="ml-2 text-gray-900 font-semibold">5,0</span>
+          <span className="ml-2 text-gray-900 font-semibold">{pesantren.rating.toFixed(1)}</span>
         </div>
         
         {/* Description */}
         <p className="text-gray-600 text-sm leading-relaxed mb-6">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.
+          {pesantren.description || 'Deskripsi pesantren tidak tersedia.'}
         </p>
+        
+        {/* Students Count */}
+        <div className="flex items-center text-gray-600 text-sm mb-4">
+          <span>👥 {formatNumber(pesantren.students)} santri</span>
+          {pesantren.fees && (
+            <>
+              <span className="mx-2">|</span>
+              <span>💰 Rp {formatNumber(pesantren.fees.monthly)}/bulan</span>
+            </>
+          )}
+        </div>
         
         {/* Visit Button */}
         <button 

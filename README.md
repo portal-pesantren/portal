@@ -1,36 +1,194 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portal Pesantren Frontend
 
-## Getting Started
+Aplikasi frontend untuk Portal Pesantren yang dibangun dengan Next.js 15, React 19, TypeScript, dan Tailwind CSS.
 
-First, run the development server:
+## 🚀 Fitur Utama
+
+- **Pencarian Pesantren**: Cari pesantren berdasarkan lokasi, program, fasilitas, dan kriteria lainnya
+- **Detail Pesantren**: Informasi lengkap tentang pesantren termasuk program, fasilitas, dan biaya
+- **Sistem Review**: Baca dan tulis review dari alumni dan santri
+- **Autentikasi**: Sistem login/register untuk pengguna
+- **Konsultasi**: Fitur konsultasi dengan admin pesantren
+- **Aplikasi**: Sistem pendaftaran online ke pesantren
+- **Responsive Design**: Optimized untuk desktop dan mobile
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15 dengan App Router
+- **UI Library**: React 19
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **State Management**: React Query (TanStack Query)
+- **HTTP Client**: Axios
+- **Icons**: Lucide React
+- **Development**: ESLint, Turbopack
+
+## 📋 Prerequisites
+
+- Node.js 18+ 
+- npm atau yarn
+- Backend API Portal Pesantren (FastAPI)
+
+## 🚀 Quick Start
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Setup Environment Variables
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` sesuai dengan konfigurasi backend:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_VERSION=v1
+NEXT_PUBLIC_APP_NAME=Portal Pesantren
+```
+
+### 3. Jalankan Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka [http://localhost:3000](http://localhost:3000) di browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Pastikan Backend Berjalan
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Pastikan backend FastAPI berjalan di `http://localhost:8000`.
 
-## Learn More
+## 📁 Struktur Proyek
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                    # Next.js App Router
+├── components/            # Reusable components
+├── contexts/             # React contexts
+├── hooks/                # Custom React hooks
+├── lib/                  # Utility libraries
+├── providers/            # Context providers
+├── services/             # API services
+├── types/                # TypeScript definitions
+└── data/                 # Static data dan mocks
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔌 API Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Proyek ini sudah terintegrasi dengan backend FastAPI. Lihat dokumentasi lengkap di:
 
-## Deploy on Vercel
+- [Frontend API Integration Guide](./FRONTEND_API_INTEGRATION.md)
+- [Backend Integration Guide](./BACKEND_INTEGRATION_GUIDE.md)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Contoh Penggunaan Hooks
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```typescript
+import { usePesantren } from '@/hooks/usePesantren';
+import { useAuth } from '@/hooks/useAuth';
+
+function PesantrenPage() {
+  const { data, isLoading, error } = usePesantren({ page: 1, limit: 10 });
+  const { user, isAuthenticated } = useAuth();
+  
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  
+  return (
+    <div>
+      {data?.data.map(pesantren => (
+        <div key={pesantren.id}>{pesantren.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+## 🛠️ Available Scripts
+
+```bash
+# Development dengan Turbopack
+npm run dev
+
+# Build untuk production
+npm run build
+
+# Start production server
+npm run start
+
+# Linting
+npm run lint
+
+# Export static files
+npm run export
+```
+
+## 🧪 Testing
+
+### Test Backend Connection
+
+```bash
+curl http://localhost:8000/health
+curl http://localhost:8000/api/v1/pesantren?limit=3
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push code ke GitHub
+2. Connect repository di Vercel
+3. Set environment variables
+4. Deploy
+
+### Environment Variables untuk Production
+
+```env
+NEXT_PUBLIC_API_URL=https://api.yourbackend.com
+NEXT_PUBLIC_DEBUG=false
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**API Connection Error**
+- Pastikan backend berjalan di port 8000
+- Check CORS configuration di backend
+- Verify API URL di environment variables
+
+**Authentication Issues**
+- Check token di localStorage
+- Pastikan token belum expired
+
+**Build Errors**
+- Run `npm install` untuk install dependencies
+- Clear Next.js cache: `rm -rf .next`
+
+### Debug Mode
+
+```env
+NEXT_PUBLIC_DEBUG=true
+NEXT_PUBLIC_LOG_LEVEL=debug
+```
+
+## 📚 Dokumentasi
+
+- [Frontend API Integration](./FRONTEND_API_INTEGRATION.md)
+- [Backend Integration](./BACKEND_INTEGRATION_GUIDE.md)
+
+## 🤝 Contributing
+
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Open Pull Request
+
+---
+
+**Happy Coding! 🚀**

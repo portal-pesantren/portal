@@ -1,41 +1,34 @@
 'use client';
 
 import { ArrowUpRight } from 'lucide-react';
-
-interface NewsItem {
-  id: number;
-  title: string;
-  description: string;
-  image?: string;
-}
+import { useLatestNews, NewsItem } from '@/hooks/useNews';
+import { Button } from '@/components/ui';
 
 interface NewsSectionProps {
   className?: string;
 }
 
+const NewsSkeleton = () => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {Array.from({ length: 4 }).map((_, i) => (
+      <div key={i} className="animate-pulse">
+        <div className="bg-white rounded-xl overflow-hidden border border-gray-100">
+          <div className="bg-gray-200 h-64"></div>
+          <div className="p-6">
+            <div className="h-6 bg-gray-200 rounded mb-3"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 export default function NewsSection({ className = '' }: NewsSectionProps) {
-  const newsItems: NewsItem[] = [
-    {
-      id: 1,
-      title: 'Berita Pondok Pesantren',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.'
-    },
-    {
-      id: 2,
-      title: 'Berita Pondok Pesantren',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.'
-    },
-    {
-      id: 3,
-      title: 'Berita Pondok Pesantren',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.'
-    },
-    {
-      id: 4,
-      title: 'Berita Pondok Pesantren',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.'
-    }
-  ];
+  const { data: newsData, isLoading, error } = useLatestNews(4);
 
   return (
     <section className={`py-16 bg-white ${className}`}>
@@ -51,9 +44,26 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
           </p>
         </div>
 
+        {/* Loading State */}
+        {isLoading && <NewsSkeleton />}
+        
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <div className="text-red-500 mb-4">
+              <h3 className="text-lg font-semibold mb-2">Gagal memuat berita</h3>
+              <p className="text-gray-600 mb-4">Terjadi kesalahan saat mengambil data berita.</p>
+              <Button onClick={() => window.location.reload()}>
+                Coba Lagi
+              </Button>
+            </div>
+          </div>
+        )}
+        
         {/* News Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {newsItems.map((news) => (
+        {newsData && newsData.data.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {newsData.data.map((news: NewsItem) => (
             <div 
               key={news.id} 
               className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group border border-gray-100"
@@ -80,8 +90,9 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
                 </p>
               </div>
             </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

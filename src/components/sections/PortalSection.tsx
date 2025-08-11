@@ -1,25 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Heart, Bookmark, Star } from 'lucide-react';
-
-interface PesantrenCard {
-  id: number;
-  name: string;
-  type: string;
-  category: string;
-  rating: number;
-  description: string;
-  image: string;
-  isFavorited: boolean;
-  isBookmarked: boolean;
-}
+import { usePesantren } from '@/hooks/usePesantren';
+import { Pesantren } from '@/types';
+import { Button } from '@/components/ui';
+import { useRouter } from 'next/navigation';
 
 const PortalSection = () => {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('Terekomendasi');
   const [favorites, setFavorites] = useState<number[]>([]);
   const [bookmarks, setBookmarks] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
+  // Fetch pesantren data with pagination
+  const { data: pesantrenResponse, isLoading, error, refetch } = usePesantren({
+    page: currentPage,
+    limit: itemsPerPage,
+    search: '',
+    program: selectedCategory !== 'Terekomendasi' ? (
+      selectedCategory === 'Pondok Putra' ? 'Putra' :
+      selectedCategory === 'Pondok Putri' ? 'Putri' :
+      selectedCategory === 'Pondok Campuran' ? 'Campuran' :
+      selectedCategory === 'Pondok ABK' ? 'ABK' : ''
+    ) : ''
+  });
 
   const categories = [
     'Terekomendasi',
@@ -29,107 +36,68 @@ const PortalSection = () => {
     'Pondok ABK'
   ];
 
-  const pesantrenData: PesantrenCard[] = [
+  // Get pesantren data from API response
+  const pesantrenData = pesantrenResponse?.data || [];
+  const totalPages = pesantrenResponse?.pagination?.totalPages || 1;
+  const totalItems = pesantrenResponse?.pagination?.total || 0;
+
+  // Fallback data for when API is loading or fails
+  const fallbackData: Pesantren[] = useMemo(() => [
     {
       id: 1,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
+      name: 'Pondok Pesantren Al-Hikmah',
+      description: 'Pesantren modern dengan kurikulum terpadu yang menggabungkan pendidikan agama dan umum.',
+      address: 'Jl. Raya Malang No. 123',
+      location: 'Malang, Jawa Timur',
+      programs: ['Putra', 'Putri'],
+      fees: { monthly: 2500000, registration: 500000 },
+      rating: 4.8,
+      students: 850,
+      facilities: ['Asrama', 'Masjid', 'Perpustakaan', 'Lab Komputer'],
       image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
+      images: ['/placeholder-pesantren.jpg'],
+      contact: { phone: '0341-123456', email: 'info@alhikmah.ac.id' },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     },
     {
       id: 2,
-      name: 'Nama Pondok Pesantren',
-      type: 'Modern Salaf',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
+      name: 'Pondok Pesantren Darul Ulum',
+      description: 'Pesantren salaf dengan tradisi keilmuan yang kuat dan sistem pendidikan 24 jam.',
+      address: 'Jl. Pesantren Darul Ulum',
+      location: 'Jombang, Jawa Timur',
+      programs: ['Putra'],
+      fees: { monthly: 1800000, registration: 300000 },
+      rating: 4.9,
+      students: 1200,
+      facilities: ['Asrama', 'Masjid', 'Perpustakaan'],
       image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
+      images: ['/placeholder-pesantren.jpg'],
+      contact: { phone: '0321-654321', email: 'info@darululum.ac.id' },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     },
     {
       id: 3,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
+      name: 'Pondok Pesantren An-Nur',
+      description: 'Pesantren putri dengan fokus pada pengembangan karakter dan keterampilan hidup.',
+      address: 'Jl. Yogya-Solo KM 15',
+      location: 'Yogyakarta',
+      programs: ['Putri'],
+      fees: { monthly: 2200000, registration: 400000 },
+      rating: 4.7,
+      students: 650,
+      facilities: ['Asrama', 'Masjid', 'Perpustakaan', 'Lab Bahasa'],
       image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
-    },
-    {
-      id: 4,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
-      image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
-    },
-    {
-      id: 5,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
-      image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
-    },
-    {
-      id: 6,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
-      image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
-    },
-    {
-      id: 7,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
-      image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
-    },
-    {
-      id: 8,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
-      image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
-    },
-    {
-      id: 9,
-      name: 'Nama Pondok Pesantren',
-      type: 'Boarding School',
-      category: 'Pondok Putri',
-      rating: 5.0,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt pharetra elit etiam cursus orci in. Id sed montes.',
-      image: '/placeholder-pesantren.jpg',
-      isFavorited: false,
-      isBookmarked: false
+      images: ['/placeholder-pesantren.jpg'],
+      contact: { phone: '0274-987654', email: 'info@annur.ac.id' },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     }
-  ];
+  ], []);
+
+  // Use fallback data when loading or error
+  const displayData = isLoading || error ? fallbackData : pesantrenData;
 
   const toggleFavorite = (id: number) => {
     setFavorites(prev => 
@@ -158,7 +126,7 @@ const PortalSection = () => {
     ));
   };
 
-  const PesantrenCard = ({ pesantren }: { pesantren: PesantrenCard }) => (
+  const PesantrenCardComponent = ({ pesantren }: { pesantren: Pesantren }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Image Container */}
       <div className="relative h-48 bg-gray-200">
@@ -217,10 +185,10 @@ const PortalSection = () => {
         
         <div className="flex items-center gap-2 mb-2">
           <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
-            {pesantren.type}
+            {pesantren.programs.join(', ')}
           </span>
           <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
-            {pesantren.category}
+            {pesantren.location}
           </span>
         </div>
         
@@ -233,7 +201,10 @@ const PortalSection = () => {
           {pesantren.description}
         </p>
         
-        <button className="w-full bg-blue-900 text-white py-2 px-4 rounded-full hover:bg-blue-800 transition-colors duration-200">
+        <button 
+          onClick={() => router.push(`/pesantren/${pesantren.id}`)}
+          className="w-full bg-blue-900 text-white py-2 px-4 rounded-full hover:bg-blue-800 transition-colors duration-200"
+        >
           Kunjungi Pesantren
         </button>
       </div>
@@ -260,46 +231,109 @@ const PortalSection = () => {
           ))}
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="h-48 bg-gray-200 animate-pulse"></div>
+                <div className="p-4">
+                  <div className="h-6 bg-gray-200 rounded mb-2 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-4 animate-pulse"></div>
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-gray-600 mb-4">Gagal memuat data pesantren</p>
+            <Button onClick={() => refetch()} variant="outline">
+              Coba Lagi
+            </Button>
+          </div>
+        )}
+
         {/* Pesantren Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {pesantrenData.map((pesantren) => (
-            <PesantrenCard key={pesantren.id} pesantren={pesantren} />
-          ))}
-        </div>
+        {!isLoading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {displayData.map((pesantren) => (
+              <PesantrenCardComponent key={pesantren.id} pesantren={pesantren} />
+            ))}
+          </div>
+        )}
+
+        {/* No Data State */}
+        {!isLoading && !error && displayData.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-600 mb-4">Tidak ada pesantren ditemukan</p>
+            <Button onClick={() => setSelectedCategory('Terekomendasi')} variant="outline">
+              Reset Filter
+            </Button>
+          </div>
+        )}
 
         {/* Pagination */}
-        <div className="flex items-center justify-center gap-2">
-          <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors"
-            disabled={currentPage === 1}
-          >
-            ←
-          </button>
-          
-          {[1, 2, 3, 4].map((page) => (
+        {!isLoading && !error && totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2">
             <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                currentPage === page
-                  ? 'bg-blue-900 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={currentPage === 1}
             >
-              {page}
+              ←
             </button>
-          ))}
-          
-          <span className="text-gray-500">...</span>
-          
-          <button
-            onClick={() => setCurrentPage(prev => prev + 1)}
-            className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors"
-          >
-            →
-          </button>
-        </div>
+            
+            {/* Dynamic page numbers */}
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, index) => {
+              let pageNumber;
+              if (totalPages <= 5) {
+                pageNumber = index + 1;
+              } else if (currentPage <= 3) {
+                pageNumber = index + 1;
+              } else if (currentPage >= totalPages - 2) {
+                pageNumber = totalPages - 4 + index;
+              } else {
+                pageNumber = currentPage - 2 + index;
+              }
+              
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => setCurrentPage(pageNumber)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                    currentPage === pageNumber
+                      ? 'bg-blue-900 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+            
+            {totalPages > 5 && currentPage < totalPages - 2 && (
+              <span className="text-gray-500">...</span>
+            )}
+            
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={currentPage === totalPages}
+            >
+              →
+            </button>
+            
+            {/* Page info */}
+            <div className="ml-4 text-sm text-gray-600">
+              Halaman {currentPage} dari {totalPages} ({totalItems} pesantren)
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

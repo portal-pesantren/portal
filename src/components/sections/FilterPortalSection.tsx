@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSearch } from '@/hooks/useSearch';
+import { SearchFormData } from '@/types';
 
 interface FilterPortalSectionProps {
   className?: string;
@@ -10,7 +13,7 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
   const [selectedLocation, setSelectedLocation] = useState('Pilih Lokasi');
   const [selectedCurriculum, setSelectedCurriculum] = useState('Pilih kurikulum pondok');
   const [selectedEducationStatus, setSelectedEducationStatus] = useState('Pilih status pendidikan');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
 
   const locations = [
     'Pilih Lokasi',
@@ -41,15 +44,41 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
     'Pondok Pesantren Mahasiswa'
   ];
 
+  const router = useRouter();
+  const { setSearchQuery } = useSearch();
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle search logic here
-    console.log('Search:', searchQuery);
+    if (localSearchQuery.trim()) {
+       setSearchQuery(localSearchQuery);
+      
+      const params = new URLSearchParams();
+      params.set('q', localSearchQuery);
+      
+      if (selectedLocation !== 'Pilih Lokasi') {
+        params.set('province', selectedLocation);
+      }
+      
+      router.push(`/search?${params.toString()}`);
+    }
   };
 
   const handleFilterClick = () => {
-    // Handle filter logic here
-    console.log('Filter clicked');
+    const params = new URLSearchParams();
+    
+    if (localSearchQuery.trim()) {
+       params.set('q', localSearchQuery);
+    }
+    
+    if (selectedLocation !== 'Pilih Lokasi') {
+      params.set('province', selectedLocation);
+    }
+    
+    if (selectedCurriculum !== 'Pilih kurikulum pondok') {
+      params.set('program', selectedCurriculum);
+    }
+    
+    router.push(`/search?${params.toString()}`);
   };
 
   return (
@@ -89,8 +118,8 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
                 </div>
                 <input
                   type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={localSearchQuery}
+                  onChange={(e) => setLocalSearchQuery(e.target.value)}
                   placeholder="Cari Pondok Pesantren"
                   className="flex-1 px-4 py-3 text-gray-900 bg-transparent border-0 focus:outline-none text-sm placeholder-gray-500"
                 />
