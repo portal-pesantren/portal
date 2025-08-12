@@ -42,7 +42,7 @@ interface PopularPesantrenSectionProps {
 // Data dummy sebagai fallback
 const fallbackData: Pesantren[] = [
   {
-    id: 1,
+    id: "1",
     name: "Nama Pesantren Pesantren",
     location: "Bogor, Jawa Barat",
     address: "Jl. Raya Bogor, Bogor, Jawa Barat",
@@ -53,7 +53,7 @@ const fallbackData: Pesantren[] = [
     featured: true
   },
   {
-    id: 2,
+    id: "2",
     name: "Nama Pesantren Pesantren",
     location: "Yogyakarta, DIY",
     address: "Jl. Raya Yogyakarta, Yogyakarta, DIY",
@@ -64,7 +64,7 @@ const fallbackData: Pesantren[] = [
     featured: true
   },
   {
-    id: 3,
+    id: "3",
     name: "Nama Pesantren Pesantren",
     location: "Malang, Jawa Timur",
     address: "Jl. Raya Malang, Malang, Jawa Timur",
@@ -75,7 +75,7 @@ const fallbackData: Pesantren[] = [
     featured: true
   },
   {
-    id: 4,
+    id: "4",
     name: "Nama Pesantren Pesantren",
     location: "Bandung, Jawa Barat",
     address: "Jl. Raya Bandung, Bandung, Jawa Barat",
@@ -85,7 +85,7 @@ const fallbackData: Pesantren[] = [
     image: "/api/placeholder/300/200"
   },
   {
-    id: 5,
+    id: "5",
     name: "Nama Pesantren Pesantren",
     location: "Solo, Jawa Tengah",
     address: "Jl. Raya Solo, Solo, Jawa Tengah",
@@ -95,7 +95,7 @@ const fallbackData: Pesantren[] = [
     image: "/api/placeholder/300/200"
   },
   {
-    id: 6,
+    id: "6",
     name: "Nama Pesantren Pesantren",
     location: "Surabaya, Jawa Timur",
     address: "Jl. Raya Surabaya, Surabaya, Jawa Timur",
@@ -105,7 +105,7 @@ const fallbackData: Pesantren[] = [
     image: "/api/placeholder/300/200"
   },
   {
-    id: 7,
+    id: "7",
     name: "Nama Pesantren Pesantren",
     location: "Jakarta, DKI Jakarta",
     address: "Jl. Raya Jakarta, Jakarta, DKI Jakarta",
@@ -115,7 +115,7 @@ const fallbackData: Pesantren[] = [
     image: "/api/placeholder/300/200"
   },
   {
-    id: 8,
+    id: "8",
     name: "Nama Pesantren Pesantren",
     location: "Bekasi, Jawa Barat",
     address: "Jl. Raya Bekasi, Bekasi, Jawa Barat",
@@ -125,7 +125,7 @@ const fallbackData: Pesantren[] = [
     image: "/api/placeholder/300/200"
   },
   {
-    id: 9,
+    id: "9",
     name: "Nama Pesantren Pesantren",
     location: "Depok, Jawa Barat",
     address: "Jl. Raya Depok, Depok, Jawa Barat",

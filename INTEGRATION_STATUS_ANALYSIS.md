@@ -131,7 +131,7 @@ const displayData = pesantrenData || fallbackPesantrenData;
 ```typescript
 // types/index.ts
 export interface Pesantren {
-  id: number;  // ❌ number
+  id: string;  // ✅ string
   students: number;
   fees?: { monthly: number; };
 }

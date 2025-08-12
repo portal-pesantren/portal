@@ -4,8 +4,11 @@ import { Review } from '@/types';
 // Review interfaces
 export interface ApiReview {
   _id: string;
+  code?: string; // UUID v7
   pesantren_id: string;
+  pesantren_code?: string; // UUID v7 reference
   user_id: string;
+  user_code?: string; // UUID v7 reference
   user_name: string;
   rating: number;
   title: string;
@@ -23,6 +26,7 @@ export interface ApiReview {
 
 export interface CreateReviewData {
   pesantren_id: string;
+  pesantren_code?: string; // UUID v7 reference
   rating: number;
   title: string;
   content: string;
@@ -42,7 +46,9 @@ export interface UpdateReviewData {
 
 export interface ReviewSearchParams {
   pesantren_id?: string;
+  pesantren_code?: string; // UUID v7 reference
   user_id?: string;
+  user_code?: string; // UUID v7 reference
   rating?: number;
   status?: 'pending' | 'approved' | 'rejected';
   is_verified?: boolean;
@@ -69,9 +75,12 @@ export interface ReviewStats {
 // Transform API review to frontend format
 const transformReview = (apiReview: ApiReview): Review => {
   return {
-    id: parseInt(apiReview._id, 16) || 0, // Convert hex string to number
-    pesantrenId: parseInt(apiReview.pesantren_id, 16) || 0,
-    userId: parseInt(apiReview.user_id, 16) || 0,
+    id: apiReview._id, // Keep as string to avoid scientific notation
+    code: apiReview.code, // UUID v7
+    pesantrenId: apiReview.pesantren_id, // Keep as string to avoid scientific notation
+    pesantrenCode: apiReview.pesantren_code, // UUID v7 reference
+    userId: apiReview.user_id, // Keep as string to avoid scientific notation
+    userCode: apiReview.user_code, // UUID v7 reference
     userName: apiReview.user_name,
     userAvatar: apiReview.user_avatar,
     rating: apiReview.rating,
@@ -148,7 +157,20 @@ export const reviewService = {
   },
 
   /**
-   * Get review by ID
+   * Get reviews for a specific pesantren by UUID v7 code
+   */
+  getPesantrenReviewsByCode: async (pesantrenCode: string, params: Omit<ReviewSearchParams, 'pesantren_code'> = {}): Promise<{
+    reviews: Review[];
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+  }> => {
+    return reviewService.getReviews({ ...params, pesantren_code: pesantrenCode });
+  },
+
+  /**
+   * Get review by ID (legacy support)
    */
   getReviewById: async (reviewId: string): Promise<Review> => {
     try {
@@ -156,6 +178,19 @@ export const reviewService = {
       return transformReview(response.data);
     } catch (error) {
       console.error('Get review by ID error:', error);
+      throw new Error('Gagal mengambil data review');
+    }
+  },
+
+  /**
+   * Get review by UUID v7 code
+   */
+  getReviewByCode: async (reviewCode: string): Promise<Review> => {
+    try {
+      const response = await api.get<{ data: ApiReview }>(`/reviews/code/${reviewCode}`);
+      return transformReview(response.data);
+    } catch (error) {
+      console.error('Get review by code error:', error);
       throw new Error('Gagal mengambil data review');
     }
   },
@@ -249,7 +284,7 @@ export const reviewService = {
   },
 
   /**
-   * Get review statistics for a pesantren
+   * Get review statistics for a pesantren (legacy support)
    */
   getPesantrenReviewStats: async (pesantrenId: string): Promise<ReviewStats> => {
     try {
@@ -262,7 +297,20 @@ export const reviewService = {
   },
 
   /**
-   * Get user's reviews
+   * Get review statistics for a pesantren by UUID v7 code
+   */
+  getPesantrenReviewStatsByCode: async (pesantrenCode: string): Promise<ReviewStats> => {
+    try {
+      const response = await api.get<{ data: ReviewStats }>(`/reviews/stats/code/${pesantrenCode}`);
+      return response.data;
+    } catch (error) {
+      console.error('Get review stats by code error:', error);
+      throw new Error('Gagal mengambil statistik review');
+    }
+  },
+
+  /**
+   * Get user's reviews (legacy support)
    */
   getUserReviews: async (userId: string, params: Omit<ReviewSearchParams, 'user_id'> = {}): Promise<{
     reviews: Review[];
@@ -272,6 +320,19 @@ export const reviewService = {
     total_pages: number;
   }> => {
     return reviewService.getReviews({ ...params, user_id: userId });
+  },
+
+  /**
+   * Get user's reviews by UUID v7 code
+   */
+  getUserReviewsByCode: async (userCode: string, params: Omit<ReviewSearchParams, 'user_code'> = {}): Promise<{
+    reviews: Review[];
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+  }> => {
+    return reviewService.getReviews({ ...params, user_code: userCode });
   },
 
   /**
@@ -313,7 +374,7 @@ export const reviewService = {
   },
 
   /**
-   * Check if user can review a pesantren
+   * Check if user can review a pesantren (legacy support)
    */
   canUserReview: async (pesantrenId: string): Promise<boolean> => {
     try {
@@ -321,6 +382,19 @@ export const reviewService = {
       return response.can_review;
     } catch (error) {
       console.error('Check can review error:', error);
+      return false;
+    }
+  },
+
+  /**
+   * Check if user can review a pesantren by UUID v7 code
+   */
+  canUserReviewByCode: async (pesantrenCode: string): Promise<boolean> => {
+    try {
+      const response = await api.get<{ can_review: boolean }>(`/reviews/can-review/code/${pesantrenCode}`);
+      return response.can_review;
+    } catch (error) {
+      console.error('Check can review by code error:', error);
       return false;
     }
   }

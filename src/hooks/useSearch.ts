@@ -20,7 +20,7 @@ interface UseSearchReturn {
 // Mock data for demonstration
 const mockPesantrenData: Pesantren[] = [
   {
-    id: 1,
+    id: "1",
     name: "Pondok Pesantren Al-Hikmah",
     location: "Bogor, Jawa Barat",
     address: "Jl. Raya Bogor No. 123, Bogor, Jawa Barat",
@@ -43,7 +43,7 @@ const mockPesantrenData: Pesantren[] = [
     }
   },
   {
-    id: 2,
+    id: "2",
     name: "Pondok Pesantren Darul Ulum",
     location: "Yogyakarta, DIY",
     address: "Jl. Malioboro No. 456, Yogyakarta, DIY",
@@ -64,7 +64,7 @@ const mockPesantrenData: Pesantren[] = [
     }
   },
   {
-    id: 3,
+    id: "3",
     name: "Pondok Pesantren Nurul Huda",
     location: "Malang, Jawa Timur",
     address: "Jl. Veteran No. 789, Malang, Jawa Timur",

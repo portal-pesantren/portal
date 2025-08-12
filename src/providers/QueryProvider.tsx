@@ -102,10 +102,13 @@ export const queryKeys = {
     details: () => [...queryKeys.reviews.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.reviews.details(), id] as const,
     byPesantren: (pesantrenId: string, params?: any) => [...queryKeys.reviews.all, 'pesantren', pesantrenId, params] as const,
+    byPesantrenCode: (pesantrenCode: string, params?: any) => [...queryKeys.reviews.all, 'pesantren-code', pesantrenCode, params] as const,
     byUser: (userId: string) => [...queryKeys.reviews.all, 'user', userId] as const,
+    byUserCode: (userCode: string) => [...queryKeys.reviews.all, 'user-code', userCode] as const,
     featured: () => [...queryKeys.reviews.all, 'featured'] as const,
     recent: () => [...queryKeys.reviews.all, 'recent'] as const,
     stats: (pesantrenId?: string) => [...queryKeys.reviews.all, 'stats', pesantrenId] as const,
+    statsByCode: (pesantrenCode?: string) => [...queryKeys.reviews.all, 'stats-code', pesantrenCode] as const,
   },
   
   // Applications queries
@@ -127,7 +130,7 @@ export const queryKeys = {
     list: (params: any) => [...queryKeys.consultations.lists(), params] as const,
     details: () => [...queryKeys.consultations.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.consultations.details(), id] as const,
-    byUser: (userId: string) => [...queryKeys.consultations.all, 'user', userId] as const,
+    byUser: (userId: string, params: { page?: number; limit?: number; status?: "pending" | "scheduled" | "completed" | "cancelled"; consultation_type?: "general" | "specific_pesantren" | "program_selection" | "admission_process"; sort_by?: "created_at" | "scheduled_date" | "parent_name"; sort_order?: "asc" | "desc"; } | undefined) => [...queryKeys.consultations.all, 'user', userId] as const,
     slots: (date?: string) => [...queryKeys.consultations.all, 'slots', date] as const,
     types: () => [...queryKeys.consultations.all, 'types'] as const,
     stats: () => [...queryKeys.consultations.all, 'stats'] as const,

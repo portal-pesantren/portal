@@ -4,6 +4,7 @@ import { Pesantren, PaginatedResponse, SearchFilters } from '@/types';
 // Updated Pesantren interface to match API response
 export interface ApiPesantren {
   id: string;
+  code?: string; // UUID v7 identifier
   name: string;
   slug: string;
   location: {
@@ -34,7 +35,8 @@ export interface ApiPesantren {
 // Transform API response to frontend format
 const transformPesantren = (apiPesantren: ApiPesantren): Pesantren => {
   return {
-    id: parseInt(apiPesantren.id, 16), // Convert hex string to number for compatibility
+    id: apiPesantren.id, // Keep as string to avoid scientific notation
+    code: apiPesantren.code, // UUID v7 identifier
     name: apiPesantren.name,
     location: `${apiPesantren.location.city}, ${apiPesantren.location.province}`,
     address: apiPesantren.address || `${apiPesantren.location.city}, ${apiPesantren.location.province}`,
@@ -138,7 +140,7 @@ export const pesantrenService = {
   },
 
   /**
-   * Get pesantren by ID
+   * Get pesantren by ID (legacy support)
    */
   getPesantrenById: async (id: string): Promise<Pesantren> => {
     try {
@@ -149,6 +151,57 @@ export const pesantrenService = {
       return transformPesantren(response.data);
     } catch (error) {
       console.error('Error fetching pesantren by ID:', error);
+      throw new Error('Gagal mengambil detail pesantren');
+    }
+  },
+
+  /**
+   * Get pesantren by UUID v7 code
+   */
+  getPesantrenByCode: async (code: string): Promise<Pesantren> => {
+    try {
+      const response = await api.get<{
+        data: ApiPesantren;
+      }>(`/pesantren/by-code/${code}`);
+
+      return transformPesantren(response.data);
+    } catch (error) {
+      console.error('Error fetching pesantren by code:', error);
+      throw new Error('Gagal mengambil detail pesantren');
+    }
+  },
+
+  /**
+   * Get pesantren by identifier (code or id)
+   * Prefers code over id for better performance
+   */
+  getPesantrenByIdentifier: async (identifier: string): Promise<Pesantren> => {
+    try {
+      // Sanitize identifier to prevent scientific notation issues
+      const sanitizedIdentifier = String(identifier).trim();
+      
+      // Check for scientific notation format
+      if (sanitizedIdentifier.includes('e+') || sanitizedIdentifier.includes('E+')) {
+        console.warn('Scientific notation identifier detected:', sanitizedIdentifier);
+        throw new Error('Invalid identifier format');
+      }
+      
+      // Check for extremely long identifiers
+      if (sanitizedIdentifier.length > 50) {
+        console.warn('Extremely long identifier detected:', sanitizedIdentifier);
+        throw new Error('Invalid identifier format');
+      }
+      
+      // Check if identifier is UUID v7 format
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sanitizedIdentifier);
+      
+      if (isUUID) {
+        return await pesantrenService.getPesantrenByCode(sanitizedIdentifier);
+      } else {
+        return await pesantrenService.getPesantrenById(sanitizedIdentifier);
+      }
+    } catch (error) {
+      console.error('Error fetching pesantren by identifier:', error);
       throw new Error('Gagal mengambil detail pesantren');
     }
   },

@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 interface NewsItem {
-  id: number;
+  id: string;
   title: string;
   description: string;
   image?: string;
@@ -26,7 +26,7 @@ interface NewsResponse {
 // Mock data untuk sementara sampai backend siap
 const mockNewsData: NewsItem[] = [
   {
-    id: 1,
+    id: '1',
     title: 'Pesantren Modern Terdepan dalam Pendidikan Digital',
     description: 'Pesantren Al-Hikmah mengintegrasikan teknologi digital dalam pembelajaran untuk mempersiapkan santri menghadapi era digital.',
     publishedAt: '2024-01-15',
@@ -35,7 +35,7 @@ const mockNewsData: NewsItem[] = [
     author: 'Tim Redaksi'
   },
   {
-    id: 2,
+    id: '2',
     title: 'Program Beasiswa Santri Berprestasi 2024',
     description: 'Kementerian Agama membuka program beasiswa untuk santri berprestasi di seluruh Indonesia dengan total dana 50 miliar rupiah.',
     publishedAt: '2024-01-12',
@@ -44,7 +44,7 @@ const mockNewsData: NewsItem[] = [
     author: 'Admin Portal'
   },
   {
-    id: 3,
+    id: '3',
     title: 'Pesantren Salaf Tetap Eksis di Era Modern',
     description: 'Meskipun zaman terus berkembang, pesantren salaf tetap mempertahankan tradisi pembelajaran klasik yang terbukti efektif.',
     publishedAt: '2024-01-10',
@@ -53,7 +53,7 @@ const mockNewsData: NewsItem[] = [
     author: 'Dr. Ahmad Fauzi'
   },
   {
-    id: 4,
+    id: '4',
     title: 'Inovasi Kurikulum Pesantren untuk Generasi Z',
     description: 'Pesantren-pesantren terkemuka mulai mengadaptasi kurikulum yang sesuai dengan karakteristik dan kebutuhan generasi Z.',
     publishedAt: '2024-01-08',

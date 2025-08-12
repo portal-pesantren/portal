@@ -9,7 +9,9 @@ export function useReviews(params?: {
   page?: number;
   limit?: number;
   pesantren_id?: string;
+  pesantren_code?: string; // UUID v7 support
   user_id?: string;
+  user_code?: string; // UUID v7 support
   rating?: number;
   sort_by?: 'created_at' | 'rating' | 'helpful_count';
   sort_order?: 'asc' | 'desc';
@@ -23,7 +25,7 @@ export function useReviews(params?: {
   });
 }
 
-// Hook untuk mendapatkan review berdasarkan pesantren
+// Hook untuk mendapatkan review berdasarkan pesantren (legacy support)
 export function useReviewsByPesantren(
   pesantrenId: string,
   params?: {
@@ -44,7 +46,28 @@ export function useReviewsByPesantren(
   });
 }
 
-// Hook untuk mendapatkan detail review
+// Hook untuk mendapatkan review berdasarkan pesantren dengan UUID v7 code
+export function useReviewsByPesantrenCode(
+  pesantrenCode: string,
+  params?: {
+    page?: number;
+    limit?: number;
+    rating?: number;
+    sort_by?: 'created_at' | 'rating' | 'helpful_count';
+    sort_order?: 'asc' | 'desc';
+    status?: 'pending' | 'approved' | 'rejected';
+    is_verified?: boolean;
+  }
+) {
+  return useQuery({
+    queryKey: queryKeys.reviews.byPesantrenCode(pesantrenCode, params),
+    queryFn: () => reviewService.getPesantrenReviewsByCode(pesantrenCode, params),
+    enabled: !!pesantrenCode,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}
+
+// Hook untuk mendapatkan detail review (legacy support)
 export function useReviewDetail(id: string) {
   return useQuery({
     queryKey: queryKeys.reviews.detail(id),
@@ -54,15 +77,38 @@ export function useReviewDetail(id: string) {
   });
 }
 
-// Hook untuk mendapatkan review pengguna
+// Hook untuk mendapatkan detail review dengan UUID v7 code
+export function useReviewDetailByCode(code: string) {
+  return useQuery({
+    queryKey: queryKeys.reviews.detail(code),
+    queryFn: () => reviewService.getReviewByCode(code),
+    enabled: !!code,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+}
+
+// Hook untuk mendapatkan review pengguna (legacy support)
 export function useUserReviews(userId?: string) {
   const { user } = useAuth();
-  const targetUserId = userId || user?.id?.toString();
+  const targetUserId = userId || user?.id;
   
   return useQuery({
     queryKey: queryKeys.reviews.byUser(targetUserId || ''),
     queryFn: () => reviewService.getUserReviews(targetUserId!),
     enabled: !!targetUserId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}
+
+// Hook untuk mendapatkan review pengguna dengan UUID v7 code
+export function useUserReviewsByCode(userCode?: string) {
+  const { user } = useAuth();
+  const targetUserCode = userCode || user?.code;
+  
+  return useQuery({
+    queryKey: queryKeys.reviews.byUserCode(targetUserCode || ''),
+    queryFn: () => reviewService.getUserReviewsByCode(targetUserCode!),
+    enabled: !!targetUserCode,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }
@@ -85,12 +131,22 @@ export function useRecentReviews(limit?: number) {
   });
 }
 
-// Hook untuk mendapatkan statistik review
+// Hook untuk mendapatkan statistik review (legacy support)
 export function useReviewStats(pesantrenId: string) {
   return useQuery({
     queryKey: queryKeys.reviews.stats(pesantrenId),
     queryFn: () => reviewService.getPesantrenReviewStats(pesantrenId),
     enabled: !!pesantrenId,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+}
+
+// Hook untuk mendapatkan statistik review dengan UUID v7 code
+export function useReviewStatsByCode(pesantrenCode: string) {
+  return useQuery({
+    queryKey: queryKeys.reviews.statsByCode(pesantrenCode),
+    queryFn: () => reviewService.getPesantrenReviewStatsByCode(pesantrenCode),
+    enabled: !!pesantrenCode,
     staleTime: 10 * 60 * 1000, // 10 minutes
   });
 }
@@ -107,12 +163,12 @@ export function useCreateReview() {
       
       // Update pesantren cache if needed
       queryClient.invalidateQueries({ 
-        queryKey: queryKeys.pesantren.detail(newReview.pesantrenId.toString()) 
+        queryKey: queryKeys.pesantren.detail(newReview.pesantrenId) 
       });
       
       // Update user reviews cache
       queryClient.invalidateQueries({ 
-        queryKey: queryKeys.reviews.byUser(newReview.userId.toString()) 
+        queryKey: queryKeys.reviews.byUser(newReview.userId) 
       });
     },
     onError: (error) => {
@@ -140,7 +196,7 @@ export function useUpdateReview() {
       
       // Update user reviews cache
       queryClient.invalidateQueries({ 
-        queryKey: queryKeys.reviews.byUser(updatedReview.userId.toString()) 
+        queryKey: queryKeys.reviews.byUser(updatedReview.userId) 
       });
     },
     onError: (error) => {
@@ -212,7 +268,7 @@ export function useReportReview() {
   });
 }
 
-// Hook untuk memeriksa apakah user dapat memberikan review
+// Hook untuk memeriksa apakah user dapat memberikan review (legacy support)
 export function useCanUserReview(pesantrenId: string) {
   const { user } = useAuth();
   
@@ -220,6 +276,18 @@ export function useCanUserReview(pesantrenId: string) {
     queryKey: ['canUserReview', pesantrenId, user?.id],
     queryFn: () => reviewService.canUserReview(pesantrenId),
     enabled: !!user && !!pesantrenId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}
+
+// Hook untuk memeriksa apakah user dapat memberikan review dengan UUID v7 code
+export function useCanUserReviewByCode(pesantrenCode: string) {
+  const { user } = useAuth();
+  
+  return useQuery({
+    queryKey: ['canUserReviewByCode', pesantrenCode, user?.code],
+    queryFn: () => reviewService.canUserReviewByCode(pesantrenCode),
+    enabled: !!user && !!pesantrenCode,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }

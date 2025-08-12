@@ -159,7 +159,7 @@ export function useUpdatePesantrenCache() {
         return {
           ...oldData,
           data: oldData.data.map((pesantren: Pesantren) =>
-            pesantren.id === parseInt(id) ? { ...pesantren, ...updatedData } : pesantren
+            pesantren.id === id ? { ...pesantren, ...updatedData } : pesantren
           ),
         };
       }

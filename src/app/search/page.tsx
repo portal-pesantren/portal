@@ -385,7 +385,11 @@ export default function SearchPage() {
                     <PesantrenCard 
                       key={pesantren.id}
                       pesantren={pesantren}
-                      onViewDetail={(id) => router.push(`/pesantren/${id}`)}
+                      onViewDetail={(pesantren) => {
+                        const pesantrenId = pesantren.code || pesantren.id;
+                        const pesantrenIdStr = typeof pesantrenId === 'string' ? pesantrenId : String(pesantrenId);
+                        router.push(`/pesantren/${pesantrenIdStr}`);
+                      }}
                     />
                   ))}
                 </div>

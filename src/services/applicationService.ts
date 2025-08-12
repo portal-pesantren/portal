@@ -3,6 +3,7 @@ import { api } from '@/lib/api';
 // Application interfaces
 export interface ApplicationData {
   pesantren_id: string;
+  pesantren_code?: string; // UUID v7 reference to pesantren
   student_name: string;
   student_age: number;
   parent_name: string;
@@ -27,8 +28,11 @@ export interface ApplicationData {
 
 export interface ApiApplication {
   _id: string;
+  code?: string; // UUID v7 identifier
   pesantren_id: string;
+  pesantren_code?: string; // UUID v7 reference to pesantren
   user_id: string;
+  user_code?: string; // UUID v7 reference to user
   student_name: string;
   student_age: number;
   parent_name: string;
@@ -61,8 +65,11 @@ export interface ApiApplication {
 
 export interface Application {
   id: string;
+  code?: string; // UUID v7 identifier
   pesantrenId: string;
+  pesantrenCode?: string; // UUID v7 reference to pesantren
   userId: string;
+  userCode?: string; // UUID v7 reference to user
   studentName: string;
   studentAge: number;
   parentName: string;
@@ -110,8 +117,11 @@ export interface ApplicationSearchParams {
 const transformApplication = (apiApplication: ApiApplication): Application => {
   return {
     id: apiApplication._id,
+    code: apiApplication.code, // UUID v7 identifier
     pesantrenId: apiApplication.pesantren_id,
+    pesantrenCode: apiApplication.pesantren_code, // UUID v7 reference to pesantren
     userId: apiApplication.user_id,
+    userCode: apiApplication.user_code, // UUID v7 reference to user
     studentName: apiApplication.student_name,
     studentAge: apiApplication.student_age,
     parentName: apiApplication.parent_name,

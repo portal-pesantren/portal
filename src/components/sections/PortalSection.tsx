@@ -10,8 +10,8 @@ import { useRouter } from 'next/navigation';
 const PortalSection = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('Terekomendasi');
-  const [favorites, setFavorites] = useState<number[]>([]);
-  const [bookmarks, setBookmarks] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
@@ -44,7 +44,7 @@ const PortalSection = () => {
   // Fallback data for when API is loading or fails
   const fallbackData: Pesantren[] = useMemo(() => [
     {
-      id: 1,
+      id: '1',
       name: 'Pondok Pesantren Al-Hikmah',
       description: 'Pesantren modern dengan kurikulum terpadu yang menggabungkan pendidikan agama dan umum.',
       address: 'Jl. Raya Malang No. 123',
@@ -61,7 +61,7 @@ const PortalSection = () => {
       updatedAt: new Date().toISOString()
     },
     {
-      id: 2,
+      id: '2',
       name: 'Pondok Pesantren Darul Ulum',
       description: 'Pesantren salaf dengan tradisi keilmuan yang kuat dan sistem pendidikan 24 jam.',
       address: 'Jl. Pesantren Darul Ulum',
@@ -78,7 +78,7 @@ const PortalSection = () => {
       updatedAt: new Date().toISOString()
     },
     {
-      id: 3,
+      id: '3',
       name: 'Pondok Pesantren An-Nur',
       description: 'Pesantren putri dengan fokus pada pengembangan karakter dan keterampilan hidup.',
       address: 'Jl. Yogya-Solo KM 15',
@@ -99,7 +99,7 @@ const PortalSection = () => {
   // Use fallback data when loading or error
   const displayData = isLoading || error ? fallbackData : pesantrenData;
 
-  const toggleFavorite = (id: number) => {
+  const toggleFavorite = (id: string) => {
     setFavorites(prev => 
       prev.includes(id) 
         ? prev.filter(fav => fav !== id)
@@ -107,7 +107,7 @@ const PortalSection = () => {
     );
   };
 
-  const toggleBookmark = (id: number) => {
+  const toggleBookmark = (id: string) => {
     setBookmarks(prev => 
       prev.includes(id) 
         ? prev.filter(bookmark => bookmark !== id)
@@ -202,7 +202,11 @@ const PortalSection = () => {
         </p>
         
         <button 
-          onClick={() => router.push(`/pesantren/${pesantren.id}`)}
+          onClick={() => {
+            const pesantrenId = pesantren.code || pesantren.id;
+            const pesantrenIdStr = typeof pesantrenId === 'string' ? pesantrenId : String(pesantrenId);
+            router.push(`/pesantren/${pesantrenIdStr}`);
+          }}
           className="w-full bg-blue-900 text-white py-2 px-4 rounded-full hover:bg-blue-800 transition-colors duration-200"
         >
           Kunjungi Pesantren

@@ -340,7 +340,7 @@ function PesantrenCard({ pesantren }: { pesantren: Pesantren }) {
   
   return (
     <div
-      onMouseEnter={() => prefetchPesantren(pesantren.id.toString())}
+      onMouseEnter={() => prefetchPesantren(pesantren.id)}
     >
       {/* Card content */}
     </div>

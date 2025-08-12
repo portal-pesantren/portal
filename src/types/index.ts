@@ -1,7 +1,8 @@
 // Common types for the Portal Pesantren application
 
 export interface Pesantren {
-  id: number;
+  id: string; // Changed to string to avoid scientific notation issues
+  code?: string; // UUID v7 identifier for new records
   name: string;
   location: string;
   address: string;
@@ -31,9 +32,12 @@ export interface Feature {
 }
 
 export interface Review {
-  id: number;
-  pesantrenId: number;
-  userId: number;
+  id: string; // Changed to string to avoid scientific notation issues
+  code?: string; // UUID v7 identifier for new records
+  pesantrenId: string; // Changed to string to avoid scientific notation issues
+  pesantrenCode?: string; // UUID v7 reference to pesantren
+  userId: string; // Changed to string to avoid scientific notation issues
+  userCode?: string; // UUID v7 reference to user
   userName: string;
   userAvatar?: string;
   rating: number;
@@ -63,6 +67,7 @@ export interface SearchFilters {
 
 export interface User {
   id: string;
+  code?: string; // UUID v7 identifier for new records
   created_at: string;
   updated_at: string;
   name: string;
@@ -132,7 +137,8 @@ export interface ContactFormData {
   email: string;
   phone: string;
   message: string;
-  pesantrenId?: number;
+  pesantrenId?: string; // Changed to string to avoid scientific notation issues
+  pesantrenCode?: string; // UUID v7 reference to pesantren
 }
 
 export interface ConsultationFormData {

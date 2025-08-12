@@ -24,8 +24,24 @@ export default function PesantrenCard({
     if (onViewDetail) {
       onViewDetail(pesantren);
     } else {
+      // Convert pesantren ID to string to avoid scientific notation
+      const rawId = pesantren.code || pesantren.id;
+      const pesantrenIdStr = String(rawId);
+      
+      // Additional validation to prevent scientific notation
+      if (pesantrenIdStr.includes('e+') || pesantrenIdStr.includes('E+')) {
+        console.warn('Scientific notation ID detected in PesantrenCard:', pesantrenIdStr);
+        return; // Don't navigate if ID is in scientific notation
+      }
+      
+      // Ensure ID is reasonable length
+      if (pesantrenIdStr.length > 50) {
+        console.warn('Extremely long ID detected in PesantrenCard:', pesantrenIdStr);
+        return;
+      }
+      
       // Default action - could navigate to detail page
-      console.log('View detail for:', pesantren.name);
+      console.log('View detail for:', pesantren.name, 'ID:', pesantrenIdStr);
     }
   };
 
