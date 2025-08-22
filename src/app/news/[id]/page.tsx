@@ -14,11 +14,15 @@ interface NewsItem {
   title: string;
   excerpt: string;
   content: string;
-  image: string;
-  date: string;
+  featuredImage?: string;
+  publishedAt: Date;
   category: string;
-  author: string;
-  readTime: string;
+  author: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+  readingTime: number;
   tags: string[];
 }
 
@@ -47,44 +51,66 @@ const dummyNewsDetail: NewsItem = {
     
     <p>Pemerintah akan terus memberikan dukungan melalui berbagai program, termasuk bantuan infrastruktur, peningkatan kualitas tenaga pendidik, dan pengembangan kurikulum yang sesuai dengan kebutuhan zaman.</p>
   `,
-  image: '/api/placeholder/800/400',
-  date: '2024-01-15',
+  featuredImage: '/api/placeholder/800/400',
+  publishedAt: new Date('2024-01-15'),
   category: 'Kunjungan',
-  author: 'Admin Portal',
-  readTime: '3 min',
+  author: {
+    id: '1',
+    name: 'Admin Portal',
+    avatar: '/api/placeholder/40/40'
+  },
+  readingTime: 3,
   tags: ['Kunjungan Menteri', 'Pesantren', 'Pendidikan', 'Pabuaran']
 };
 
-const relatedNews = [
+const relatedNews: NewsItem[] = [
   {
     id: '2',
     title: 'Program Beasiswa Santri Berprestasi',
     excerpt: 'Kementerian Agama meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-14',
+    content: '',
+    featuredImage: '/api/placeholder/400/250',
+    publishedAt: new Date('2024-01-14'),
     category: 'Beasiswa',
-    author: 'Tim Redaksi',
-    readTime: '5 min'
+    author: {
+      id: '2',
+      name: 'Tim Redaksi',
+      avatar: '/api/placeholder/40/40'
+    },
+    readingTime: 5,
+    tags: ['Beasiswa', 'Santri']
   },
   {
     id: '3',
     title: 'Modernisasi Kurikulum Pesantren',
     excerpt: 'Pesantren di era digital mulai mengintegrasikan teknologi dalam pembelajaran.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-13',
+    content: '',
+    featuredImage: '/api/placeholder/400/250',
+    publishedAt: new Date('2024-01-13'),
     category: 'Pendidikan',
-    author: 'Dr. Ahmad Syafi\'i',
-    readTime: '4 min'
+    author: {
+      id: '3',
+      name: 'Dr. Ahmad Syafi\'i',
+      avatar: '/api/placeholder/40/40'
+    },
+    readingTime: 4,
+    tags: ['Pendidikan', 'Teknologi']
   },
   {
     id: '4',
     title: 'Festival Seni Budaya Pesantren',
     excerpt: 'Ratusan santri dari berbagai pesantren se-Jawa Barat mengikuti festival seni budaya.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-12',
+    content: '',
+    featuredImage: '/api/placeholder/400/250',
+    publishedAt: new Date('2024-01-12'),
     category: 'Budaya',
-    author: 'Humas Pesantren',
-    readTime: '6 min'
+    author: {
+      id: '4',
+      name: 'Humas Pesantren',
+      avatar: '/api/placeholder/40/40'
+    },
+    readingTime: 6,
+    tags: ['Budaya', 'Festival']
   }
 ];
 
@@ -202,15 +228,15 @@ export default function NewsDetailPage() {
                 <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
                   <div className="flex items-center">
                     <CalendarIcon className="h-5 w-5 mr-2" />
-                    <span>{formatDate(news.date)}</span>
+                    <span>{formatDate(news.publishedAt.toISOString().split('T')[0])}</span>
                   </div>
                   <div className="flex items-center">
                     <UserIcon className="h-5 w-5 mr-2" />
-                    <span>{news.author}</span>
+                    <span>{news.author.name}</span>
                   </div>
                   <div className="flex items-center">
                     <ClockIcon className="h-5 w-5 mr-2" />
-                    <span>{news.readTime}</span>
+                    <span>{news.readingTime} min</span>
                   </div>
                   <Button
                     variant="outline"
@@ -226,7 +252,7 @@ export default function NewsDetailPage() {
               {/* Featured Image */}
               <div className="relative h-64 md:h-96">
                 <img
-                  src={news.image}
+                  src={news.featuredImage || '/api/placeholder/800/400'}
                   alt={news.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {

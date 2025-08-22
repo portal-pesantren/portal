@@ -207,9 +207,12 @@ const PortalSection = () => {
             const pesantrenIdStr = typeof pesantrenId === 'string' ? pesantrenId : String(pesantrenId);
             router.push(`/pesantren/${pesantrenIdStr}`);
           }}
-          className="w-full bg-blue-900 text-white py-2 px-4 rounded-full hover:bg-blue-800 transition-colors duration-200"
+          className="w-full bg-[#042558] text-white py-2.5 px-4 rounded-full font-medium hover:bg-[#031a3d] transition-all duration-200 flex items-center justify-center space-x-2"
         >
-          Kunjungi Pesantren
+          <span>Kunjungi Pesantren</span>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7V17" />
+          </svg>
         </button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { usePesantren } from '@/hooks/usePesantren';
 import { useSearch } from '@/hooks/useSearch';
@@ -234,7 +234,7 @@ const Pagination = ({
   );
 };
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { searchQuery, setSearchQuery } = useSearch();
@@ -433,5 +433,13 @@ export default function SearchPage() {
       
       <Footer />
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchPageContent />
+    </Suspense>
   );
 }

@@ -6,11 +6,15 @@ interface NewsItem {
   id: string;
   title: string;
   excerpt: string;
-  image: string;
-  date: string;
+  featuredImage?: string;
+  publishedAt: Date;
   category: string;
-  author: string;
-  readTime: string;
+  author: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+  readingTime: number;
 }
 
 interface NewsCardProps {
@@ -19,8 +23,7 @@ interface NewsCardProps {
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (date: Date) => {
     return date.toLocaleDateString('id-ID', {
       year: 'numeric',
       month: 'long',
@@ -37,7 +40,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
         {/* Image */}
         <div className="relative h-48 bg-gray-200">
           <img
-            src={news.image}
+            src={news.featuredImage || '/api/placeholder/400/250'}
             alt={news.title}
             className="w-full h-full object-cover"
             onError={(e) => {
@@ -68,12 +71,12 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
           {/* Meta Info */}
           <div className="flex items-center justify-between text-sm text-gray-500">
             <div className="flex items-center space-x-4">
-              <span>{formatDate(news.date)}</span>
+              <span>{formatDate(news.publishedAt)}</span>
               <span>•</span>
-              <span>{news.author}</span>
+              <span>{news.author.name}</span>
             </div>
             <span className="bg-gray-100 px-2 py-1 rounded text-xs">
-              {news.readTime}
+              {news.readingTime} menit baca
             </span>
           </div>
         </div>

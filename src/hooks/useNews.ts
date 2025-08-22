@@ -1,19 +1,181 @@
-'use client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { newsService, type News, type NewsSearchParams, type NewsCreateData, type NewsUpdateData } from '@/services/newsService';
 
-import { useQuery } from '@tanstack/react-query';
+// Mock data for fallback when API is not available
+const mockNewsData: NewsItem[] = [
+  {
+    id: '1',
+    title: 'Aries Baswadan di Pabuaran',
+    slug: 'aries-baswadan-di-pabuaran',
+    excerpt: 'Menteri Agus Gumiwang Kartasasmita mengunjungi Pondok Pesantren Pabuaran untuk melihat langsung program pendidikan yang telah berjalan.',
+    content: 'Content lengkap artikel...',
+    category: 'berita',
+    tags: ['kunjungan', 'pendidikan'],
+    featuredImage: '/api/placeholder/400/250',
+    author: {
+      id: '1',
+      name: 'Admin Portal',
+      avatar: '/api/placeholder/40/40'
+    },
+    publishedAt: new Date('2024-01-15T10:00:00Z'),
+    views: 150,
+    likes: 25,
+    readingTime: 3,
+    isPublished: true,
+    isFeatured: true
+  },
+  {
+    id: '2',
+    title: 'Program Beasiswa Santri Berprestasi',
+    slug: 'program-beasiswa-santri-berprestasi',
+    excerpt: 'Kementerian Agama meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia dengan total dana 50 miliar rupiah.',
+    content: 'Content lengkap artikel...',
+    category: 'pengumuman',
+    tags: ['beasiswa', 'santri'],
+    featuredImage: '/api/placeholder/400/250',
+    author: {
+      id: '2',
+      name: 'Tim Redaksi',
+      avatar: '/api/placeholder/40/40'
+    },
+    publishedAt: new Date('2024-01-14T09:00:00Z'),
+    views: 200,
+    likes: 40,
+    readingTime: 5,
+    isPublished: true,
+    isFeatured: false
+  },
+  {
+    id: '3',
+    title: 'Modernisasi Kurikulum Pesantren',
+    slug: 'modernisasi-kurikulum-pesantren',
+    excerpt: 'Pesantren di era digital mulai mengintegrasikan teknologi dalam pembelajaran untuk mempersiapkan santri menghadapi tantangan masa depan.',
+    content: 'Content lengkap artikel...',
+    category: 'artikel',
+    tags: ['pendidikan', 'teknologi'],
+    featuredImage: '/api/placeholder/400/250',
+    author: {
+      id: '3',
+      name: 'Dr. Ahmad Syafi\'i',
+      avatar: '/api/placeholder/40/40'
+    },
+    publishedAt: new Date('2024-01-13T08:00:00Z'),
+    views: 120,
+    likes: 18,
+    readingTime: 4,
+    isPublished: true,
+    isFeatured: false
+  },
+  {
+    id: '4',
+    title: 'Festival Seni Budaya Pesantren',
+    slug: 'festival-seni-budaya-pesantren',
+    excerpt: 'Ratusan santri dari berbagai pesantren se-Jawa Barat mengikuti festival seni budaya untuk melestarikan warisan budaya Islam.',
+    content: 'Content lengkap artikel...',
+    category: 'kegiatan',
+    tags: ['budaya', 'festival'],
+    featuredImage: '/api/placeholder/400/250',
+    author: {
+      id: '4',
+      name: 'Humas Pesantren',
+      avatar: '/api/placeholder/40/40'
+    },
+    publishedAt: new Date('2024-01-12T07:00:00Z'),
+    views: 300,
+    likes: 55,
+    readingTime: 6,
+    isPublished: true,
+    isFeatured: true
+  },
+  {
+    id: '5',
+    title: 'Kerjasama Internasional Pesantren',
+    slug: 'kerjasama-internasional-pesantren',
+    excerpt: 'Pesantren Al-Azhar menjalin kerjasama dengan universitas di Timur Tengah untuk program pertukaran santri dan pengajar.',
+    content: 'Content lengkap artikel...',
+    category: 'berita',
+    tags: ['internasional', 'kerjasama'],
+    featuredImage: '/api/placeholder/400/250',
+    author: {
+      id: '5',
+      name: 'Redaksi',
+      avatar: '/api/placeholder/40/40'
+    },
+    publishedAt: new Date('2024-01-11T06:00:00Z'),
+    views: 180,
+    likes: 32,
+    readingTime: 7,
+    isPublished: true,
+    isFeatured: false
+  },
+  {
+    id: '6',
+    title: 'Inovasi Pembelajaran Digital',
+    slug: 'inovasi-pembelajaran-digital',
+    excerpt: 'Pesantren modern mulai menggunakan platform e-learning untuk mendukung pembelajaran jarak jauh dan hybrid learning.',
+    content: 'Content lengkap artikel...',
+    category: 'tips',
+    tags: ['teknologi', 'pembelajaran'],
+    featuredImage: '/api/placeholder/400/250',
+    author: {
+      id: '6',
+      name: 'Tim IT Pesantren',
+      avatar: '/api/placeholder/40/40'
+    },
+    publishedAt: new Date('2024-01-10T05:00:00Z'),
+    views: 250,
+    likes: 45,
+    readingTime: 5,
+    isPublished: true,
+    isFeatured: false
+  }
+];
 
-interface NewsItem {
+// Query keys
+const NEWS_KEYS = {
+  all: ['news'] as const,
+  lists: () => [...NEWS_KEYS.all, 'list'] as const,
+  list: (params: NewsSearchParams) => [...NEWS_KEYS.lists(), params] as const,
+  details: () => [...NEWS_KEYS.all, 'detail'] as const,
+  detail: (id: string) => [...NEWS_KEYS.details(), id] as const,
+  slug: (slug: string) => [...NEWS_KEYS.all, 'slug', slug] as const,
+  categories: () => [...NEWS_KEYS.all, 'categories'] as const,
+  tags: () => [...NEWS_KEYS.all, 'tags'] as const,
+};
+
+// Legacy interface for backward compatibility
+export interface NewsItem {
   id: string;
   title: string;
-  description: string;
-  image?: string;
-  publishedAt: string;
   slug: string;
-  category?: string;
-  author?: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  tags: string[];
+  featuredImage?: string;
+  author: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+  publishedAt: Date;
+  views: number;
+  likes: number;
+  readingTime: number;
+  isPublished: boolean;
+  isFeatured: boolean;
 }
 
-interface NewsResponse {
+export interface NewsFilters {
+  category?: string;
+  tags?: string[];
+  search?: string;
+  featured?: boolean;
+  limit?: number;
+  page?: number;
+}
+
+export interface NewsResponse {
   data: NewsItem[];
   pagination: {
     page: number;
@@ -23,92 +185,259 @@ interface NewsResponse {
   };
 }
 
-// Mock data untuk sementara sampai backend siap
-const mockNewsData: NewsItem[] = [
-  {
-    id: '1',
-    title: 'Pesantren Modern Terdepan dalam Pendidikan Digital',
-    description: 'Pesantren Al-Hikmah mengintegrasikan teknologi digital dalam pembelajaran untuk mempersiapkan santri menghadapi era digital.',
-    publishedAt: '2024-01-15',
-    slug: 'pesantren-modern-pendidikan-digital',
-    category: 'Pendidikan',
-    author: 'Tim Redaksi'
-  },
-  {
-    id: '2',
-    title: 'Program Beasiswa Santri Berprestasi 2024',
-    description: 'Kementerian Agama membuka program beasiswa untuk santri berprestasi di seluruh Indonesia dengan total dana 50 miliar rupiah.',
-    publishedAt: '2024-01-12',
-    slug: 'program-beasiswa-santri-2024',
-    category: 'Beasiswa',
-    author: 'Admin Portal'
-  },
-  {
-    id: '3',
-    title: 'Pesantren Salaf Tetap Eksis di Era Modern',
-    description: 'Meskipun zaman terus berkembang, pesantren salaf tetap mempertahankan tradisi pembelajaran klasik yang terbukti efektif.',
-    publishedAt: '2024-01-10',
-    slug: 'pesantren-salaf-era-modern',
-    category: 'Tradisi',
-    author: 'Dr. Ahmad Fauzi'
-  },
-  {
-    id: '4',
-    title: 'Inovasi Kurikulum Pesantren untuk Generasi Z',
-    description: 'Pesantren-pesantren terkemuka mulai mengadaptasi kurikulum yang sesuai dengan karakteristik dan kebutuhan generasi Z.',
-    publishedAt: '2024-01-08',
-    slug: 'inovasi-kurikulum-generasi-z',
-    category: 'Inovasi',
-    author: 'Prof. Siti Nurhaliza'
-  }
-];
-
-const fetchNews = async (params: {
-  page?: number;
-  limit?: number;
-  category?: string;
-}): Promise<NewsResponse> => {
-  // Simulasi API call
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  const { page = 1, limit = 4, category } = params;
-  
-  let filteredNews = mockNewsData;
-  if (category && category !== 'all') {
-    filteredNews = mockNewsData.filter(news => 
-      news.category?.toLowerCase() === category.toLowerCase()
-    );
-  }
-  
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-  const paginatedNews = filteredNews.slice(startIndex, endIndex);
-  
+// Transform News to NewsItem for backward compatibility
+function transformNewsToNewsItem(news: News): NewsItem {
   return {
-    data: paginatedNews,
-    pagination: {
-      page,
-      limit,
-      total: filteredNews.length,
-      totalPages: Math.ceil(filteredNews.length / limit)
-    }
+    id: news.id,
+    title: news.title,
+    slug: news.slug,
+    excerpt: news.excerpt,
+    content: news.content,
+    category: news.category,
+    tags: news.tags,
+    featuredImage: news.featuredImage,
+    author: {
+      id: news.authorId,
+      name: news.authorName,
+      avatar: news.authorAvatar,
+    },
+    publishedAt: news.publishDate || news.createdAt,
+    views: news.views,
+    likes: news.likes,
+    readingTime: news.readingTime,
+    isPublished: news.isPublished,
+    isFeatured: news.isFeatured,
   };
-};
+}
 
-export const useNews = (params: {
-  page?: number;
-  limit?: number;
-  category?: string;
-} = {}) => {
+// Transform NewsFilters to NewsSearchParams
+function transformFiltersToParams(filters: NewsFilters): NewsSearchParams {
+  return {
+    query: filters.search,
+    category: filters.category,
+    tags: filters.tags,
+    is_featured: filters.featured,
+    is_published: true, // Only show published news by default
+    limit: filters.limit,
+    page: filters.page,
+    sort_by: 'published_at',
+    sort_order: 'desc',
+  };
+}
+
+export function useNews(filters: NewsFilters = {}) {
+  const params = transformFiltersToParams(filters);
+  
   return useQuery({
-    queryKey: ['news', params],
-    queryFn: () => fetchNews(params),
+    queryKey: NEWS_KEYS.list(params),
+    queryFn: async () => {
+      try {
+        const response = await newsService.getNews(params);
+        return {
+          ...response,
+          data: response.data.map(transformNewsToNewsItem),
+        };
+      } catch (error) {
+        console.warn('API not available, using mock data:', error);
+        // Filter mock data based on filters
+        let filteredData = [...mockNewsData];
+        
+        if (filters.search) {
+          const query = filters.search.toLowerCase();
+          filteredData = filteredData.filter(item => 
+            item.title.toLowerCase().includes(query) ||
+            item.excerpt.toLowerCase().includes(query)
+          );
+        }
+        
+        if (filters.category) {
+          filteredData = filteredData.filter(item => item.category === filters.category);
+        }
+        
+        if (filters.featured !== undefined) {
+          filteredData = filteredData.filter(item => item.isFeatured === filters.featured);
+        }
+        
+        // Pagination
+        const page = filters.page || 1;
+        const limit = filters.limit || 10;
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedData = filteredData.slice(startIndex, endIndex);
+        
+        return {
+          data: paginatedData,
+          pagination: {
+            page,
+            limit,
+            total: filteredData.length,
+            totalPages: Math.ceil(filteredData.length / limit)
+          }
+        };
+      }
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
-};
+}
 
-export const useLatestNews = (limit: number = 4) => {
-  return useNews({ page: 1, limit });
-};
+export function useNewsDetail(slug: string) {
+  return useQuery({
+    queryKey: NEWS_KEYS.slug(slug),
+    queryFn: async () => {
+      try {
+        const response = await newsService.getNewsBySlug(slug);
+        return transformNewsToNewsItem(response);
+      } catch (error) {
+        console.warn('API not available, using mock data:', error);
+        const mockItem = mockNewsData.find(item => item.slug === slug);
+        if (!mockItem) {
+          throw new Error('News not found');
+        }
+        return mockItem;
+      }
+    },
+    enabled: !!slug,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+}
 
-export type { NewsItem, NewsResponse };
+export function useFeaturedNews(limit: number = 3) {
+  return useQuery({
+    queryKey: NEWS_KEYS.list({ is_featured: true, limit, is_published: true }),
+    queryFn: async () => {
+      try {
+        const response = await newsService.getFeaturedNews(limit);
+        return response.map(transformNewsToNewsItem);
+      } catch (error) {
+        console.warn('API not available, using mock data:', error);
+        return mockNewsData.filter(item => item.isFeatured).slice(0, limit);
+      }
+    },
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+}
+
+export function useLatestNews(limit: number = 5) {
+  return useQuery({
+    queryKey: NEWS_KEYS.list({ limit, is_published: true }),
+    queryFn: async () => {
+      try {
+        const response = await newsService.getLatestNews(limit);
+        return response.map(transformNewsToNewsItem);
+      } catch (error) {
+        console.warn('API not available, using mock data:', error);
+        return mockNewsData
+          .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+          .slice(0, limit);
+      }
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}
+
+export function useNewsCategories() {
+  return useQuery({
+    queryKey: NEWS_KEYS.categories(),
+    queryFn: () => newsService.getCategories(),
+    staleTime: 30 * 60 * 1000, // 30 minutes
+  });
+}
+
+export function usePopularTags() {
+  return useQuery({
+    queryKey: NEWS_KEYS.tags(),
+    queryFn: () => newsService.getPopularTags(),
+    staleTime: 30 * 60 * 1000, // 30 minutes
+  });
+}
+
+// Admin hooks for managing news
+export function useCreateNews() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (data: NewsCreateData) => newsService.createNews(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.all });
+    },
+  });
+}
+
+export function useUpdateNews() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: NewsUpdateData }) => 
+      newsService.updateNews(id, data),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.detail(id) });
+    },
+  });
+}
+
+export function useDeleteNews() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => newsService.deleteNews(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.all });
+    },
+  });
+}
+
+export function usePublishNews() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => newsService.publishNews(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.detail(id) });
+    },
+  });
+}
+
+export function useUnpublishNews() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => newsService.unpublishNews(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.detail(id) });
+    },
+  });
+}
+
+export function useLikeNews() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => newsService.likeNews(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.detail(id) });
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.lists() });
+    },
+  });
+}
+
+export function useUnlikeNews() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => newsService.unlikeNews(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.detail(id) });
+      queryClient.invalidateQueries({ queryKey: NEWS_KEYS.lists() });
+    },
+  });
+}
+
+export function useIncrementNewsViews() {
+  return useMutation({
+    mutationFn: (id: string) => newsService.incrementViews(id),
+    // Don't invalidate queries for view count to avoid unnecessary refetches
+  });
+}

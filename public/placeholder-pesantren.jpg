@@ -1,0 +1,28 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#f3f4f6"/>
+  <g transform="translate(200,150)">
+    <!-- Mosque silhouette -->
+    <g fill="#9ca3af">
+      <!-- Main building -->
+      <rect x="-80" y="-40" width="160" height="80" rx="5"/>
+      <!-- Dome -->
+      <ellipse cx="0" cy="-40" rx="30" ry="20"/>
+      <!-- Minaret -->
+      <rect x="-90" y="-60" width="15" height="100" rx="2"/>
+      <ellipse cx="-82.5" cy="-60" rx="8" ry="5"/>
+      <!-- Second minaret -->
+      <rect x="75" y="-60" width="15" height="100" rx="2"/>
+      <ellipse cx="82.5" cy="-60" rx="8" ry="5"/>
+      <!-- Windows -->
+      <rect x="-60" y="-20" width="20" height="30" rx="10" fill="#6b7280"/>
+      <rect x="-20" y="-20" width="20" height="30" rx="10" fill="#6b7280"/>
+      <rect x="20" y="-20" width="20" height="30" rx="10" fill="#6b7280"/>
+      <!-- Door -->
+      <rect x="-10" y="10" width="20" height="30" rx="10" fill="#6b7280"/>
+    </g>
+    <!-- Text -->
+    <text x="0" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#6b7280">
+      Foto Pesantren
+    </text>
+  </g>
+</svg>

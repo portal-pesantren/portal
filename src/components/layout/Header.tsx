@@ -9,7 +9,7 @@ interface HeaderProps {
 
 export default function Header({ className = '' }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState('eksplor');
+  const [activeMenu, setActiveMenu] = useState('explore');
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -25,28 +25,29 @@ export default function Header({ className = '' }: HeaderProps) {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">P</span>
-            </div>
-            <span className="text-xl font-bold text-[#042558]">Portal Pesantren</span>
-          </div>
+          <Link href="/" className="flex items-center space-x-2">
+            <img 
+              src="/logo-biru.png" 
+              alt="Portal Pesantren Logo" 
+              className="w-32 h-32 object-contain"
+            />
+          </Link>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a 
-              href="#eksplor" 
-              onClick={() => handleMenuClick('eksplor')}
+            <Link 
+              href="/" 
+              onClick={() => handleMenuClick('explore')}
               className={`hover:text-[#031a3d] transition-colors font-medium pb-1 ${
-                activeMenu === 'eksplor' 
+                activeMenu === 'explore' 
                   ? 'text-[#042558] border-b-2 border-[#042558]' 
                   : 'text-gray-600 hover:text-[#042558]'
               }`}
             >
-              Eksplor
-            </a>
-            <a 
-              href="#berita" 
+              Explore
+            </Link>
+            <Link 
+              href="/news" 
               onClick={() => handleMenuClick('berita')}
               className={`hover:text-[#031a3d] transition-colors font-medium pb-1 ${
                 activeMenu === 'berita' 
@@ -55,7 +56,7 @@ export default function Header({ className = '' }: HeaderProps) {
               }`}
             >
               Berita
-            </a>
+            </Link>
             <a 
               href="#tentang-kami" 
               onClick={() => handleMenuClick('tentang-kami')}
@@ -101,19 +102,19 @@ export default function Header({ className = '' }: HeaderProps) {
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-4">
-              <a 
-                href="#eksplor" 
-                onClick={() => handleMenuClick('eksplor')}
+              <Link 
+                href="/" 
+                onClick={() => handleMenuClick('explore')}
                 className={`transition-colors px-2 py-1 font-medium ${
-                  activeMenu === 'eksplor' 
+                  activeMenu === 'explore' 
                     ? 'text-[#042558] border-l-2 border-[#042558]' 
                     : 'text-gray-600 hover:text-[#042558]'
                 }`}
               >
-                Eksplor
-              </a>
-              <a 
-                href="#berita" 
+                Explore
+              </Link>
+              <Link 
+                href="/news" 
                 onClick={() => handleMenuClick('berita')}
                 className={`transition-colors px-2 py-1 font-medium ${
                   activeMenu === 'berita' 
@@ -122,7 +123,7 @@ export default function Header({ className = '' }: HeaderProps) {
                 }`}
               >
                 Berita
-              </a>
+              </Link>
               <a 
                 href="#tentang-kami" 
                 onClick={() => handleMenuClick('tentang-kami')}

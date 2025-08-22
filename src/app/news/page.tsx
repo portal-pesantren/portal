@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsCard from '@/components/cards/NewsCard';
@@ -8,131 +8,85 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import { ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useNews } from '@/hooks/useNews';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 interface NewsItem {
   id: string;
   title: string;
   excerpt: string;
-  image: string;
-  date: string;
+  featuredImage?: string;
+  publishedAt: Date;
   category: string;
-  author: string;
-  readTime: string;
+  author: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+  readingTime: number;
 }
 
-const dummyNews: NewsItem[] = [
-  {
-    id: '1',
-    title: 'Aries Baswadan di Pabuaran',
-    excerpt: 'Menteri Agus Gumiwang Kartasasmita mengunjungi Pondok Pesantren Pabuaran untuk melihat langsung program pendidikan yang telah berjalan.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-15',
-    category: 'Kunjungan',
-    author: 'Admin Portal',
-    readTime: '3 min'
-  },
-  {
-    id: '2',
-    title: 'Program Beasiswa Santri Berprestasi',
-    excerpt: 'Kementerian Agama meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia dengan total dana 50 miliar rupiah.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-14',
-    category: 'Beasiswa',
-    author: 'Tim Redaksi',
-    readTime: '5 min'
-  },
-  {
-    id: '3',
-    title: 'Modernisasi Kurikulum Pesantren',
-    excerpt: 'Pesantren di era digital mulai mengintegrasikan teknologi dalam pembelajaran untuk mempersiapkan santri menghadapi tantangan masa depan.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-13',
-    category: 'Pendidikan',
-    author: 'Dr. Ahmad Syafi\'i',
-    readTime: '4 min'
-  },
-  {
-    id: '4',
-    title: 'Festival Seni Budaya Pesantren',
-    excerpt: 'Ratusan santri dari berbagai pesantren se-Jawa Barat mengikuti festival seni budaya untuk melestarikan warisan budaya Islam.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-12',
-    category: 'Budaya',
-    author: 'Humas Pesantren',
-    readTime: '6 min'
-  },
-  {
-    id: '5',
-    title: 'Kerjasama Internasional Pesantren',
-    excerpt: 'Pesantren Al-Azhar menjalin kerjasama dengan universitas di Timur Tengah untuk program pertukaran santri dan pengajar.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-11',
-    category: 'Internasional',
-    author: 'Redaksi',
-    readTime: '7 min'
-  },
-  {
-    id: '6',
-    title: 'Inovasi Pembelajaran Digital',
-    excerpt: 'Pesantren modern mulai menggunakan platform e-learning untuk mendukung pembelajaran jarak jauh dan hybrid learning.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-10',
-    category: 'Teknologi',
-    author: 'Tim IT Pesantren',
-    readTime: '5 min'
-  },
-  {
-    id: '7',
-    title: 'Pemberdayaan Ekonomi Santri',
-    excerpt: 'Program kewirausahaan santri berhasil menciptakan UMKM yang berkontribusi pada perekonomian lokal dengan omzet miliaran rupiah.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-09',
-    category: 'Ekonomi',
-    author: 'Divisi Ekonomi',
-    readTime: '4 min'
-  },
-  {
-    id: '8',
-    title: 'Pelatihan Kepemimpinan Santri',
-    excerpt: 'Workshop kepemimpinan untuk santri senior bertujuan mempersiapkan mereka menjadi pemimpin yang berintegritas di masa depan.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-08',
-    category: 'Kepemimpinan',
-    author: 'Ustadz Mahmud',
-    readTime: '3 min'
-  },
-  {
-    id: '9',
-    title: 'Renovasi Fasilitas Pesantren',
-    excerpt: 'Pembangunan asrama baru dan renovasi masjid pesantren untuk meningkatkan kenyamanan dan kapasitas santri.',
-    image: '/api/placeholder/400/250',
-    date: '2024-01-07',
-    category: 'Infrastruktur',
-    author: 'Tim Pembangunan',
-    readTime: '2 min'
-  }
-];
+// Transform function to convert API data to component format
+const transformNewsItem = (apiNews: any): NewsItem => {
+  return {
+    id: apiNews._id || apiNews.id,
+    title: apiNews.title,
+    excerpt: apiNews.excerpt || apiNews.content?.substring(0, 150) + '...',
+    featuredImage: apiNews.featured_image || apiNews.featuredImage,
+    publishedAt: new Date(apiNews.published_at || apiNews.publish_date || apiNews.publishedAt || apiNews.created_at),
+    category: apiNews.category,
+    author: {
+      id: apiNews.author_id || apiNews.author?.id || '1',
+      name: apiNews.author_name || apiNews.author?.name || 'Admin',
+      avatar: apiNews.author_avatar || apiNews.author?.avatar
+    },
+    readingTime: typeof apiNews.reading_time === 'number' ? apiNews.reading_time : (apiNews.readingTime || 5)
+  };
+};
 
-const categories = ['Semua', 'Kunjungan', 'Beasiswa', 'Pendidikan', 'Budaya', 'Internasional', 'Teknologi', 'Ekonomi', 'Kepemimpinan', 'Infrastruktur'];
+// Mapping kategori backend ke frontend
+const categoryMapping: Record<string, string> = {
+  'berita': 'Berita',
+  'artikel': 'Artikel', 
+  'tips': 'Tips',
+  'panduan': 'Panduan',
+  'event': 'Event',
+  'pengumuman': 'Pengumuman',
+  'prestasi': 'Prestasi',
+  'kegiatan': 'Kegiatan'
+};
+
+const defaultCategories = ['Semua', 'Berita', 'Artikel', 'Tips', 'Panduan', 'Event', 'Pengumuman', 'Prestasi', 'Kegiatan'];
 
 export default function NewsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Semua');
   const [currentPage, setCurrentPage] = useState(1);
+  const [categories, setCategories] = useState<string[]>(defaultCategories);
   const itemsPerPage = 6;
 
-  // Filter news based on search and category
-  const filteredNews = dummyNews.filter(news => {
-    const matchesSearch = news.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         news.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'Semua' || news.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Prepare search parameters
+  const searchParams = {
+    page: currentPage,
+    limit: itemsPerPage,
+    query: searchTerm || undefined,
+    category: selectedCategory !== 'Semua' ? selectedCategory.toLowerCase() : undefined,
+    is_published: true
+  };
 
-  // Pagination
-  const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedNews = filteredNews.slice(startIndex, startIndex + itemsPerPage);
+  // Fetch news data
+  const { 
+    data: newsResponse, 
+    isLoading, 
+    error, 
+    refetch 
+  } = useNews(searchParams);
+
+  const newsData = newsResponse?.data || [];
+  const pagination = newsResponse?.pagination;
+  const totalPages = pagination?.totalPages || 1;
+  const totalItems = pagination?.total || 0;
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -199,34 +153,62 @@ export default function NewsPage() {
       <main className="py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            {/* Results Info */}
-            <div className="mb-8">
-              <p className="text-gray-600">
-                Menampilkan {paginatedNews.length} dari {filteredNews.length} berita
-                {selectedCategory !== 'Semua' && ` dalam kategori "${selectedCategory}"`}
-                {searchTerm && ` untuk pencarian "${searchTerm}"`}
-              </p>
-            </div>
-
-            {/* News Grid */}
-            {paginatedNews.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                {paginatedNews.map((news) => (
-                  <NewsCard key={news.id} news={news} />
-                ))}
+            {/* Loading State */}
+            {isLoading && (
+              <div className="flex justify-center py-16">
+                <LoadingSpinner size="lg" />
               </div>
-            ) : (
-              <div className="text-center py-16">
-                <div className="text-gray-400 mb-4">
-                  <MagnifyingGlassIcon className="h-16 w-16 mx-auto" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                  Tidak ada berita ditemukan
-                </h3>
-                <p className="text-gray-500">
-                  Coba ubah kata kunci pencarian atau kategori
+            )}
+
+            {/* Error State */}
+            {error && (
+              <ErrorMessage 
+                message="Gagal memuat berita. Silakan coba lagi."
+                onRetry={() => refetch()}
+              />
+            )}
+
+            {/* Results Info */}
+            {!isLoading && !error && (
+              <div className="mb-8">
+                <p className="text-gray-600">
+                  Menampilkan {newsData.length} dari {totalItems} berita
+                  {selectedCategory !== 'Semua' && ` dalam kategori "${selectedCategory}"`}
+                  {searchTerm && ` untuk pencarian "${searchTerm}"`}
                 </p>
               </div>
+            )}
+
+            {/* News Grid */}
+            {!isLoading && !error && (
+              newsData.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                   {newsData.map((news) => {
+                     const transformedNews = transformNewsItem(news);
+                     return (
+                       <NewsCard 
+                         key={transformedNews.id} 
+                         news={{
+                           ...transformedNews,
+                           category: categoryMapping[news.category] || news.category
+                         }} 
+                       />
+                     );
+                   })}
+                 </div>
+              ) : (
+                <div className="text-center py-16">
+                  <div className="text-gray-400 mb-4">
+                    <MagnifyingGlassIcon className="h-16 w-16 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                    Tidak ada berita ditemukan
+                  </h3>
+                  <p className="text-gray-500">
+                    Coba ubah kata kunci pencarian atau kategori
+                  </p>
+                </div>
+              )
             )}
 
             {/* Pagination */}

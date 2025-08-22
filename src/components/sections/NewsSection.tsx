@@ -61,9 +61,9 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
         )}
         
         {/* News Grid */}
-        {newsData && newsData.data.length > 0 && (
+        {newsData && newsData.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {newsData.data.map((news: NewsItem) => (
+            {newsData.map((news: NewsItem) => (
             <div 
               key={news.id} 
               className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group border border-gray-100"
@@ -86,7 +86,7 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
                   {news.title}
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
-                  {news.description}
+                  {news.excerpt}
                 </p>
               </div>
             </div>

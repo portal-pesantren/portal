@@ -43,13 +43,14 @@ interface PopularPesantrenSectionProps {
 const fallbackData: Pesantren[] = [
   {
     id: "1",
-    name: "Nama Pesantren Pesantren",
-    location: "Bogor, Jawa Barat",
+    name: "Pondok Pesantren Al-Hikmah",
+    location: "Pondok Putri",
     address: "Jl. Raya Bogor, Bogor, Jawa Barat",
-    rating: 4.8,
+    rating: 5.0,
     students: 1200,
     programs: ["Tahfidz", "Kitab Kuning", "Bahasa Arab"],
-    image: "/api/placeholder/300/200",
+    image: "/placeholder-pesantren.jpg",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.",
     featured: true
   },
   {
@@ -212,7 +213,7 @@ export default function PopularPesantrenSection({ className = '' }: PopularPesan
         </div>
         
         {/* Pesantren Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12">
           {currentPesantren.map((pesantren) => (
             <div key={pesantren.id} className="relative">
               <PesantrenCard 
