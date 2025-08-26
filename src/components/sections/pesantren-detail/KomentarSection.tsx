@@ -22,22 +22,11 @@ interface Review {
   verified?: boolean;
 }
 
-interface NewReview {
-  rating: number;
-  comment: string;
-  name: string;
-  email: string;
-}
+
 
 export default function KomentarSection({ pesantrenId, reviews = [] }: KomentarSectionProps) {
-  const [showReviewForm, setShowReviewForm] = useState(false);
-  const [newReview, setNewReview] = useState<NewReview>({
-    rating: 0,
-    comment: '',
-    name: '',
-    email: ''
-  });
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'highest' | 'lowest'>('newest');
+  const [comment, setComment] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
   // Sample reviews data
   const sampleReviews: Review[] = [
@@ -121,233 +110,71 @@ export default function KomentarSection({ pesantrenId, reviews = [] }: KomentarS
     });
   };
 
-  const handleSubmitReview = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle review submission logic here
-    console.log('New review:', newReview);
-    
-    // Reset form
-    setNewReview({
-      rating: 0,
-      comment: '',
-      name: '',
-      email: ''
-    });
-    setShowReviewForm(false);
-  };
-
   const sortedReviews = [...allReviews].sort((a, b) => {
-    switch (sortBy) {
-      case 'newest':
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      case 'oldest':
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      case 'highest':
-        return b.rating - a.rating;
-      case 'lowest':
-        return a.rating - b.rating;
-      default:
-        return 0;
-    }
-  });
-
-  const averageRating = allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length;
-  const ratingDistribution = [5, 4, 3, 2, 1].map(rating => {
-    const count = allReviews.filter(review => review.rating === rating).length;
-    const percentage = (count / allReviews.length) * 100;
-    return { rating, count, percentage };
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
   return (
     <div id="reviews" className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-2 sm:space-y-0">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Ulasan & Testimoni</h2>
-        <Button 
-          onClick={() => setShowReviewForm(!showReviewForm)}
-          className="self-start sm:self-auto"
-        >
-          {showReviewForm ? 'Batal' : 'Tulis Ulasan'}
-        </Button>
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold text-gray-900">Komentar {allReviews.length}</h2>
       </div>
 
-      {/* Rating Summary */}
-      <div className="bg-gray-50 rounded-lg p-4 mb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Overall Rating */}
-          <div className="text-center lg:text-left">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-4">
-              <div>
-                <div className="text-4xl font-bold text-gray-900 mb-2">
-                  {averageRating.toFixed(1)}
-                </div>
-                <div className="flex justify-center lg:justify-start mb-2">
-                  {renderStars(Math.round(averageRating))}
-                </div>
-                <p className="text-gray-600 text-sm">
-                  Berdasarkan {allReviews.length} ulasan
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Rating Distribution */}
-          <div className="space-y-2">
-            {ratingDistribution.map(({ rating, count, percentage }) => (
-              <div key={rating} className="flex items-center space-x-3">
-                <span className="text-sm font-medium w-8">{rating}⭐</span>
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${percentage}%` }}
-                  ></div>
-                </div>
-                <span className="text-sm text-gray-600 w-8">{count}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Review Form */}
-      {showReviewForm && (
-        <div className="bg-blue-50 rounded-lg p-4 sm:p-6 mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Tulis Ulasan Anda</h3>
-          <form onSubmit={handleSubmitReview} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nama Lengkap *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newReview.name}
-                  onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Masukkan nama lengkap"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={newReview.email}
-                  onChange={(e) => setNewReview({ ...newReview, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Masukkan email"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rating *
-              </label>
-              {renderStars(newReview.rating, true, (rating) => setNewReview({ ...newReview, rating }))}
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Ulasan *
-              </label>
-              <textarea
-                required
-                rows={4}
-                value={newReview.comment}
-                onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Bagikan pengalaman Anda tentang pesantren ini..."
+      {/* Comment Form */}
+      <div className="border border-gray-300 rounded-lg p-4 mb-6">
+        <textarea 
+          placeholder="Tulis komentar"
+          className="w-full border-none outline-none resize-none text-gray-700 placeholder-gray-500"
+          rows={3}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <div className="flex items-center justify-between mt-3">
+          <div className="flex items-center text-sm text-gray-600">
+            <span className="mr-3">Sembunyikan sebagai anonim</span>
+            <label className="cursor-pointer" onClick={() => setIsAnonymous(!isAnonymous)}>
+              <input 
+                type="checkbox" 
+                className="sr-only" 
+                checked={isAnonymous}
+                onChange={() => setIsAnonymous(!isAnonymous)}
               />
-            </div>
-            
-            <div className="flex space-x-3">
-              <Button type="submit" disabled={!newReview.rating || !newReview.comment.trim()}>
-                Kirim Ulasan
-              </Button>
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => setShowReviewForm(false)}
-              >
-                Batal
-              </Button>
-            </div>
-          </form>
+              <div className={`w-10 h-6 rounded-full shadow-inner transition-colors duration-200 ease-in-out ${
+                 isAnonymous ? 'bg-gray-400' : 'bg-blue-500'
+               }`}>
+                 <div className={`w-4 h-4 bg-white rounded-full shadow transform transition-transform duration-200 ease-in-out ${
+                   isAnonymous ? 'translate-x-1' : 'translate-x-5'
+                 }`}></div>
+              </div>
+            </label>
+          </div>
+          <Button 
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm flex items-center space-x-2 font-medium"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+            <span>Kirim</span>
+          </Button>
         </div>
-      )}
-
-      {/* Sort Options */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
-        <p className="text-gray-600 text-sm">
-          Menampilkan {sortedReviews.length} ulasan
-        </p>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as any)}
-          className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="newest">Terbaru</option>
-          <option value="oldest">Terlama</option>
-          <option value="highest">Rating Tertinggi</option>
-          <option value="lowest">Rating Terendah</option>
-        </select>
       </div>
 
-      {/* Reviews List */}
+      {/* Comments List */}
       <div className="space-y-4">
         {sortedReviews.map((review) => (
-          <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-300">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 space-y-2 sm:space-y-0">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-semibold text-sm">
-                    {review.user.name.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <h4 className="font-semibold text-gray-900">{review.user.name}</h4>
-                    {review.verified && (
-                      <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                        ✓ Terverifikasi
-                      </span>
-                    )}
-                  </div>
-                  {review.user.role && (
-                    <p className="text-sm text-gray-600">{review.user.role}</p>
-                  )}
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="flex justify-end mb-1">
-                  {renderStars(review.rating)}
-                </div>
+          <div key={review.id} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
+            <div className="mb-2">
+              <div className="flex items-center space-x-2">
+                <h4 className="font-semibold text-gray-900 text-base">{review.user.name}</h4>
+                <span className="text-gray-400 text-sm">•</span>
                 <p className="text-sm text-gray-500">{formatDate(review.date)}</p>
               </div>
             </div>
-            
-            <p className="text-gray-700 leading-relaxed mb-3">{review.comment}</p>
-            
-            {review.helpful && (
-              <div className="flex items-center justify-between">
-                <button className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-800">
-                  <span>👍</span>
-                  <span>Membantu ({review.helpful})</span>
-                </button>
-              </div>
-            )}
+            <p className="text-gray-700 leading-relaxed text-sm">{review.comment}</p>
           </div>
         ))}
-      </div>
-
-      {/* Load More Button */}
-      <div className="mt-6 text-center">
-        <Button variant="outline">
-          Muat Lebih Banyak Ulasan
-        </Button>
       </div>
     </div>
   );

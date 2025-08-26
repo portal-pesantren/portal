@@ -6,7 +6,7 @@ interface DropdownSectionProps {
   sections: {
     id: string;
     title: string;
-    icon: string;
+    icon: React.ReactNode;
   }[];
   activeSection: string;
   onSectionClick: (sectionId: string) => void;
@@ -30,7 +30,7 @@ export default function DropdownSection({ sections, activeSection, onSectionClic
         className="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       >
         <div className="flex items-center space-x-3">
-          <span className="text-lg">{activeItem?.icon}</span>
+          <span className="mr-3">{activeItem?.icon}</span>
           <span className="font-medium text-gray-900">{activeItem?.title}</span>
         </div>
         <svg
@@ -66,7 +66,7 @@ export default function DropdownSection({ sections, activeSection, onSectionClic
                     : 'text-gray-700'
                 }`}
               >
-                <span className="text-lg">{section.icon}</span>
+                <span className="mr-3">{section.icon}</span>
                 <span className="font-medium">{section.title}</span>
                 {activeSection === section.id && (
                   <span className="ml-auto text-blue-500">

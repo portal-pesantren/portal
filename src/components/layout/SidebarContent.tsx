@@ -1,7 +1,7 @@
 interface Section {
   id: string;
   title: string;
-  icon: string;
+  icon: React.ReactNode;
 }
 
 interface SidebarContentProps {
@@ -31,7 +31,7 @@ export default function SidebarContent({ sections, activeSection, onSectionClick
                 : 'hover:bg-gray-100 text-gray-700 hover:text-gray-900'
             }`}
           >
-            <span className={`text-xl transition-transform duration-200 ${
+            <span className={`transition-transform duration-200 ${
               activeSection === section.id ? 'scale-110' : 'group-hover:scale-105'
             }`}>{section.icon}</span>
             <span className="font-medium">{section.title}</span>

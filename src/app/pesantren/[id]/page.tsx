@@ -20,6 +20,21 @@ import {
 } from '@/components/sections/pesantren-detail';
 import SidebarContent from '@/components/layout/SidebarContent';
 import { formatNumber } from '@/lib/utils';
+import {
+  Home,
+  Star,
+  BookOpen,
+  Target,
+  Users,
+  Building,
+  Trophy,
+  GraduationCap,
+  DollarSign,
+  Gift,
+  Calendar,
+  Camera,
+  MessageCircle
+} from 'lucide-react';
 
 // Loading skeleton component
 const DetailSkeleton = () => (
@@ -38,7 +53,7 @@ export default function PesantrenDetailPage() {
   const router = useRouter();
   const pesantrenId = params?.id as string;
   
-  const [activeSection, setActiveSection] = useState('keterangan');
+  const [activeSection, setActiveSection] = useState('tentang-pondok');
   const [isMobile, setIsMobile] = useState(false);
 
   // Fetch pesantren detail data
@@ -96,12 +111,19 @@ export default function PesantrenDetailPage() {
 
   // Navigation sections
   const sections = [
-    { id: 'keterangan', title: 'Keterangan', icon: '📋' },
-    { id: 'galeri', title: 'Galeri', icon: '🖼️' },
-    { id: 'ulasan', title: 'Ulasan', icon: '⭐' },
-    { id: 'berita', title: 'Berita', icon: '📰' },
-    { id: 'kalender', title: 'Kalender', icon: '📅' },
-    { id: 'keterangan-event', title: 'Event Bulanan', icon: '📆' }
+    { id: 'tentang-pondok', title: 'Tentang Pondok', icon: <Home className="w-4 h-4" /> },
+    { id: 'kenapa-belajar', title: 'Kenapa Belajar di sini', icon: <Star className="w-4 h-4" /> },
+    { id: 'program-pendidikan', title: 'Program Pendidikan', icon: <BookOpen className="w-4 h-4" /> },
+    { id: 'program-ekstrakurikuler', title: 'Program Ekstrakurikuler', icon: <Target className="w-4 h-4" /> },
+    { id: 'kehidupan-santri', title: 'Kehidupan Santri', icon: <Users className="w-4 h-4" /> },
+    { id: 'fasilitas', title: 'Fasilitas', icon: <Building className="w-4 h-4" /> },
+    { id: 'prestasi-pondok', title: 'Prestasi Pondok & Santri', icon: <Trophy className="w-4 h-4" /> },
+    { id: 'alumni-jejak', title: 'Alumni & Jejak Karier', icon: <GraduationCap className="w-4 h-4" /> },
+    { id: 'biaya-pendidikan', title: 'Biaya Pendidikan', icon: <DollarSign className="w-4 h-4" /> },
+    { id: 'info-beasiswa', title: 'Info Beasiswa', icon: <Gift className="w-4 h-4" /> },
+    { id: 'kalender-event', title: 'Kalender Event', icon: <Calendar className="w-4 h-4" /> },
+    { id: 'galeri-pondok', title: 'Galeri Pondok', icon: <Camera className="w-4 h-4" /> },
+    { id: 'kolom-komentar', title: 'Kolom Komentar', icon: <MessageCircle className="w-4 h-4" /> }
   ];
 
   const handleSectionChange = (sectionId: string) => {
@@ -371,12 +393,193 @@ export default function PesantrenDetailPage() {
             
             {/* Content Sections */}
             <div className="space-y-6">
-              {/* Keterangan Section */}
-              <div id="section-keterangan" className={activeSection === 'keterangan' || !isMobile ? 'block' : 'hidden'}>
+              {/* Tentang Pondok Section */}
+              <div id="section-tentang-pondok" className={activeSection === 'tentang-pondok' || !isMobile ? 'block' : 'hidden'}>
                 <TableOfContentDropdown pesantrenId={pesantrenId} />
               </div>
-               {/* Kalender Section */}
-              <div id="section-kalender" className={activeSection === 'kalender' || !isMobile ? 'block' : 'hidden'}>
+              
+              {/* Kenapa Belajar Section */}
+                 <div id="section-kenapa-belajar" className={activeSection === 'kenapa-belajar' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                        monthly: displayPesantren.fees.monthly,
+                        registration: displayPesantren.fees.registration,
+                        dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                      } : undefined,
+                      contact: displayPesantren.contact ? {
+                        phone: displayPesantren.contact.phone || '',
+                        email: displayPesantren.contact.email || '',
+                        address: displayPesantren.location || '',
+                        website: displayPesantren.contact.website
+                      } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Program Pendidikan Section */}
+                 <div id="section-program-pendidikan" className={activeSection === 'program-pendidikan' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Program Ekstrakurikuler Section */}
+                 <div id="section-program-ekstrakurikuler" className={activeSection === 'program-ekstrakurikuler' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Kehidupan Santri Section */}
+                 <div id="section-kehidupan-santri" className={activeSection === 'kehidupan-santri' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Fasilitas Section */}
+                 <div id="section-fasilitas" className={activeSection === 'fasilitas' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Prestasi Pondok Section */}
+                 <div id="section-prestasi-pondok" className={activeSection === 'prestasi-pondok' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Alumni & Jejak Karier Section */}
+                 <div id="section-alumni-jejak" className={activeSection === 'alumni-jejak' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Biaya Pendidikan Section */}
+                 <div id="section-biaya-pendidikan" className={activeSection === 'biaya-pendidikan' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+                 
+                 {/* Info Beasiswa Section */}
+                 <div id="section-info-beasiswa" className={activeSection === 'info-beasiswa' || !isMobile ? 'block' : 'hidden'}>
+                   <KeteranganSection pesantren={{
+                     programs: displayPesantren.programs,
+                     facilities: displayPesantren.facilities,
+                     fees: displayPesantren.fees ? {
+                       monthly: displayPesantren.fees.monthly,
+                       registration: displayPesantren.fees.registration,
+                       dormitory: 'dormitory' in displayPesantren.fees ? displayPesantren.fees.dormitory : ('other' in displayPesantren.fees ? displayPesantren.fees.other || 0 : 0)
+                     } : undefined,
+                     contact: displayPesantren.contact ? {
+                       phone: displayPesantren.contact.phone || '',
+                       email: displayPesantren.contact.email || '',
+                       address: displayPesantren.location || '',
+                       website: displayPesantren.contact.website
+                     } : undefined,
+                     advantages: (displayPesantren as any).advantages
+                   }} />
+                 </div>
+              
+              {/* Kalender Event Section */}
+              <div id="section-kalender-event" className={activeSection === 'kalender-event' || !isMobile ? 'block' : 'hidden'}>
                 <div className="flex flex-col lg:flex-row gap-6">
                   <div className="flex-1">
                     <KalenderEvent pesantrenId={pesantrenId} />
@@ -387,27 +590,17 @@ export default function PesantrenDetailPage() {
                 </div>
               </div>
               
-              {/* Keterangan Event Section - Mobile only */}
-              <div id="section-keterangan-event" className={`${activeSection === 'keterangan-event' && isMobile ? 'block' : 'hidden'} lg:hidden`}>
-                <KeteranganEvent pesantrenId={pesantrenId} />
-              </div>
-              
-              {/* Galeri Section */}
-              <div id="section-galeri" className={activeSection === 'galeri' || !isMobile ? 'block' : 'hidden'}>
+              {/* Galeri Pondok Section */}
+              <div id="section-galeri-pondok" className={activeSection === 'galeri-pondok' || !isMobile ? 'block' : 'hidden'}>
                 <GaleriPondok pesantrenId={pesantrenId} />
               </div>
               
-              {/* Ulasan Section */}
-              <div id="section-ulasan" className={activeSection === 'ulasan' || !isMobile ? 'block' : 'hidden'}>
+              {/* Kolom Komentar Section */}
+              <div id="section-kolom-komentar" className={activeSection === 'kolom-komentar' || !isMobile ? 'block' : 'hidden'}>
                 <KomentarSection 
                   pesantrenId={pesantrenId} 
                   reviews={reviews?.reviews as any || []} 
                 />
-              </div>
-              
-              {/* Berita Section */}
-              <div id="section-berita" className={activeSection === 'berita' || !isMobile ? 'block' : 'hidden'}>
-                <BeritaTerkait pesantrenId={pesantrenId} />
               </div>
             </div>
           </div>
