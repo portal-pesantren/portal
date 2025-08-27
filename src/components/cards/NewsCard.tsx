@@ -25,58 +25,54 @@ interface NewsCardProps {
 const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('id-ID', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
     });
   };
 
   return (
     <article className={cn(
-      'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300',
+      'bg-white rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 group',
       className
     )}>
       <Link href={`/news/${news.id}`} className="block">
         {/* Image */}
-        <div className="relative h-48 bg-gray-200">
+        <div className="relative h-48 bg-gray-200 rounded-lg overflow-hidden mb-4">
           <img
-            src={news.featuredImage || '/api/placeholder/400/250'}
+            src={news.featuredImage || 'https://picsum.photos/400/250?random=1'}
             alt={news.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTAwSDIyNVYxNTBIMTc1VjEwMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHA+CjwvcGF0aD4KPC9zdmc+';
             }}
           />
-          {/* Category Badge */}
-          <div className="absolute top-3 left-3">
-            <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
-              {news.category}
-            </span>
-          </div>
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="space-y-3">
+          {/* Date and Category */}
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <span>{formatDate(news.publishedAt)}</span>
+            <span>•</span>
+            <span className="text-blue-600 font-medium">{news.category}</span>
+          </div>
+          
           {/* Title */}
-          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 hover:text-blue-600 transition-colors">
+          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors leading-tight">
             {news.title}
           </h3>
           
           {/* Excerpt */}
-          <p className="text-gray-600 mb-4 line-clamp-3">
+          <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
             {news.excerpt}
           </p>
           
-          {/* Meta Info */}
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center space-x-4">
-              <span>{formatDate(news.publishedAt)}</span>
-              <span>•</span>
-              <span>{news.author.name}</span>
-            </div>
-            <span className="bg-gray-100 px-2 py-1 rounded text-xs">
-              {news.readingTime} menit baca
+          {/* Read More */}
+          <div className="pt-2">
+            <span className="text-blue-600 text-sm font-medium group-hover:underline">
+              Baca Selengkapnya →
             </span>
           </div>
         </div>

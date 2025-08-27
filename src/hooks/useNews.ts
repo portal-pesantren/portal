@@ -11,7 +11,7 @@ const mockNewsData: NewsItem[] = [
     content: 'Content lengkap artikel...',
     category: 'berita',
     tags: ['kunjungan', 'pendidikan'],
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=1',
     author: {
       id: '1',
       name: 'Admin Portal',
@@ -32,7 +32,7 @@ const mockNewsData: NewsItem[] = [
     content: 'Content lengkap artikel...',
     category: 'pengumuman',
     tags: ['beasiswa', 'santri'],
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=2',
     author: {
       id: '2',
       name: 'Tim Redaksi',
@@ -53,7 +53,7 @@ const mockNewsData: NewsItem[] = [
     content: 'Content lengkap artikel...',
     category: 'artikel',
     tags: ['pendidikan', 'teknologi'],
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=3',
     author: {
       id: '3',
       name: 'Dr. Ahmad Syafi\'i',
@@ -74,7 +74,7 @@ const mockNewsData: NewsItem[] = [
     content: 'Content lengkap artikel...',
     category: 'kegiatan',
     tags: ['budaya', 'festival'],
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=4',
     author: {
       id: '4',
       name: 'Humas Pesantren',
@@ -95,7 +95,7 @@ const mockNewsData: NewsItem[] = [
     content: 'Content lengkap artikel...',
     category: 'berita',
     tags: ['internasional', 'kerjasama'],
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=5',
     author: {
       id: '5',
       name: 'Redaksi',
@@ -116,7 +116,7 @@ const mockNewsData: NewsItem[] = [
     content: 'Content lengkap artikel...',
     category: 'tips',
     tags: ['teknologi', 'pembelajaran'],
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=6',
     author: {
       id: '6',
       name: 'Tim IT Pesantren',

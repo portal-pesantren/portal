@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsCard from '@/components/cards/NewsCard';
@@ -98,59 +99,20 @@ export default function NewsPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Berita Pesantren
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8">
-              Informasi terkini seputar dunia pesantren dan pendidikan Islam
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Search and Filter Section */}
-      <section className="py-8 bg-white border-b">
+      <section className="bg-white py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-              {/* Search */}
-              <div className="relative flex-1 max-w-md">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Cari berita..."
-                  value={searchTerm}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setSearchTerm(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="pl-10"
-                />
-              </div>
-              
-              {/* Category Filter */}
-              <div className="flex items-center gap-4">
-                <span className="text-gray-600 font-medium whitespace-nowrap">Kategori:</span>
-                <Select
-                  value={selectedCategory}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                    setSelectedCategory(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  options={categories.map(cat => ({ value: cat, label: cat }))}
-                  className="min-w-[150px]"
-                />
-              </div>
-            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Baca Berita dan temukan informasi menarik
+            </h1>
           </div>
         </div>
       </section>
 
-      {/* News Grid */}
-      <main className="py-12">
+
+
+      {/* Featured News Section */}
+      <main className="bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             {/* Loading State */}
@@ -168,52 +130,156 @@ export default function NewsPage() {
               />
             )}
 
-            {/* Results Info */}
-            {!isLoading && !error && (
-              <div className="mb-8">
-                <p className="text-gray-600">
-                  Menampilkan {newsData.length} dari {totalItems} berita
-                  {selectedCategory !== 'Semua' && ` dalam kategori "${selectedCategory}"`}
-                  {searchTerm && ` untuk pencarian "${searchTerm}"`}
+            {/* Featured News Grid */}
+            {!isLoading && !error && newsData.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                {/* Main Featured News */}
+                {newsData.slice(0, 2).map((news, index) => {
+                  const transformedNews = transformNewsItem(news);
+                  return (
+                    <div key={transformedNews.id} className="relative group cursor-pointer">
+                      <Link href={`/news/${transformedNews.id}`}>
+                        <div className="relative h-64 rounded-lg overflow-hidden">
+                          <img
+                            src={transformedNews.featuredImage || '/api/placeholder/600/300'}
+                            alt={transformedNews.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDYwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNzUgMTI1SDMyNVYxNzVIMjc1VjEyNVoiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+';
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                          <div className="absolute bottom-4 left-4 right-4 text-white">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="bg-blue-600 px-2 py-1 rounded text-xs font-medium">
+                                {categoryMapping[news.category] || news.category}
+                              </span>
+                              <span className="text-xs opacity-90">
+                                {transformedNews.publishedAt.toLocaleDateString('id-ID', {
+                                  day: 'numeric',
+                                  month: 'short',
+                                  year: 'numeric'
+                                })}
+                              </span>
+                            </div>
+                            <h3 className="text-lg font-bold line-clamp-2 group-hover:text-blue-200 transition-colors">
+                              {transformedNews.title}
+                            </h3>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Category Sections - Side by Side Layout */}
+            {!isLoading && !error && newsData.length > 2 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                {/* Berita Popular Section - Left Side */}
+                <section>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-gray-900">Berita popular pekan ini</h2>
+                    <div className="flex gap-2">
+                      <button className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                        <ChevronLeftIcon className="w-4 h-4" />
+                      </button>
+                      <button className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                        <ChevronRightIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {newsData.slice(2, 5).map((news) => {
+                      const transformedNews = transformNewsItem(news);
+                      return (
+                        <NewsCard 
+                          key={transformedNews.id} 
+                          news={{
+                            ...transformedNews,
+                            category: categoryMapping[news.category] || news.category
+                          }}
+                          className="border-0 shadow-sm"
+                        />
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* Berita Populer Pesantren Section - Right Side */}
+                <section>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-gray-900">Berita Populer Pesantren</h2>
+                    <div className="flex gap-2">
+                      <button className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                        <ChevronLeftIcon className="w-4 h-4" />
+                      </button>
+                      <button className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                        <ChevronRightIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {newsData.slice(5, 8).map((news) => {
+                      const transformedNews = transformNewsItem(news);
+                      return (
+                        <NewsCard 
+                          key={transformedNews.id} 
+                          news={{
+                            ...transformedNews,
+                            category: categoryMapping[news.category] || news.category
+                          }}
+                          className="border-0 shadow-sm"
+                        />
+                      );
+                    })}
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {/* Remaining News Section */}
+            {!isLoading && !error && newsData.length > 8 && (
+              <section className="mb-12">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">Berita Lainnya</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {newsData.slice(8).map((news) => {
+                    const transformedNews = transformNewsItem(news);
+                    return (
+                      <NewsCard 
+                        key={transformedNews.id} 
+                        news={{
+                          ...transformedNews,
+                          category: categoryMapping[news.category] || news.category
+                        }}
+                        className="border-0 shadow-sm"
+                      />
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+            {/* Empty State */}
+            {!isLoading && !error && newsData.length === 0 && (
+              <div className="text-center py-16">
+                <div className="text-gray-400 mb-4">
+                  <MagnifyingGlassIcon className="h-16 w-16 mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                  Tidak ada berita ditemukan
+                </h3>
+                <p className="text-gray-500">
+                  Silakan coba lagi nanti
                 </p>
               </div>
             )}
 
-            {/* News Grid */}
-            {!isLoading && !error && (
-              newsData.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                   {newsData.map((news) => {
-                     const transformedNews = transformNewsItem(news);
-                     return (
-                       <NewsCard 
-                         key={transformedNews.id} 
-                         news={{
-                           ...transformedNews,
-                           category: categoryMapping[news.category] || news.category
-                         }} 
-                       />
-                     );
-                   })}
-                 </div>
-              ) : (
-                <div className="text-center py-16">
-                  <div className="text-gray-400 mb-4">
-                    <MagnifyingGlassIcon className="h-16 w-16 mx-auto" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                    Tidak ada berita ditemukan
-                  </h3>
-                  <p className="text-gray-500">
-                    Coba ubah kata kunci pencarian atau kategori
-                  </p>
-                </div>
-              )
-            )}
-
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center space-x-2">
+              <div className="flex justify-center items-center space-x-2 py-8">
                 <Button
                   variant="outline"
                   onClick={() => handlePageChange(currentPage - 1)}
@@ -223,16 +289,29 @@ export default function NewsPage() {
                   <ChevronLeftIcon className="h-5 w-5" />
                 </Button>
                 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <Button
-                    key={page}
-                    variant={currentPage === page ? 'primary' : 'outline'}
-                    onClick={() => handlePageChange(page)}
-                    className="px-4 py-2 min-w-[40px]"
-                  >
-                    {page}
-                  </Button>
-                ))}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let page;
+                  if (totalPages <= 5) {
+                    page = i + 1;
+                  } else if (currentPage <= 3) {
+                    page = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    page = totalPages - 4 + i;
+                  } else {
+                    page = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? 'primary' : 'outline'}
+                      onClick={() => handlePageChange(page)}
+                      className="px-4 py-2 min-w-[40px]"
+                    >
+                      {page}
+                    </Button>
+                  );
+                })}
                 
                 <Button
                   variant="outline"

@@ -98,24 +98,21 @@ export default function KeteranganEvent({ pesantrenId, className = '' }: Keteran
   }
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${className}`}>
+    <div className={`bg-blue-50 rounded-lg p-6 ${className}`}>
       <div className="mb-6">
         <h3 className="text-xl font-bold text-gray-900 mb-2">
           Keterangan:
         </h3>
-        <p className="text-sm text-gray-600">
-          Event dan kegiatan bulan {currentMonth} {currentYear}
-        </p>
       </div>
       
       <div className="space-y-4">
         {events.map((event) => (
           <div 
             key={event.id} 
-            className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center space-x-4 bg-white rounded-lg p-4 shadow-sm"
           >
             {/* Date Circle */}
-            <div className={`w-12 h-12 ${getEventTypeColor(event.type)} rounded-full flex items-center justify-center flex-shrink-0`}>
+            <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
               <span className="text-white font-bold text-lg">
                 {event.date}
               </span>
@@ -123,11 +120,11 @@ export default function KeteranganEvent({ pesantrenId, className = '' }: Keteran
             
             {/* Event Details */}
             <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-gray-900 text-sm leading-tight">
+              <h4 className="font-medium text-gray-900 text-base leading-tight">
                 {event.title}
               </h4>
               {event.description && (
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 mt-1">
                   {event.description}
                 </p>
               )}
@@ -142,12 +139,6 @@ export default function KeteranganEvent({ pesantrenId, className = '' }: Keteran
           <p className="text-gray-600">Tidak ada event untuk bulan ini</p>
         </div>
       )}
-      
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <p className="text-xs text-gray-500 text-center">
-          Jadwal kegiatan dapat berubah sewaktu-waktu
-        </p>
-      </div>
     </div>
   );
 }

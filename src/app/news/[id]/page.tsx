@@ -69,7 +69,7 @@ const relatedNews: NewsItem[] = [
     title: 'Program Beasiswa Santri Berprestasi',
     excerpt: 'Kementerian Agama meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia.',
     content: '',
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=7',
     publishedAt: new Date('2024-01-14'),
     category: 'Beasiswa',
     author: {
@@ -85,7 +85,7 @@ const relatedNews: NewsItem[] = [
     title: 'Modernisasi Kurikulum Pesantren',
     excerpt: 'Pesantren di era digital mulai mengintegrasikan teknologi dalam pembelajaran.',
     content: '',
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=8',
     publishedAt: new Date('2024-01-13'),
     category: 'Pendidikan',
     author: {
@@ -101,7 +101,7 @@ const relatedNews: NewsItem[] = [
     title: 'Festival Seni Budaya Pesantren',
     excerpt: 'Ratusan santri dari berbagai pesantren se-Jawa Barat mengikuti festival seni budaya.',
     content: '',
-    featuredImage: '/api/placeholder/400/250',
+    featuredImage: 'https://picsum.photos/400/250?random=9',
     publishedAt: new Date('2024-01-12'),
     category: 'Budaya',
     author: {
