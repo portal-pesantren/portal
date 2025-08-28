@@ -205,108 +205,160 @@ export default function NewsDetailPage() {
         </div>
       </nav>
 
-      {/* Article */}
+      {/* Main Content with Sidebar */}
       <main className="py-8">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <article className="bg-white rounded-lg shadow-lg overflow-hidden">
-              {/* Header */}
-              <div className="p-6 md:p-8">
-                {/* Category */}
-                <div className="mb-4">
-                  <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {news.category}
-                  </span>
-                </div>
-                
-                {/* Title */}
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  {news.title}
-                </h1>
-                
-                {/* Meta Info */}
-                <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
-                  <div className="flex items-center">
-                    <CalendarIcon className="h-5 w-5 mr-2" />
-                    <span>{formatDate(news.publishedAt.toISOString().split('T')[0])}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <UserIcon className="h-5 w-5 mr-2" />
-                    <span>{news.author.name}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <ClockIcon className="h-5 w-5 mr-2" />
-                    <span>{news.readingTime} min</span>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleShare}
-                    leftIcon={<ShareIcon className="h-4 w-4" />}
-                  >
-                    Bagikan
-                  </Button>
-                </div>
-              </div>
-              
-              {/* Featured Image */}
-              <div className="relative h-64 md:h-96">
-                <img
-                  src={news.featuredImage || '/api/placeholder/800/400'}
-                  alt={news.title}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDgwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zNTAgMjAwSDQ1MFYzMDBIMzUwVjIwMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+';
-                  }}
-                />
-              </div>
-              
-              {/* Content */}
-              <div className="p-6 md:p-8">
-                <div 
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: news.content }}
-                />
-                
-                {/* Tags */}
-                <div className="mt-8 pt-6 border-t">
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Tags:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {news.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-                      >
-                        {tag}
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Main Article - Left Side */}
+              <div className="lg:col-span-2">
+                <article className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  {/* Header */}
+                  <div className="p-6 md:p-8">
+                    {/* Category */}
+                    <div className="mb-4">
+                      <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {news.category}
                       </span>
-                    ))}
+                    </div>
+                    
+                    {/* Title */}
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                      {news.title}
+                    </h1>
+                    
+                    {/* Meta Info */}
+                    <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
+                      <div className="flex items-center">
+                        <CalendarIcon className="h-5 w-5 mr-2" />
+                        <span>{formatDate(news.publishedAt.toISOString().split('T')[0])}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <UserIcon className="h-5 w-5 mr-2" />
+                        <span>{news.author.name}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <ClockIcon className="h-5 w-5 mr-2" />
+                        <span>{news.readingTime} min</span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleShare}
+                        leftIcon={<ShareIcon className="h-4 w-4" />}
+                      >
+                        Bagikan
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                  
+                  {/* Featured Image */}
+                  <div className="relative h-64 md:h-96">
+                    <img
+                      src={news.featuredImage || 'https://picsum.photos/800/400?random=1'}
+                      alt={news.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'https://picsum.photos/800/400?random=1';
+                      }}
+                    />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-6 md:p-8">
+                    <div 
+                      className="prose prose-lg max-w-none"
+                      dangerouslySetInnerHTML={{ __html: news.content }}
+                    />
+                    
+                    {/* Tags */}
+                    <div className="mt-8 pt-6 border-t">
+                      <h4 className="text-sm font-medium text-gray-900 mb-3">Tags:</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {news.tags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </article>
               </div>
-            </article>
+
+            </div>
           </div>
         </div>
       </main>
 
-      {/* Related News */}
-      <section className="py-12 bg-white">
+      {/* Berita Terkait Section - Horizontal Layout */}
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-              Berita Terkait
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedNews.map((item) => (
-                <NewsCard key={item.id} news={item} />
-              ))}
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                Berita terkait
+              </h2>
+              <div className="flex items-center gap-2">
+                <button className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition-colors">
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button className="p-2 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
-            <div className="text-center mt-8">
-              <Link href="/news">
-                <Button variant="outline" size="lg">
-                  Lihat Semua Berita
-                </Button>
-              </Link>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedNews.map((item) => (
+                <Link key={item.id} href={`/news/${item.id}`} className="group">
+                  <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div className="relative h-48">
+                      <img
+                        src={item.featuredImage || `https://picsum.photos/400/250?random=${item.id}`}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://picsum.photos/400/250?random=${item.id}`;
+                        }}
+                      />
+                      <div className="absolute top-3 left-3">
+                        <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
+                          {item.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                        {item.excerpt}
+                      </p>
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <div className="flex items-center">
+                          <CalendarIcon className="h-3 w-3 mr-1" />
+                          <span>{formatDate(item.publishedAt.toISOString().split('T')[0])}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                            Baca Berita
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
