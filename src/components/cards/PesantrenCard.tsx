@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, Button } from '@/components/ui';
 import { Pesantren } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import AuthModal from '@/components/modals/AuthModal';
+import { School } from 'lucide-react';
 
 // Helper function to format numbers with thousand separators
 const formatNumber = (num: number): string => {
@@ -120,15 +121,9 @@ export default function PesantrenCard({
           }}
         />
         
-        {/* Building Icon - Top Left */}
+        {/* School Icon - Top Left */}
         <div className="absolute top-3 left-3 w-10 h-10 bg-black bg-opacity-70 rounded-full flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2L2 7v10c0 5.55 3.84 10 9 11 5.16-1 9-5.45 9-11V7l-10-5z"/>
-            <rect x="8" y="10" width="2" height="2" fill="white"/>
-            <rect x="10" y="10" width="2" height="2" fill="white"/>
-            <rect x="12" y="10" width="2" height="2" fill="white"/>
-            <rect x="14" y="10" width="2" height="2" fill="white"/>
-          </svg>
+          <School className="w-5 h-5 text-white" />
         </div>
         
         {/* Featured Badge - Top Right */}

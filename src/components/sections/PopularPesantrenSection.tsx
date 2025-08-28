@@ -49,91 +49,99 @@ const fallbackData: Pesantren[] = [
     rating: 5.0,
     students: 1200,
     programs: ["Tahfidz", "Kitab Kuning", "Bahasa Arab"],
-    image: "/placeholder-pesantren.jpg",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.",
+    image: "/pesantren-modern-1.svg",
+    description: "Pesantren modern dengan fasilitas lengkap dan pendidikan berkualitas tinggi. Menggabungkan pendidikan agama dan umum dengan metode pembelajaran terkini.",
     featured: true
   },
   {
     id: "2",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Al-Furqan",
     location: "Yogyakarta, DIY",
     address: "Jl. Raya Yogyakarta, Yogyakarta, DIY",
     rating: 4.7,
     students: 800,
     programs: ["Tahfidz", "Sains", "Teknologi"],
-    image: "/api/placeholder/300/200",
+    image: "/pesantren-modern-2.svg",
+    description: "Pesantren yang mengutamakan pendidikan tahfidz Al-Quran dengan dukungan teknologi modern dan laboratorium sains yang lengkap.",
     featured: true
   },
   {
     id: "3",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Darul Ulum",
     location: "Malang, Jawa Timur",
     address: "Jl. Raya Malang, Malang, Jawa Timur",
     rating: 4.9,
     students: 1500,
     programs: ["Tahfidz", "Bahasa Inggris", "Leadership"],
-    image: "/api/placeholder/300/200",
+    image: "/pesantren-traditional.svg",
+    description: "Pesantren tradisional dengan nilai-nilai klasik yang kuat, mengembangkan kepemimpinan dan kemampuan bahasa internasional.",
     featured: true
   },
   {
     id: "4",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Al-Ikhlas",
     location: "Bandung, Jawa Barat",
     address: "Jl. Raya Bandung, Bandung, Jawa Barat",
     rating: 4.6,
     students: 900,
     programs: ["Tahfidz", "Entrepreneurship", "IT"],
-    image: "/api/placeholder/300/200"
+    image: "/pesantren-contemporary.svg",
+    description: "Pesantren kontemporer yang memadukan pendidikan agama dengan kewirausahaan dan teknologi informasi untuk masa depan yang cerah."
   },
   {
     id: "5",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Nurul Huda",
     location: "Solo, Jawa Tengah",
     address: "Jl. Raya Solo, Solo, Jawa Tengah",
     rating: 4.8,
     students: 1100,
     programs: ["Tahfidz", "Seni", "Olahraga"],
-    image: "/api/placeholder/300/200"
+    image: "/pesantren-modern-1.svg",
+    description: "Pesantren yang mengembangkan bakat seni dan olahraga santri sambil memperkuat hafalan Al-Quran dan pemahaman agama."
   },
   {
     id: "6",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Baitul Hikmah",
     location: "Surabaya, Jawa Timur",
     address: "Jl. Raya Surabaya, Surabaya, Jawa Timur",
     rating: 4.7,
     students: 1300,
     programs: ["Tahfidz", "Bisnis", "Komunikasi"],
-    image: "/api/placeholder/300/200"
+    image: "/pesantren-modern-2.svg",
+    description: "Pesantren yang mempersiapkan santri menjadi entrepreneur muslim dengan kemampuan komunikasi dan bisnis yang handal."
   },
   {
     id: "7",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Ar-Rahman",
     location: "Jakarta, DKI Jakarta",
     address: "Jl. Raya Jakarta, Jakarta, DKI Jakarta",
     rating: 4.5,
     students: 700,
     programs: ["Tahfidz", "Multimedia", "Desain"],
-    image: "/api/placeholder/300/200"
+    image: "/pesantren-traditional.svg",
+    description: "Pesantren urban yang mengintegrasikan pendidikan agama dengan keterampilan multimedia dan desain kreatif."
   },
   {
     id: "8",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Al-Falah",
     location: "Bekasi, Jawa Barat",
     address: "Jl. Raya Bekasi, Bekasi, Jawa Barat",
     rating: 4.6,
     students: 950,
     programs: ["Tahfidz", "Robotika", "Programming"],
-    image: "/api/placeholder/300/200"
+    image: "/pesantren-contemporary.svg",
+    description: "Pesantren teknologi yang memadukan pendidikan agama dengan robotika dan pemrograman untuk era digital."
   },
   {
     id: "9",
-    name: "Nama Pesantren Pesantren",
+    name: "Pesantren Darul Ilmi",
     location: "Depok, Jawa Barat",
     address: "Jl. Raya Depok, Depok, Jawa Barat",
     rating: 4.8,
     students: 850,
     programs: ["Tahfidz", "Penelitian", "Inovasi"],
-    image: "/api/placeholder/300/200"
+    image: "/pesantren-modern-1.svg",
+    description: "Pesantren riset yang mendorong santri untuk melakukan penelitian dan inovasi dalam berbagai bidang ilmu pengetahuan."
   }
 ];
 

@@ -59,7 +59,7 @@ const TableOfContentsSidebar = ({
               }}
               className={`w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-3 ${
                 activeTab === section.id 
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                  ? 'bg-blue-50 text-[#042558] border border-blue-200' 
                   : 'hover:bg-gray-50 text-gray-700'
               }`}
             >

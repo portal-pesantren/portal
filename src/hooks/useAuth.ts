@@ -33,15 +33,19 @@ export function useRegister() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (userData: {
-      name: string;
-      email: string;
-      password: string;
-      confirm_password: string;
-      phone?: string;
-      role?: 'parent' | 'admin' | 'pesantren_admin';
-      terms_accepted?: boolean;
-    }) => register(userData),
+    mutationFn: (userData: RegisterData) => {
+      // Transform simplified RegisterData to full format expected by backend
+      const fullUserData = {
+        name: '', // Default empty name since we removed the field
+        email: userData.email,
+        password: userData.password,
+        confirm_password: userData.confirm_password,
+        phone: '', // Default empty phone since we removed the field
+        role: userData.role || 'parent',
+        terms_accepted: userData.terms_accepted || true
+      };
+      return register(fullUserData);
+    },
     onSuccess: (data) => {
       // Invalidate and refetch user-related queries
       queryClient.invalidateQueries({ queryKey: queryKeys.user.all });
@@ -284,11 +288,9 @@ export type LoginCredentials = {
 };
 
 export type RegisterData = {
-  name: string;
   email: string;
   password: string;
   confirm_password: string;
-  phone?: string;
   role?: 'parent' | 'admin' | 'pesantren_admin';
   terms_accepted?: boolean;
 };

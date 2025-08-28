@@ -238,7 +238,7 @@ export function useNews(filters: NewsFilters = {}) {
           data: response.data.map(transformNewsToNewsItem),
         };
       } catch (error) {
-        console.warn('API not available, using mock data:', error);
+        console.warn('API tidak tersedia, menggunakan data mock untuk news');
         // Filter mock data based on filters
         let filteredData = [...mockNewsData];
         
@@ -277,6 +277,9 @@ export function useNews(filters: NewsFilters = {}) {
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
@@ -288,7 +291,7 @@ export function useNewsDetail(slug: string) {
         const response = await newsService.getNewsBySlug(slug);
         return transformNewsToNewsItem(response);
       } catch (error) {
-        console.warn('API not available, using mock data:', error);
+        console.warn('API tidak tersedia, menggunakan data mock untuk news detail');
         const mockItem = mockNewsData.find(item => item.slug === slug);
         if (!mockItem) {
           throw new Error('News not found');
@@ -298,6 +301,9 @@ export function useNewsDetail(slug: string) {
     },
     enabled: !!slug,
     staleTime: 10 * 60 * 1000, // 10 minutes
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
@@ -309,29 +315,33 @@ export function useFeaturedNews(limit: number = 3) {
         const response = await newsService.getFeaturedNews(limit);
         return response.map(transformNewsToNewsItem);
       } catch (error) {
-        console.warn('API not available, using mock data:', error);
+        console.warn('API tidak tersedia, menggunakan data mock untuk featured news');
         return mockNewsData.filter(item => item.isFeatured).slice(0, limit);
       }
     },
     staleTime: 10 * 60 * 1000, // 10 minutes
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
-export function useLatestNews(limit: number = 5) {
+export function useLatestNews(limit: number = 6) {
   return useQuery({
-    queryKey: NEWS_KEYS.list({ limit, is_published: true }),
+    queryKey: ['news', 'latest', limit],
     queryFn: async () => {
       try {
-        const response = await newsService.getLatestNews(limit);
-        return response.map(transformNewsToNewsItem);
+        return await newsService.getLatestNews(limit);
       } catch (error) {
-        console.warn('API not available, using mock data:', error);
-        return mockNewsData
-          .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-          .slice(0, limit);
+        // Silently return mock data on API failure
+        console.warn('API tidak tersedia, menggunakan data mock untuk latest news');
+        return mockNewsData.slice(0, limit);
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: false, // Don't retry, use fallback immediately
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 

@@ -1,0 +1,88 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sky Background -->
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5DC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DDD8C7;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="roofGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky -->
+  <rect width="400" height="300" fill="url(#skyGradient)"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="250" width="400" height="50" fill="#90EE90"/>
+  
+  <!-- Main Building -->
+  <rect x="80" y="120" width="120" height="130" fill="url(#buildingGradient)" stroke="#C0C0C0" stroke-width="1"/>
+  
+  <!-- Main Building Roof -->
+  <polygon points="70,120 150,80 210,120" fill="url(#roofGradient)"/>
+  
+  <!-- Minaret -->
+  <rect x="220" y="80" width="30" height="170" fill="url(#buildingGradient)" stroke="#C0C0C0" stroke-width="1"/>
+  
+  <!-- Minaret Dome -->
+  <ellipse cx="235" cy="80" rx="20" ry="15" fill="#4169E1"/>
+  
+  <!-- Minaret Top -->
+  <rect x="232" y="65" width="6" height="20" fill="#FFD700"/>
+  <polygon points="235,60 238,65 232,65" fill="#FFD700"/>
+  
+  <!-- Side Building -->
+  <rect x="280" y="140" width="80" height="110" fill="url(#buildingGradient)" stroke="#C0C0C0" stroke-width="1"/>
+  
+  <!-- Side Building Roof -->
+  <polygon points="270,140 320,110 370,140" fill="url(#roofGradient)"/>
+  
+  <!-- Windows Main Building -->
+  <rect x="90" y="140" width="15" height="20" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="115" y="140" width="15" height="20" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="165" y="140" width="15" height="20" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  
+  <rect x="90" y="180" width="15" height="20" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="115" y="180" width="15" height="20" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="165" y="180" width="15" height="20" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  
+  <!-- Main Door -->
+  <rect x="135" y="210" width="20" height="40" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+  <circle cx="150" cy="230" r="2" fill="#FFD700"/>
+  
+  <!-- Windows Side Building -->
+  <rect x="290" y="160" width="12" height="15" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="310" y="160" width="12" height="15" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="330" y="160" width="12" height="15" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  
+  <!-- Minaret Windows -->
+  <rect x="227" y="120" width="8" height="10" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="240" y="120" width="8" height="10" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  
+  <!-- Trees -->
+  <ellipse cx="40" cy="220" rx="25" ry="30" fill="#228B22"/>
+  <rect x="37" y="220" width="6" height="30" fill="#8B4513"/>
+  
+  <ellipse cx="350" cy="210" rx="20" ry="25" fill="#228B22"/>
+  <rect x="347" y="210" width="6" height="40" fill="#8B4513"/>
+  
+  <!-- Clouds -->
+  <ellipse cx="60" cy="40" rx="15" ry="8" fill="white" opacity="0.8"/>
+  <ellipse cx="70" cy="35" rx="12" ry="6" fill="white" opacity="0.8"/>
+  <ellipse cx="80" cy="40" rx="10" ry="5" fill="white" opacity="0.8"/>
+  
+  <ellipse cx="320" cy="30" rx="18" ry="10" fill="white" opacity="0.8"/>
+  <ellipse cx="335" cy="25" rx="15" ry="8" fill="white" opacity="0.8"/>
+  
+  <!-- Islamic Crescent -->
+  <g transform="translate(150,95)">
+    <path d="M 0,0 A 8,8 0 1,1 0,16 A 6,6 0 1,0 0,0" fill="#FFD700"/>
+    <circle cx="12" cy="8" r="2" fill="#FFD700"/>
+  </g>
+</svg>

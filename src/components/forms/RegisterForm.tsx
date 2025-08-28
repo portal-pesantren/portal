@@ -6,11 +6,9 @@ import { useRegister } from '@/hooks/useAuth';
 import { RegisterData } from '@/types';
 
 interface FormErrors {
-  name?: string;
   email?: string;
   password?: string;
   confirm_password?: string;
-  phone?: string;
   general?: string;
 }
 
@@ -19,11 +17,9 @@ const RegisterForm: React.FC = () => {
   const registerMutation = useRegister();
   
   const [formData, setFormData] = useState<RegisterData>({
-    name: '',
     email: '',
     password: '',
     confirm_password: '',
-    phone: '',
     terms_accepted: true, // Auto-accept terms for simplified UI
   });
   
@@ -33,13 +29,6 @@ const RegisterForm: React.FC = () => {
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
-    
-    // Validasi name
-    if (!formData.name) {
-      newErrors.name = 'Nama wajib diisi';
-    } else if (formData.name.length < 2) {
-      newErrors.name = 'Nama minimal 2 karakter';
-    }
     
     // Validasi email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,14 +50,6 @@ const RegisterForm: React.FC = () => {
       newErrors.confirm_password = 'Konfirmasi password wajib diisi';
     } else if (formData.password !== formData.confirm_password) {
       newErrors.confirm_password = 'Konfirmasi password tidak cocok';
-    }
-    
-    // Validasi phone
-    const phoneRegex = /^\+62[0-9-]+$/;
-    if (!formData.phone) {
-      newErrors.phone = 'Nomor telepon wajib diisi';
-    } else if (!phoneRegex.test(formData.phone)) {
-      newErrors.phone = 'Format nomor telepon tidak valid (gunakan +62)';
     }
     
     setErrors(newErrors);
@@ -126,20 +107,52 @@ const RegisterForm: React.FC = () => {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left side - Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gray-200 items-center justify-center">
-        <div className="w-96 h-96 bg-gray-300 rounded-lg flex items-center justify-center">
-          <span className="text-gray-500 text-lg">Ilustrasi Registrasi</span>
+      {/* Left side - Background Image */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
+            alt="Islamic Scholar Reading" 
+            className="w-full h-full object-cover"
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        </div>
+        
+        {/* Content overlay */}
+        <div className="relative z-10 flex flex-col justify-end p-8 text-white">
+          {/* Logo/Branding at bottom */}
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                <span className="text-[#042558] font-bold text-sm">P</span>
+              </div>
+              <span className="text-white font-medium">pabelan.or.id</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                <span className="text-[#042558] font-bold text-sm">P</span>
+              </div>
+              <span className="text-white font-medium">pondok pabelan</span>
+            </div>
+          </div>
+          
+          {/* Social media handles */}
+          <div className="mt-4 flex items-center space-x-4 text-sm text-white text-opacity-80">
+            <span>@pondokpabelan</span>
+            <span>Pondok Pesantren Pabelan</span>
+          </div>
         </div>
       </div>
       
       {/* Right side - Registration Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Registrasi Akun</h1>
+            <h1 className="text-3xl font-bold text-[#042558] mb-2">Registrasi Akun</h1>
             <p className="text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.
+              Daftar sekarang untuk mengakses informasi lengkap pesantren dan layanan konsultasi pendidikan Islam.
             </p>
           </div>
           
@@ -151,28 +164,9 @@ const RegisterForm: React.FC = () => {
               </div>
             )}
             
-            {/* Nama */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-2">
-                Nama Lengkap
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors ${
-                  errors.name ? 'ring-2 ring-red-500' : ''
-                }`}
-                placeholder="Masukkan Nama Lengkap"
-              />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-            </div>
-            
             {/* ID Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-[#042558] mb-2">
                 ID Email
               </label>
               <input
@@ -181,7 +175,7 @@ const RegisterForm: React.FC = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors ${
+                className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#042558] focus:bg-white transition-colors ${
                   errors.email ? 'ring-2 ring-red-500' : ''
                 }`}
                 placeholder="Masukkan ID Email"
@@ -189,30 +183,11 @@ const RegisterForm: React.FC = () => {
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
             
-            {/* Nomor Telepon */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-2">
-                Nomor Telepon
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors ${
-                  errors.phone ? 'ring-2 ring-red-500' : ''
-                }`}
-                placeholder="+62-812-3456-7889"
-              />
-              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-            </div>
-            
             {/* Password Fields - Side by Side */}
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <div className="grid grid-cols-2 gap-4">
                {/* Kata Sandi Baru */}
                <div>
-                 <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
+                 <label htmlFor="password" className="block text-sm font-medium text-[#042558] mb-2">
                    Kata Sandi Baru
                  </label>
                  <div className="relative">
@@ -222,7 +197,7 @@ const RegisterForm: React.FC = () => {
                      name="password"
                      value={formData.password}
                      onChange={handleInputChange}
-                     className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors pr-12 ${
+                     className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#042558] focus:bg-white transition-colors pr-12 ${
                        errors.password ? 'ring-2 ring-red-500' : ''
                      }`}
                      placeholder="Masukkan Kata Sandi"
@@ -249,7 +224,7 @@ const RegisterForm: React.FC = () => {
                
                {/* Konfirmasi Kata Sandi */}
                <div>
-                 <label htmlFor="confirm_password" className="block text-sm font-medium text-gray-900 mb-2">
+                 <label htmlFor="confirm_password" className="block text-sm font-medium text-[#042558] mb-2">
                    Konfirmasi Kata Sandi
                  </label>
                  <div className="relative">
@@ -259,7 +234,7 @@ const RegisterForm: React.FC = () => {
                      name="confirm_password"
                      value={formData.confirm_password}
                      onChange={handleInputChange}
-                     className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors pr-12 ${
+                     className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#042558] focus:bg-white transition-colors pr-12 ${
                        errors.confirm_password ? 'ring-2 ring-red-500' : ''
                      }`}
                      placeholder="Konfirmasi Kata Sandi"
@@ -286,7 +261,7 @@ const RegisterForm: React.FC = () => {
              </div>
              
              {/* Password hint */}
-             <p className="text-gray-500 text-xs -mt-4">Kata sandi Anda harus minimal 8 karakter</p>
+             <p className="text-gray-500 text-xs -mt-2">Kata sandi Anda harus minimal 8 karakter</p>
             
             {/* Submit Button */}
             <button
@@ -295,7 +270,7 @@ const RegisterForm: React.FC = () => {
               className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
                 registerMutation.isPending
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-blue-900 hover:bg-blue-800 focus:ring-2 focus:ring-blue-500'
+                  : 'bg-[#042558] hover:bg-[#0a3d7a] focus:ring-2 focus:ring-[#042558]'
               } text-white`}
             >
               {registerMutation.isPending ? (
@@ -339,7 +314,7 @@ const RegisterForm: React.FC = () => {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 sudah punya akun?{' '}
-                <a href="/login" className="text-blue-600 hover:underline font-medium">
+                <a href="/login" className="text-[#042558] hover:underline font-medium">
                   Log in sekarang
                 </a>
               </p>

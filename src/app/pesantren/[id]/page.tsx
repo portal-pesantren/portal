@@ -87,7 +87,7 @@ export default function PesantrenDetailPage() {
       registration: 2500000,
       dormitory: 1200000
     },
-    image: '/api/placeholder/800/400',
+    image: '/pesantren-contemporary.svg',
     type: 'Pondok Campuran',
     isVerified: true,
     contact: {
@@ -167,7 +167,7 @@ export default function PesantrenDetailPage() {
         <div className="container mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Pesantren Tidak Ditemukan</h1>
           <p className="text-gray-600 mb-6">Maaf, pesantren yang Anda cari tidak dapat ditemukan.</p>
-          <Button onClick={() => router.push('/')} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={() => router.push('/')} className="bg-[#042558] hover:bg-[#031a3d]">
             Kembali ke Beranda
           </Button>
         </div>
@@ -238,13 +238,13 @@ export default function PesantrenDetailPage() {
                 
                 {/* Tags and Verification */}
                 <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-[#042558]">
                     Pondok Pesantren
                   </span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                     Pondok Campuran
                   </span>
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
                      <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                      </svg>
@@ -277,20 +277,20 @@ export default function PesantrenDetailPage() {
                 {/* Statistics */}
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                   <div className="text-center bg-blue-50 rounded-lg p-2 sm:p-3">
-                    <div className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600">
+                    <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#042558]">
                       {formatNumber(displayPesantren.students)}
                     </div>
                     <div className="text-xs sm:text-sm lg:text-base text-gray-600 mt-1">Santri</div>
                   </div>
                   <div className="text-center bg-green-50 rounded-lg p-2 sm:p-3">
-                    <div className="text-lg sm:text-xl lg:text-2xl font-bold text-green-600">
+                    <div className="text-lg sm:text-xl lg:text-2xl font-bold text-green-700">
                       {displayPesantren.rating.toFixed(1)}
                     </div>
                     <div className="text-xs sm:text-sm lg:text-base text-gray-600 mt-1">Rating</div>
                   </div>
                   {displayPesantren.fees && (
                     <div className="text-center bg-orange-50 rounded-lg p-2 sm:p-3 col-span-2 lg:col-span-1">
-                      <div className="text-base sm:text-lg lg:text-xl font-bold text-orange-600">
+                      <div className="text-base sm:text-lg lg:text-xl font-bold text-orange-700">
                         Rp {formatNumber(displayPesantren.fees.monthly)}
                       </div>
                       <div className="text-xs sm:text-sm lg:text-base text-gray-600 mt-1">Per Bulan</div>
@@ -303,14 +303,14 @@ export default function PesantrenDetailPage() {
               <div className="flex flex-col gap-3 lg:min-w-[280px]">
                 <Button 
                   onClick={handleRegistration}
-                  className="bg-[#1e3a8a] hover:bg-[#1e40af] text-white px-6 py-4 rounded-full font-semibold w-full text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="bg-[#042558] hover:bg-[#031a3d] text-white px-6 py-4 rounded-full font-semibold w-full text-sm transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   Lakukan pendaftaran
                 </Button>
                 <Button 
                   onClick={handleWebsiteVisit}
                   variant="outline"
-                  className="border border-[#1e3a8a] text-[#1e3a8a] hover:border-[#1e40af] hover:bg-[#1e3a8a] hover:text-white px-6 py-4 rounded-full font-semibold w-full text-sm transition-all duration-200 bg-white shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                  className="border border-[#042558] text-[#042558] hover:border-[#031a3d] hover:bg-[#042558] hover:text-white px-6 py-4 rounded-full font-semibold w-full text-sm transition-all duration-200 bg-white shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                 >
                   Kunjungi Website Pondok
                 </Button>
@@ -340,7 +340,7 @@ export default function PesantrenDetailPage() {
             
             {/* Featured News Item */}
             <div className="px-4 pb-4">
-              <div className="relative w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl mb-4 overflow-hidden">
+              <div className="relative w-full h-48 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl mb-4 overflow-hidden">
                 <Image
                   src="/news-1.jpg"
                   alt="Anies Baswedan di Pabejan"
@@ -362,7 +362,7 @@ export default function PesantrenDetailPage() {
                 <p className="text-sm text-gray-600 leading-relaxed">
                   Keterangan Anies Baswedan sebagai Alumni dalam acara Alumni Pulang di Pondok Pesantren Pabejan, bagikan kisah inspiratif pada santri
                 </p>
-                <button className="inline-flex items-center gap-2 border-2 border-[#1e3a8a] text-[#1e3a8a] hover:bg-[#1e3a8a] hover:text-white px-6 py-3 rounded-full text-sm font-semibold transition-all duration-200 bg-white group">
+                <button className="inline-flex items-center gap-2 border-2 border-[#042558] text-[#042558] hover:bg-[#042558] hover:text-white px-6 py-3 rounded-full text-sm font-semibold transition-all duration-200 bg-white group">
                   Baca Berita 
                   <svg className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7V17" />
@@ -399,7 +399,7 @@ export default function PesantrenDetailPage() {
               </div>
               
               {/* Kenapa Belajar Section */}
-                 <div id="section-kenapa-belajar" className={activeSection === 'kenapa-belajar' || !isMobile ? 'block' : 'hidden'}>
+                 {/* <div id="section-kenapa-belajar" className={activeSection === 'kenapa-belajar' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
                      facilities: displayPesantren.facilities,
@@ -416,10 +416,10 @@ export default function PesantrenDetailPage() {
                       } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
                  
                  {/* Program Pendidikan Section */}
-                 <div id="section-program-pendidikan" className={activeSection === 'program-pendidikan' || !isMobile ? 'block' : 'hidden'}>
+                 {/* <div id="section-program-pendidikan" className={activeSection === 'program-pendidikan' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
                      facilities: displayPesantren.facilities,
@@ -436,10 +436,10 @@ export default function PesantrenDetailPage() {
                      } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
                  
                  {/* Program Ekstrakurikuler Section */}
-                 <div id="section-program-ekstrakurikuler" className={activeSection === 'program-ekstrakurikuler' || !isMobile ? 'block' : 'hidden'}>
+                 {/* <div id="section-program-ekstrakurikuler" className={activeSection === 'program-ekstrakurikuler' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
                      facilities: displayPesantren.facilities,
@@ -457,8 +457,8 @@ export default function PesantrenDetailPage() {
                      advantages: (displayPesantren as any).advantages
                    }} />
                  </div>
-                 
-                 {/* Kehidupan Santri Section */}
+                  */}
+                 {/* Kehidupan Santri Section
                  <div id="section-kehidupan-santri" className={activeSection === 'kehidupan-santri' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
@@ -476,9 +476,9 @@ export default function PesantrenDetailPage() {
                      } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
                  
-                 {/* Fasilitas Section */}
+                 {/* Fasilitas Section
                  <div id="section-fasilitas" className={activeSection === 'fasilitas' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
@@ -496,9 +496,9 @@ export default function PesantrenDetailPage() {
                      } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
                  
-                 {/* Prestasi Pondok Section */}
+                 {/* Prestasi Pondok Section
                  <div id="section-prestasi-pondok" className={activeSection === 'prestasi-pondok' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
@@ -516,10 +516,10 @@ export default function PesantrenDetailPage() {
                      } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
                  
                  {/* Alumni & Jejak Karier Section */}
-                 <div id="section-alumni-jejak" className={activeSection === 'alumni-jejak' || !isMobile ? 'block' : 'hidden'}>
+                 {/* <div id="section-alumni-jejak" className={activeSection === 'alumni-jejak' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
                      facilities: displayPesantren.facilities,
@@ -536,9 +536,9 @@ export default function PesantrenDetailPage() {
                      } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
                  
-                 {/* Biaya Pendidikan Section */}
+                 {/* Biaya Pendidikan Section
                  <div id="section-biaya-pendidikan" className={activeSection === 'biaya-pendidikan' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
@@ -556,9 +556,9 @@ export default function PesantrenDetailPage() {
                      } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
                  
-                 {/* Info Beasiswa Section */}
+                 {/* Info Beasiswa Section
                  <div id="section-info-beasiswa" className={activeSection === 'info-beasiswa' || !isMobile ? 'block' : 'hidden'}>
                    <KeteranganSection pesantren={{
                      programs: displayPesantren.programs,
@@ -576,7 +576,7 @@ export default function PesantrenDetailPage() {
                      } : undefined,
                      advantages: (displayPesantren as any).advantages
                    }} />
-                 </div>
+                 </div> */}
               
               {/* Kalender Event Section */}
               <div id="section-kalender-event" className={activeSection === 'kalender-event' || !isMobile ? 'block' : 'hidden'}>

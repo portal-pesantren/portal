@@ -1,0 +1,126 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sky Background -->
+  <defs>
+    <linearGradient id="skyGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB6C1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFF8DC;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="buildingGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFACD;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F0E68C;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="roofGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#DC143C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B22222;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky -->
+  <rect width="400" height="300" fill="url(#skyGradient2)"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="240" width="400" height="60" fill="#98FB98"/>
+  
+  <!-- Central Main Building -->
+  <rect x="120" y="100" width="160" height="140" fill="url(#buildingGradient2)" stroke="#DAA520" stroke-width="2"/>
+  
+  <!-- Central Dome -->
+  <ellipse cx="200" cy="100" rx="40" ry="25" fill="#4169E1"/>
+  <ellipse cx="200" cy="95" rx="35" ry="20" fill="#6495ED"/>
+  
+  <!-- Central Dome Top -->
+  <rect x="197" y="75" width="6" height="25" fill="#FFD700"/>
+  <polygon points="200,70 203,75 197,75" fill="#FFD700"/>
+  
+  <!-- Left Wing -->
+  <rect x="40" y="130" width="80" height="110" fill="url(#buildingGradient2)" stroke="#DAA520" stroke-width="2"/>
+  
+  <!-- Left Wing Roof -->
+  <polygon points="30,130 80,100 130,130" fill="url(#roofGradient2)"/>
+  
+  <!-- Right Wing -->
+  <rect x="280" y="130" width="80" height="110" fill="url(#buildingGradient2)" stroke="#DAA520" stroke-width="2"/>
+  
+  <!-- Right Wing Roof -->
+  <polygon points="270,130 320,100 370,130" fill="url(#roofGradient2)"/>
+  
+  <!-- Arched Windows Central Building -->
+  <g>
+    <!-- Left Arch -->
+    <path d="M 140 140 Q 150 130 160 140 L 160 170 L 140 170 Z" fill="#4169E1" stroke="#000" stroke-width="1"/>
+    <!-- Center Arch -->
+    <path d="M 180 140 Q 190 130 200 140 L 200 170 L 180 170 Z" fill="#4169E1" stroke="#000" stroke-width="1"/>
+    <!-- Right Arch -->
+    <path d="M 220 140 Q 230 130 240 140 L 240 170 L 220 170 Z" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  </g>
+  
+  <!-- Main Entrance -->
+  <path d="M 170 200 Q 185 185 200 200 L 200 240 L 170 240 Z" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+  
+  <!-- Entrance Details -->
+  <circle cx="185" cy="220" r="3" fill="#FFD700"/>
+  
+  <!-- Side Building Windows -->
+  <rect x="55" y="150" width="12" height="18" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="75" y="150" width="12" height="18" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="95" y="150" width="12" height="18" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  
+  <rect x="295" y="150" width="12" height="18" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="315" y="150" width="12" height="18" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  <rect x="335" y="150" width="12" height="18" fill="#4169E1" stroke="#000" stroke-width="1"/>
+  
+  <!-- Decorative Patterns -->
+  <g>
+    <!-- Central Building Pattern -->
+    <circle cx="150" cy="120" r="3" fill="#DAA520"/>
+    <circle cx="170" cy="120" r="3" fill="#DAA520"/>
+    <circle cx="190" cy="120" r="3" fill="#DAA520"/>
+    <circle cx="210" cy="120" r="3" fill="#DAA520"/>
+    <circle cx="230" cy="120" r="3" fill="#DAA520"/>
+    <circle cx="250" cy="120" r="3" fill="#DAA520"/>
+  </g>
+  
+  <!-- Palm Trees -->
+  <g>
+    <!-- Left Palm -->
+    <rect x="17" y="200" width="6" height="40" fill="#8B4513"/>
+    <ellipse cx="20" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(-20 20 195)"/>
+    <ellipse cx="20" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(20 20 195)"/>
+    <ellipse cx="20" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(60 20 195)"/>
+    <ellipse cx="20" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(-60 20 195)"/>
+    
+    <!-- Right Palm -->
+    <rect x="377" y="200" width="6" height="40" fill="#8B4513"/>
+    <ellipse cx="380" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(-20 380 195)"/>
+    <ellipse cx="380" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(20 380 195)"/>
+    <ellipse cx="380" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(60 380 195)"/>
+    <ellipse cx="380" cy="195" rx="15" ry="8" fill="#228B22" transform="rotate(-60 380 195)"/>
+  </g>
+  
+  <!-- Fountain -->
+  <ellipse cx="200" cy="270" rx="25" ry="8" fill="#87CEEB"/>
+  <rect x="195" y="265" width="10" height="10" fill="#C0C0C0"/>
+  
+  <!-- Water Drops -->
+  <circle cx="200" cy="260" r="1" fill="#87CEEB"/>
+  <circle cx="205" cy="258" r="1" fill="#87CEEB"/>
+  <circle cx="195" cy="258" r="1" fill="#87CEEB"/>
+  
+  <!-- Sun -->
+  <circle cx="350" cy="50" r="20" fill="#FFD700" opacity="0.8"/>
+  <g stroke="#FFD700" stroke-width="2" opacity="0.6">
+    <line x1="350" y1="20" x2="350" y2="30"/>
+    <line x1="350" y1="70" x2="350" y2="80"/>
+    <line x1="320" y1="50" x2="330" y2="50"/>
+    <line x1="370" y1="50" x2="380" y2="50"/>
+    <line x1="329" y1="29" x2="336" y2="36"/>
+    <line x1="364" y1="64" x2="371" y2="71"/>
+    <line x1="371" y1="29" x2="364" y2="36"/>
+    <line x1="336" y1="64" x2="329" y2="71"/>
+  </g>
+  
+  <!-- Islamic Calligraphy Style Decoration -->
+  <g transform="translate(200,50)">
+    <path d="M -10,0 Q 0,-10 10,0 Q 0,10 -10,0" fill="#DAA520" opacity="0.7"/>
+  </g>
+</svg>

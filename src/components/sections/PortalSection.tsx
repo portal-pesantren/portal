@@ -54,8 +54,8 @@ const PortalSection = () => {
       rating: 4.8,
       students: 850,
       facilities: ['Asrama', 'Masjid', 'Perpustakaan', 'Lab Komputer'],
-      image: '/placeholder-pesantren.jpg',
-      images: ['/placeholder-pesantren.jpg'],
+      image: '/pesantren-modern-1.svg',
+      images: ['/pesantren-modern-1.svg'],
       contact: { phone: '0341-123456', email: 'info@alhikmah.ac.id' },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -71,8 +71,8 @@ const PortalSection = () => {
       rating: 4.9,
       students: 1200,
       facilities: ['Asrama', 'Masjid', 'Perpustakaan'],
-      image: '/placeholder-pesantren.jpg',
-      images: ['/placeholder-pesantren.jpg'],
+      image: '/pesantren-traditional.svg',
+      images: ['/pesantren-traditional.svg'],
       contact: { phone: '0321-654321', email: 'info@darululum.ac.id' },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -88,8 +88,8 @@ const PortalSection = () => {
       rating: 4.7,
       students: 650,
       facilities: ['Asrama', 'Masjid', 'Perpustakaan', 'Lab Bahasa'],
-      image: '/placeholder-pesantren.jpg',
-      images: ['/placeholder-pesantren.jpg'],
+      image: '/pesantren-contemporary.svg',
+      images: ['/pesantren-contemporary.svg'],
       contact: { phone: '0274-987654', email: 'info@annur.ac.id' },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()

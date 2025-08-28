@@ -30,6 +30,8 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       // Refetch on reconnect
       refetchOnReconnect: true,
+      // Don't throw errors to console when using error boundaries or custom error handling
+      throwOnError: false,
     },
     mutations: {
       // Retry failed mutations
@@ -41,6 +43,8 @@ const queryClient = new QueryClient({
         // Retry on network errors and 5xx errors
         return failureCount < 2;
       },
+      // Don't throw errors to console for mutations
+      throwOnError: false,
     },
   },
 });

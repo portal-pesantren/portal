@@ -155,11 +155,9 @@ export interface ConsultationFormData {
 
 // Authentication types
 export interface RegisterData {
-  name: string;
   email: string;
   password: string;
   confirm_password: string;
-  phone: string;
   terms_accepted: boolean;
 }
 
