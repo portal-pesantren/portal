@@ -111,7 +111,7 @@ const NewsSidebar = ({ pesantrenId }: { pesantrenId: string }) => {
         <h3 className="text-lg font-semibold mb-3 text-gray-900">Berita Pondok</h3>
         <div className="space-y-3">
           {newsItems.map((news, index) => (
-            <div key={index} className={`${index < newsItems.length - 1 ? 'border-b border-gray-100 pb-3' : 'pb-3'}`}>
+            <div key={`${news.title}-${news.date}`} className={`${index < newsItems.length - 1 ? 'border-b border-gray-100 pb-3' : 'pb-3'}`}>
               <div className="flex space-x-2">
                 <div className={`w-12 h-12 bg-${news.color}-100 rounded-lg flex-shrink-0 flex items-center justify-center`}>
                   <span className="text-2xl">{news.icon}</span>

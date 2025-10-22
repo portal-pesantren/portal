@@ -5,19 +5,19 @@ import { newsService, type News, type NewsSearchParams, type NewsCreateData, typ
 const mockNewsData: NewsItem[] = [
   {
     id: '1',
-    title: 'Aries Baswadan di Pabuaran',
-    slug: 'aries-baswadan-di-pabuaran',
-    excerpt: 'Menteri Agus Gumiwang Kartasasmita mengunjungi Pondok Pesantren Pabuaran untuk melihat langsung program pendidikan yang telah berjalan.',
-    content: 'Content lengkap artikel...',
+    title: 'Menteri Agama Gumawan Kartoasasmita mengunjungi Pondok Pesantren Pabuaran',
+    slug: 'menteri-agama-gunawan-di-paburuan',
+    excerpt: 'Menteri Agama Gumawan Kartoasasmita mengunjungi Pondok Pesantren Pabuaran untuk melihat langsung program pendidikan yang telah berjalan.',
+    content: 'Menteri Agama Gumawan Kartoasasmita melakukan kunjungan kerja ke Pondok Pesantren Pabuaran dalam rangka meninjau langsung implementasi program pendidikan pesantren yang telah berjalan. Dalam kunjungannya, beliau menyampaikan apresiasi terhadap sistem pendidikan yang memadukan kurikulum nasional dengan nilai-nilai keislaman.',
     category: 'berita',
-    tags: ['kunjungan', 'pendidikan'],
+    tags: ['kunjungan', 'menteri', 'pabuaran', 'pendidikan'],
     featuredImage: 'https://picsum.photos/400/250?random=1',
     author: {
       id: '1',
       name: 'Admin Portal',
       avatar: '/api/placeholder/40/40'
     },
-    publishedAt: new Date('2024-01-15T10:00:00Z'),
+    publishedAt: '2024-01-15T10:00:00Z',
     views: 150,
     likes: 25,
     readingTime: 3,
@@ -26,19 +26,19 @@ const mockNewsData: NewsItem[] = [
   },
   {
     id: '2',
-    title: 'Program Beasiswa Santri Berprestasi',
-    slug: 'program-beasiswa-santri-berprestasi',
-    excerpt: 'Kementerian Agama meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia dengan total dana 50 miliar rupiah.',
-    content: 'Content lengkap artikel...',
+    title: 'Program Beasiswa Berprestasi',
+    slug: 'program-beasiswa-berprestasi',
+    excerpt: 'Kementerian Agama meluncurkan beasiswa untuk santri berprestasi di seluruh Indonesia dengan total dana 50 miliar rupiah.',
+    content: 'Kementerian Agama Republik Indonesia resmi meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia. Program ini mengalokasikan total dana sebesar 50 miliar rupiah untuk mendukung pendidikan santri yang memiliki prestasi akademik dan non-akademik yang membanggakan.',
     category: 'pengumuman',
-    tags: ['beasiswa', 'santri'],
+    tags: ['beasiswa', 'santri', 'prestasi', 'kemenag'],
     featuredImage: 'https://picsum.photos/400/250?random=2',
     author: {
       id: '2',
       name: 'Tim Redaksi',
       avatar: '/api/placeholder/40/40'
     },
-    publishedAt: new Date('2024-01-14T09:00:00Z'),
+    publishedAt: '2024-01-14T09:00:00Z',
     views: 200,
     likes: 40,
     readingTime: 5,
@@ -49,20 +49,20 @@ const mockNewsData: NewsItem[] = [
     id: '3',
     title: 'Modernisasi Kurikulum Pesantren',
     slug: 'modernisasi-kurikulum-pesantren',
-    excerpt: 'Pesantren di era digital mulai mengintegrasikan teknologi dalam pembelajaran untuk mempersiapkan santri menghadapi tantangan masa depan.',
-    content: 'Content lengkap artikel...',
+    excerpt: 'Transformasi era digital mulai mengintegrasikan teknologi dalam pembelajaran untuk mempersiapkan santri menghadapi tantangan masa depan.',
+    content: 'Transformasi era digital telah membawa perubahan signifikan dalam dunia pendidikan pesantren. Banyak pesantren kini mulai mengintegrasikan teknologi dalam sistem pembelajaran mereka untuk mempersiapkan santri menghadapi tantangan masa depan yang semakin kompleks.',
     category: 'artikel',
-    tags: ['pendidikan', 'teknologi'],
+    tags: ['kurikulum', 'modernisasi', 'teknologi', 'digital'],
     featuredImage: 'https://picsum.photos/400/250?random=3',
     author: {
       id: '3',
       name: 'Dr. Ahmad Syafi\'i',
       avatar: '/api/placeholder/40/40'
     },
-    publishedAt: new Date('2024-01-13T08:00:00Z'),
-    views: 120,
-    likes: 18,
-    readingTime: 4,
+    publishedAt: '2024-01-13T08:00:00Z',
+    views: 1950,
+    likes: 142,
+    readingTime: 7,
     isPublished: true,
     isFeatured: false
   },
@@ -71,21 +71,21 @@ const mockNewsData: NewsItem[] = [
     title: 'Festival Seni Budaya Pesantren',
     slug: 'festival-seni-budaya-pesantren',
     excerpt: 'Ratusan santri dari berbagai pesantren se-Jawa Barat mengikuti festival seni budaya untuk melestarikan warisan budaya Islam.',
-    content: 'Content lengkap artikel...',
+    content: 'Festival seni budaya pesantren digelar dengan meriah di Bandung, Jawa Barat. Ratusan santri dari berbagai pesantren se-Jawa Barat berpartisipasi dalam acara ini untuk melestarikan dan mengembangkan warisan budaya Islam yang kaya dan beragam.',
     category: 'kegiatan',
-    tags: ['budaya', 'festival'],
+    tags: ['festival', 'seni', 'budaya', 'santri'],
     featuredImage: 'https://picsum.photos/400/250?random=4',
     author: {
       id: '4',
-      name: 'Humas Pesantren',
+      name: 'Panitia Festival',
       avatar: '/api/placeholder/40/40'
     },
-    publishedAt: new Date('2024-01-12T07:00:00Z'),
-    views: 300,
-    likes: 55,
-    readingTime: 6,
+    publishedAt: '2024-01-12T07:00:00Z',
+    views: 1650,
+    likes: 98,
+    readingTime: 5,
     isPublished: true,
-    isFeatured: true
+    isFeatured: false
   },
   {
     id: '5',
@@ -101,7 +101,7 @@ const mockNewsData: NewsItem[] = [
       name: 'Redaksi',
       avatar: '/api/placeholder/40/40'
     },
-    publishedAt: new Date('2024-01-11T06:00:00Z'),
+    publishedAt: '2024-01-11T06:00:00Z',
     views: 180,
     likes: 32,
     readingTime: 7,
@@ -122,7 +122,7 @@ const mockNewsData: NewsItem[] = [
       name: 'Tim IT Pesantren',
       avatar: '/api/placeholder/40/40'
     },
-    publishedAt: new Date('2024-01-10T05:00:00Z'),
+    publishedAt: '2024-01-10T05:00:00Z',
     views: 250,
     likes: 45,
     readingTime: 5,
@@ -158,7 +158,7 @@ export interface NewsItem {
     name: string;
     avatar?: string;
   };
-  publishedAt: Date;
+  publishedAt: string;
   views: number;
   likes: number;
   readingTime: number;
@@ -234,8 +234,8 @@ export function useNews(filters: NewsFilters = {}) {
       try {
         const response = await newsService.getNews(params);
         return {
-          ...response,
           data: response.data.map(transformNewsToNewsItem),
+          pagination: response.pagination,
         };
       } catch (error) {
         console.warn('API tidak tersedia, menggunakan data mock untuk news');
@@ -327,11 +327,17 @@ export function useFeaturedNews(limit: number = 3) {
 }
 
 export function useLatestNews(limit: number = 6) {
-  return useQuery({
+  return useQuery<NewsItem[]>({
     queryKey: ['news', 'latest', limit],
     queryFn: async () => {
       try {
-        return await newsService.getLatestNews(limit);
+        const items = await newsService.getLatestNews(limit);
+        // Fallback to mock data when backend returns empty list
+        if (!items || items.length === 0) {
+          console.warn('Latest news kosong, menggunakan data mock');
+          return mockNewsData.slice(0, limit);
+        }
+        return items.map(transformNewsToNewsItem);
       } catch (error) {
         // Silently return mock data on API failure
         console.warn('API tidak tersedia, menggunakan data mock untuk latest news');
@@ -449,5 +455,79 @@ export function useIncrementNewsViews() {
   return useMutation({
     mutationFn: (id: string) => newsService.incrementViews(id),
     // Don't invalidate queries for view count to avoid unnecessary refetches
+  });
+}
+
+// Hook untuk mengambil berita berdasarkan pesantren
+export function useNewsByPesantren(pesantrenId: string, filters: NewsFilters = {}) {
+  const params = {
+    ...transformFiltersToParams(filters),
+    pesantren_id: pesantrenId,
+  };
+  
+  return useQuery({
+    queryKey: [...NEWS_KEYS.list(params), 'pesantren', pesantrenId],
+    queryFn: async () => {
+      try {
+        const response = await newsService.getNews(params);
+        return {
+          ...response,
+          data: response.data.map(transformNewsToNewsItem),
+        };
+      } catch (error) {
+        console.warn('API tidak tersedia, menggunakan data mock untuk news pesantren');
+        // Filter mock data untuk pesantren tertentu
+        const filteredData = mockNewsData.slice(0, filters.limit || 4);
+        
+        return {
+          data: filteredData,
+          pagination: {
+            page: 1,
+            limit: filters.limit || 4,
+            total: filteredData.length,
+            totalPages: 1,
+          },
+        };
+      }
+    },
+    enabled: !!pesantrenId,
+  });
+}
+
+// Hook untuk mendapatkan statistik news
+export function useNewsStats() {
+  return useQuery({
+    queryKey: [...NEWS_KEYS.all, 'stats'],
+    queryFn: async () => {
+      try {
+        return await newsService.getNewsStats();
+      } catch (error) {
+        console.warn('API tidak tersedia, menggunakan data mock untuk news stats');
+        // Return mock stats data
+        return {
+          total: 450,
+          total_news: 450,
+          total_views: 125000,
+          totalViews: 125000,
+          totalLikes: 2500,
+          featured_count: 25,
+          featured: 25,
+          published: 420,
+          published_today: 5,
+          published_this_week: 18,
+          published_this_month: 75,
+          categoriesCount: 8,
+          popular_categories: [
+            { name: 'Prestasi', count: 120 },
+            { name: 'Tips', count: 95 },
+            { name: 'Kegiatan', count: 85 }
+          ]
+        };
+      }
+    },
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }

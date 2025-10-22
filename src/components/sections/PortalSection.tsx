@@ -54,8 +54,8 @@ const PortalSection = () => {
       rating: 4.8,
       students: 850,
       facilities: ['Asrama', 'Masjid', 'Perpustakaan', 'Lab Komputer'],
-      image: '/pesantren-modern-1.svg',
-      images: ['/pesantren-modern-1.svg'],
+      image: '/pesantren-1.svg',
+      images: ['/pesantren-1.svg', '/pesantren-modern-1.svg'],
       contact: { phone: '0341-123456', email: 'info@alhikmah.ac.id' },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -71,8 +71,8 @@ const PortalSection = () => {
       rating: 4.9,
       students: 1200,
       facilities: ['Asrama', 'Masjid', 'Perpustakaan'],
-      image: '/pesantren-traditional.svg',
-      images: ['/pesantren-traditional.svg'],
+      image: '/pesantren-2.svg',
+      images: ['/pesantren-2.svg', '/pesantren-traditional.svg'],
       contact: { phone: '0321-654321', email: 'info@darululum.ac.id' },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -88,8 +88,8 @@ const PortalSection = () => {
       rating: 4.7,
       students: 650,
       facilities: ['Asrama', 'Masjid', 'Perpustakaan', 'Lab Bahasa'],
-      image: '/pesantren-contemporary.svg',
-      images: ['/pesantren-contemporary.svg'],
+      image: '/pesantren-3.svg',
+      images: ['/pesantren-3.svg', '/pesantren-contemporary.svg'],
       contact: { phone: '0274-987654', email: 'info@annur.ac.id' },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -203,9 +203,8 @@ const PortalSection = () => {
         
         <button 
           onClick={() => {
-            const pesantrenId = pesantren.code || pesantren.id;
-            const pesantrenIdStr = typeof pesantrenId === 'string' ? pesantrenId : String(pesantrenId);
-            router.push(`/pesantren/${pesantrenIdStr}`);
+            // Navigate to detail page without pesantren ID
+            router.push('/pesantren/detail');
           }}
           className="w-full bg-[#042558] text-white py-2.5 px-4 rounded-full font-medium hover:bg-[#031a3d] transition-all duration-200 flex items-center justify-center space-x-2"
         >

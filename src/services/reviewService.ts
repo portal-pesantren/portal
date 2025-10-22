@@ -123,19 +123,25 @@ export const reviewService = {
       if (params.limit) queryParams.append('limit', params.limit.toString());
       
       const response = await api.get<{
-        data: ApiReview[];
-        total: number;
-        page: number;
-        limit: number;
-        total_pages: number;
+        data: {
+          data: ApiReview[];
+          pagination: {
+            page: number;
+            limit: number;
+            total: number;
+            total_pages: number;
+            has_next: boolean;
+            has_prev: boolean;
+          };
+        };
       }>(`/reviews?${queryParams.toString()}`);
       
       return {
-        reviews: response.data.map(transformReview),
-        total: response.total,
-        page: response.page,
-        limit: response.limit,
-        total_pages: response.total_pages
+        reviews: response.data.data.map(transformReview),
+        total: response.data.pagination.total,
+        page: response.data.pagination.page,
+        limit: response.data.pagination.limit,
+        total_pages: response.data.pagination.total_pages
       };
     } catch (error) {
       console.error('Get reviews error:', error);

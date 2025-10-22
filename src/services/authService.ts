@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import { API_CONFIG } from '@/lib/constants';
 import { User, LoginCredentials, RegisterData, RegisterResponse, LoginResponse, AuthTokens } from '@/types';
 
 // Legacy auth response for backward compatibility
@@ -57,7 +58,7 @@ export const authService = {
    */
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     try {
-      const data = await api.post('/auth/login', credentials);
+      const data = await api.post(API_CONFIG.ENDPOINTS.AUTH.LOGIN, credentials);
       
       // Check if response has the expected structure
       if (!data || !data.access_token) {
@@ -102,7 +103,7 @@ export const authService = {
    */
   register: async (userData: RegisterData): Promise<RegisterResponse> => {
     try {
-      const data = await api.post('/auth/register', userData);
+      const data = await api.post(API_CONFIG.ENDPOINTS.AUTH.REGISTER, userData);
       
       // Check if response has the expected structure
       if (!data || !data.access_token) {
@@ -154,7 +155,7 @@ export const authService = {
   logout: async (): Promise<void> => {
     try {
       // Call logout endpoint if available
-      await api.post('/auth/logout');
+      await api.post(API_CONFIG.ENDPOINTS.AUTH.LOGOUT);
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -182,7 +183,7 @@ export const authService = {
         throw new Error('No refresh token available');
       }
       
-      const data = await api.post<RefreshTokenResponse>('/auth/refresh', {
+      const data = await api.post<RefreshTokenResponse>(API_CONFIG.ENDPOINTS.AUTH.REFRESH, {
         refresh_token: refreshToken
       });
       
@@ -215,7 +216,7 @@ export const authService = {
    */
   getCurrentUser: async (): Promise<User> => {
     try {
-      const data = await api.get<{ data: any }>('/users/profile');
+      const data = await api.get<{ data: any }>(API_CONFIG.ENDPOINTS.AUTH.PROFILE);
       // Handle both direct user data and wrapped data structure
       const userData = data.data || data;
       return transformUser(userData);
@@ -235,7 +236,7 @@ export const authService = {
     profile_picture: string;
   }>): Promise<User> => {
     try {
-      const response = await api.put<{ data: any }>('/users/profile', userData);
+      const response = await api.put<{ data: any }>(API_CONFIG.ENDPOINTS.AUTH.PROFILE, userData);
       
       // Update user in localStorage
       if (typeof window !== 'undefined') {
@@ -257,7 +258,7 @@ export const authService = {
     new_password: string;
   }): Promise<void> => {
     try {
-      await api.post('/users/change-password', passwordData);
+      await api.post(API_CONFIG.ENDPOINTS.AUTH.CHANGE_PASSWORD, passwordData);
     } catch (error: any) {
       console.error('Change password error:', error);
       
@@ -274,7 +275,7 @@ export const authService = {
    */
   requestPasswordReset: async (email: string): Promise<void> => {
     try {
-      await api.post('/auth/forgot-password', { email });
+      await api.post(API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD, { email });
     } catch (error) {
       console.error('Request password reset error:', error);
       throw new Error('Gagal mengirim email reset password');
@@ -286,7 +287,7 @@ export const authService = {
    */
   resetPassword: async (token: string, newPassword: string): Promise<void> => {
     try {
-      await api.post('/auth/reset-password', {
+      await api.post(API_CONFIG.ENDPOINTS.AUTH.RESET_PASSWORD, {
         token,
         new_password: newPassword
       });
@@ -301,7 +302,7 @@ export const authService = {
    */
   verifyEmail: async (token: string): Promise<void> => {
     try {
-      await api.post('/auth/verify-email', { token });
+      await api.post(API_CONFIG.ENDPOINTS.AUTH.VERIFY_EMAIL, { token });
     } catch (error) {
       console.error('Verify email error:', error);
       throw new Error('Gagal verifikasi email');

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardFooter, Button } from '@/components/ui';
 import { Pesantren } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,6 +11,38 @@ import { School } from 'lucide-react';
 // Helper function to format numbers with thousand separators
 const formatNumber = (num: number): string => {
   return new Intl.NumberFormat('id-ID').format(num);
+};
+
+// Helper function to get pesantren image based on ID or name
+const getPesantrenImage = (pesantren: Pesantren): string => {
+  // Array of available pesantren images
+  const pesantrenImages = [
+    '/pesantren-1.svg',
+    '/pesantren-2.svg',
+    '/pesantren-3.svg',
+    '/pesantren-contemporary.svg',
+    '/pesantren-modern-1.svg',
+    '/pesantren-modern-2.svg',
+    '/pesantren-traditional.svg'
+  ];
+
+  // If pesantren already has an image and it's one of our available images, use it
+  if (pesantren.image && pesantrenImages.includes(pesantren.image)) {
+    return pesantren.image;
+  }
+
+  // Generate image based on pesantren ID or name hash
+  const identifier = pesantren.id || pesantren.name || '';
+  let hash = 0;
+  for (let i = 0; i < identifier.length; i++) {
+    const char = identifier.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  // Use absolute value and modulo to get index
+  const imageIndex = Math.abs(hash) % pesantrenImages.length;
+  return pesantrenImages[imageIndex];
 };
 
 interface PesantrenCardProps {
@@ -27,36 +60,16 @@ export default function PesantrenCard({
 }: PesantrenCardProps) {
   const { isAuthenticated } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const router = useRouter();
 
   const handleViewDetail = () => {
-    // Check if user is authenticated
     if (!isAuthenticated) {
       setShowAuthModal(true);
       return;
     }
 
-    if (onViewDetail) {
-      onViewDetail(pesantren);
-    } else {
-      // Convert pesantren ID to string to avoid scientific notation
-      const rawId = pesantren.code || pesantren.id;
-      const pesantrenIdStr = String(rawId);
-      
-      // Additional validation to prevent scientific notation
-      if (pesantrenIdStr.includes('e+') || pesantrenIdStr.includes('E+')) {
-        console.warn('Scientific notation ID detected in PesantrenCard:', pesantrenIdStr);
-        return; // Don't navigate if ID is in scientific notation
-      }
-      
-      // Ensure ID is reasonable length
-      if (pesantrenIdStr.length > 50) {
-        console.warn('Extremely long ID detected in PesantrenCard:', pesantrenIdStr);
-        return;
-      }
-      
-      // Navigate to detail page
-      window.location.href = `/pesantren/${pesantrenIdStr}`;
-    }
+    // Navigate to detail page without pesantren ID
+    router.push('/pesantren/detail');
   };
 
   if (variant === 'compact') {
@@ -112,7 +125,7 @@ export default function PesantrenCard({
       <div className="relative h-48 sm:h-56 md:h-64 bg-gradient-to-br from-blue-100 to-blue-200 overflow-hidden">
         {/* Pesantren Image */}
         <img 
-          src={pesantren.image || '/placeholder-pesantren.jpg'} 
+          src={getPesantrenImage(pesantren)} 
           alt={pesantren.name}
           className="w-full h-full object-cover"
           onError={(e) => {

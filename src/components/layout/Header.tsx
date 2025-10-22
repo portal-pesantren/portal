@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuthStatus, useLogout } from '@/hooks/useAuth';
 import { User, LogOut, Settings, Bell, Edit3, Bookmark, Heart, MessageCircle } from 'lucide-react';
 
@@ -10,6 +11,7 @@ interface HeaderProps {
 }
 
 export default function Header({ className = '' }: HeaderProps) {
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState('explore');
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -43,6 +45,17 @@ export default function Header({ className = '' }: HeaderProps) {
     setIsNotificationMenuOpen(!isNotificationMenuOpen);
     setIsProfileMenuOpen(false); // Close profile menu when opening notification
   };
+
+  // Set active menu based on current pathname
+  useEffect(() => {
+    if (pathname === '/') {
+      setActiveMenu('explore');
+    } else if (pathname === '/news') {
+      setActiveMenu('berita');
+    } else if (pathname === '/about') {
+      setActiveMenu('tentang-kami');
+    }
+  }, [pathname]);
 
   // Close profile and notification menus when clicking outside
   useEffect(() => {
@@ -101,8 +114,8 @@ export default function Header({ className = '' }: HeaderProps) {
             >
               Berita
             </Link>
-            <a 
-              href="#tentang-kami" 
+            <Link 
+              href="/about" 
               onClick={() => handleMenuClick('tentang-kami')}
               className={`hover:text-[#031a3d] transition-colors font-medium pb-1 ${
                 activeMenu === 'tentang-kami' 
@@ -111,7 +124,7 @@ export default function Header({ className = '' }: HeaderProps) {
               }`}
             >
               Tentang kami
-            </a>
+            </Link>
           </div>
           
           {/* Auth Buttons */}
@@ -328,8 +341,8 @@ export default function Header({ className = '' }: HeaderProps) {
               >
                 Berita
               </Link>
-              <a 
-                href="#tentang-kami" 
+              <Link 
+                href="/about" 
                 onClick={() => handleMenuClick('tentang-kami')}
                 className={`transition-colors px-2 py-1 font-medium ${
                   activeMenu === 'tentang-kami' 
@@ -338,7 +351,7 @@ export default function Header({ className = '' }: HeaderProps) {
                 }`}
               >
                 Tentang kami
-              </a>
+              </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 {isLoading ? (
                   <div className="animate-pulse flex flex-col space-y-2">

@@ -206,7 +206,7 @@ export default function KalenderEvent({ pesantrenId }: KalenderEventProps) {
           
           return (
             <button
-              key={index}
+              key={`${day.isCurrentMonth ? 'curr' : 'pad'}-${day.date}-${selectedMonth}-${selectedYear}-${index}`}
               className={`
                 w-10 h-10 rounded-full text-sm font-medium transition-colors
                 ${

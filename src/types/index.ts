@@ -190,3 +190,127 @@ export interface LoginResponse {
   expires_in: number;
   token_type: string;
 }
+
+// News interfaces based on API response
+export interface News {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featuredImage?: string;
+  images: string[];
+  author: string;
+  authorId: string;
+  authorName: string;
+  authorAvatar?: string;
+  pesantrenId?: string;
+  pesantrenName?: string;
+  published_at: string;
+  isPublished: boolean;
+  is_featured: boolean;
+  isFeatured: boolean;
+  publishDate?: string;
+  view_count: number;
+  views: number;
+  likes: number;
+  dislikes: number;
+  readingTime: number;
+  category: string;
+  tags?: string[];
+  metaTitle?: string;
+  metaDescription?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Statistics interfaces
+export interface PesantrenStats {
+  total_pesantren: number;
+  total_students: number;
+  total_provinces: number;
+  featured_count: number;
+  average_rating: number;
+  popular_programs: Array<{
+    name: string;
+    count: number;
+  }>;
+}
+
+export interface NewsStats {
+  total: number;
+  total_news: number;
+  total_views: number;
+  totalViews: number;
+  totalLikes: number;
+  featured_count: number;
+  featured: number;
+  published: number;
+  published_today: number;
+  published_this_week: number;
+  published_this_month: number;
+  categoriesCount: number;
+  popular_categories: Array<{
+    name: string;
+    count: number;
+  }>;
+}
+
+export interface ApplicationStats {
+  total: number;
+  pending: number;
+  approved: number;
+  accepted: number;
+  rejected: number;
+  completed: number;
+  underReview: number;
+  waitlisted: number;
+  this_month: number;
+}
+
+export interface ConsultationStats {
+  total: number;
+  pending: number;
+  scheduled: number;
+  completed: number;
+  cancelled: number;
+  this_month: number;
+  satisfaction_rating?: number;
+}
+
+// Application interfaces
+export interface Application {
+  id: string;
+  user_id: string;
+  pesantren_id: string;
+  pesantren_name: string;
+  student_name: string;
+  student_age: number;
+  parent_name: string;
+  parent_phone: string;
+  parent_email: string;
+  preferred_program: string;
+  status: 'pending' | 'approved' | 'rejected' | 'completed';
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Consultation interfaces
+export interface Consultation {
+  id: string;
+  user_id: string;
+  parent_name: string;
+  child_name: string;
+  child_age: number;
+  email: string;
+  phone: string;
+  preferred_location?: string;
+  preferred_programs?: string[];
+  budget?: number;
+  additional_notes?: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  assigned_counselor?: string;
+  created_at: string;
+  updated_at: string;
+}

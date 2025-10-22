@@ -1,4 +1,6 @@
 import { api } from '@/lib/api';
+import { API_CONFIG } from '@/lib/constants';
+import { ConsultationStats } from '@/types';
 
 // Consultation interfaces
 export interface ConsultationData {
@@ -130,7 +132,7 @@ export const consultationService = {
    */
   submitConsultation: async (consultationData: ConsultationData): Promise<Consultation> => {
     try {
-      const response = await api.post<{ data: ApiConsultation }>('/consultations', consultationData);
+      const response = await api.post<{ data: ApiConsultation }>(API_CONFIG.ENDPOINTS.CONSULTATIONS.CREATE, consultationData);
       return transformConsultation(response.data);
     } catch (error: any) {
       console.error('Submit consultation error:', error);
@@ -175,7 +177,7 @@ export const consultationService = {
         page: number;
         limit: number;
         total_pages: number;
-      }>(`/consultations?${queryParams.toString()}`);
+      }>(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.LIST}?${queryParams.toString()}`);
       
       return {
         consultations: response.data.map(transformConsultation),
@@ -195,7 +197,7 @@ export const consultationService = {
    */
   getConsultationById: async (consultationId: string): Promise<Consultation> => {
     try {
-      const response = await api.get<{ data: ApiConsultation }>(`/consultations/${consultationId}`);
+      const response = await api.get<{ data: ApiConsultation }>(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.DETAIL}/${consultationId}`);
       return transformConsultation(response.data);
     } catch (error) {
       console.error('Get consultation by ID error:', error);
@@ -208,7 +210,7 @@ export const consultationService = {
    */
   updateConsultation: async (consultationId: string, consultationData: Partial<ConsultationData>): Promise<Consultation> => {
     try {
-      const response = await api.put<{ data: ApiConsultation }>(`/consultations/${consultationId}`, consultationData);
+      const response = await api.put<{ data: ApiConsultation }>(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.UPDATE}/${consultationId}`, consultationData);
       return transformConsultation(response.data);
     } catch (error: any) {
       console.error('Update consultation error:', error);
@@ -228,7 +230,7 @@ export const consultationService = {
    */
   cancelConsultation: async (consultationId: string, reason?: string): Promise<void> => {
     try {
-      await api.patch(`/consultations/${consultationId}/cancel`, { reason });
+      await api.patch(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.CANCEL}/${consultationId}`, { reason });
     } catch (error: any) {
       console.error('Cancel consultation error:', error);
       
@@ -264,7 +266,7 @@ export const consultationService = {
       if (date) queryParams.append('date', date);
       if (consultationType) queryParams.append('consultation_type', consultationType);
       
-      const response = await api.get<{ data: ConsultationSlot[] }>(`/consultations/available-slots?${queryParams.toString()}`);
+      const response = await api.get<{ data: ConsultationSlot[] }>(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.SLOTS}?${queryParams.toString()}`);
       return response.data;
     } catch (error) {
       console.error('Get available slots error:', error);
@@ -277,7 +279,7 @@ export const consultationService = {
    */
   scheduleConsultation: async (consultationId: string, scheduledDate: string, consultantId?: string): Promise<Consultation> => {
     try {
-      const response = await api.patch<{ data: ApiConsultation }>(`/consultations/${consultationId}/schedule`, {
+      const response = await api.patch<{ data: ApiConsultation }>(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.SCHEDULE}/${consultationId}`, {
         scheduled_date: scheduledDate,
         consultant_id: consultantId
       });
@@ -293,7 +295,7 @@ export const consultationService = {
    */
   completeConsultation: async (consultationId: string, meetingNotes: string, followUpRequired: boolean = false): Promise<Consultation> => {
     try {
-      const response = await api.patch<{ data: ApiConsultation }>(`/consultations/${consultationId}/complete`, {
+      const response = await api.patch<{ data: ApiConsultation }>(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.COMPLETE}/${consultationId}`, {
         meeting_notes: meetingNotes,
         follow_up_required: followUpRequired
       });
@@ -307,19 +309,23 @@ export const consultationService = {
   /**
    * Get consultation statistics
    */
-  getConsultationStats: async (consultantId?: string): Promise<{
-    total: number;
-    pending: number;
-    scheduled: number;
-    completed: number;
-    cancelled: number;
-    this_month: number;
-    satisfaction_rating?: number;
-  }> => {
+  getConsultationStats: async (consultantId?: string): Promise<ConsultationStats> => {
     try {
-      const url = consultantId ? `/consultations/stats?consultant_id=${consultantId}` : '/consultations/stats';
+      const url = consultantId 
+        ? `${API_CONFIG.ENDPOINTS.CONSULTATIONS.STATS}?consultant_id=${consultantId}` 
+        : API_CONFIG.ENDPOINTS.CONSULTATIONS.STATS;
       const response = await api.get<{ data: any }>(url);
-      return response.data;
+      
+      // Transform API response to match ConsultationStats interface
+      return {
+        total: response.data.total || 0,
+        pending: response.data.pending || 0,
+        scheduled: response.data.scheduled || 0,
+        completed: response.data.completed || 0,
+        cancelled: response.data.cancelled || 0,
+        this_month: response.data.this_month || 0,
+        satisfaction_rating: response.data.satisfaction_rating
+      };
     } catch (error) {
       console.error('Get consultation stats error:', error);
       throw new Error('Gagal mengambil statistik konsultasi');
@@ -336,7 +342,7 @@ export const consultationService = {
     duration: number;
   }>> => {
     try {
-      const response = await api.get<{ data: any[] }>('/consultations/types');
+      const response = await api.get<{ data: any[] }>(API_CONFIG.ENDPOINTS.CONSULTATIONS.TYPES);
       return response.data;
     } catch (error) {
       console.error('Get consultation types error:', error);
@@ -380,7 +386,7 @@ export const consultationService = {
     improvement_suggestions?: string;
   }): Promise<void> => {
     try {
-      await api.post(`/consultations/${consultationId}/feedback`, feedback);
+      await api.post(`${API_CONFIG.ENDPOINTS.CONSULTATIONS.FEEDBACK}/${consultationId}`, feedback);
     } catch (error) {
       console.error('Send consultation feedback error:', error);
       throw new Error('Gagal mengirim feedback konsultasi');

@@ -1,5 +1,102 @@
 import { NavigationItem, Feature, ContactInfo } from '@/types';
 
+// API Configuration
+export const API_CONFIG = {
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000',
+  VERSION: process.env.NEXT_PUBLIC_API_VERSION || 'v1',
+  TIMEOUT: 10000, // 10 seconds
+  ENDPOINTS: {
+    // Health & Info
+    HEALTH: '/health',
+    
+    // Authentication
+    AUTH: {
+      LOGIN: '/users/login',
+      REGISTER: '/users/register',
+      LOGOUT: '/users/logout',
+      PROFILE: '/users/profile',
+      REFRESH: '/users/refresh',
+      VERIFY_EMAIL: '/users/verify-email',
+      FORGOT_PASSWORD: '/users/forgot-password',
+      RESET_PASSWORD: '/users/reset-password',
+      CHANGE_PASSWORD: '/users/change-password',
+    },
+    
+    // Pesantren
+    PESANTREN: {
+      LIST: '/pesantren',
+      CREATE: '/pesantren',
+      DETAIL: '/pesantren',
+      UPDATE: '/pesantren',
+      DELETE: '/pesantren',
+      BY_CODE: '/pesantren/code',
+      FEATURED: '/pesantren/featured',
+      POPULAR: '/pesantren/popular',
+      STATS: '/pesantren/stats',
+      SEARCH: '/pesantren/search',
+      REVIEWS: '/pesantren',
+    },
+    
+    // News
+    NEWS: {
+      LIST: '/news',
+      CREATE: '/news',
+      DETAIL: '/news',
+      UPDATE: '/news',
+      DELETE: '/news',
+      BY_SLUG: '/news/slug',
+      FEATURED: '/news/featured',
+      POPULAR: '/news/popular',
+      PUBLISH: '/news',
+      UNPUBLISH: '/news',
+      VIEWS: '/news',
+      LIKE: '/news',
+      UNLIKE: '/news',
+      CATEGORIES: '/news/categories',
+      TAGS: '/news/tags/popular',
+      SEARCH: '/news/search',
+      STATS: '/news/stats',
+    },
+    
+    // Applications
+    APPLICATIONS: {
+      LIST: '/applications',
+      CREATE: '/applications',
+      DETAIL: '/applications',
+      UPDATE: '/applications',
+      DELETE: '/applications',
+      STATUS: '/applications',
+      INTERVIEW: '/applications',
+      DOCUMENTS: '/applications',
+      STATS: '/applications/stats',
+    },
+    
+    // Consultations
+    CONSULTATIONS: {
+      LIST: '/consultations',
+      CREATE: '/consultations',
+      DETAIL: '/consultations',
+      UPDATE: '/consultations',
+      CANCEL: '/consultations',
+      SLOTS: '/consultations/available-slots',
+      SCHEDULE: '/consultations',
+      COMPLETE: '/consultations',
+      STATS: '/consultations/stats',
+      TYPES: '/consultations/types',
+      FEEDBACK: '/consultations',
+    },
+    
+    // Admin endpoints
+    ADMIN: {
+      USERS: '/users',
+      PESANTREN: '/pesantren',
+      NEWS: '/news',
+      APPLICATIONS: '/applications',
+      CONSULTATIONS: '/consultations',
+    }
+  }
+};
+
 // Navigation items
 export const NAVIGATION_ITEMS: NavigationItem[] = [
   { name: 'Beranda', href: '#beranda' },
