@@ -8,7 +8,34 @@ const mockNewsData: NewsItem[] = [
     title: 'Menteri Agama Gumawan Kartoasasmita mengunjungi Pondok Pesantren Pabuaran',
     slug: 'menteri-agama-gunawan-di-paburuan',
     excerpt: 'Menteri Agama Gumawan Kartoasasmita mengunjungi Pondok Pesantren Pabuaran untuk melihat langsung program pendidikan yang telah berjalan.',
-    content: 'Menteri Agama Gumawan Kartoasasmita melakukan kunjungan kerja ke Pondok Pesantren Pabuaran dalam rangka meninjau langsung implementasi program pendidikan pesantren yang telah berjalan. Dalam kunjungannya, beliau menyampaikan apresiasi terhadap sistem pendidikan yang memadukan kurikulum nasional dengan nilai-nilai keislaman.',
+    content: `
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Kembali ke Pesantren Lama</h2>
+        <p class="text-gray-700 leading-relaxed">
+          Menteri Agama Gumawan Kartoasasmita melakukan kunjungan kerja ke Pondok Pesantren Pabuaran dalam rangka meninjau langsung implementasi program pendidikan pesantren yang telah berjalan. Dalam kunjungannya, beliau menyampaikan apresiasi terhadap sistem pendidikan yang memadukan kurikulum nasional dengan nilai-nilai keislaman.
+        </p>
+        
+        <h3 class="text-xl font-semibold text-gray-900 mt-6 mb-3">Pesan untuk Generasi Santri</h3>
+        <p class="text-gray-700 leading-relaxed">
+          "Pesantren memiliki peran yang sangat penting dalam membentuk karakter bangsa. Melalui pendidikan yang holistik, pesantren tidak hanya mengajarkan ilmu agama, tetapi juga mempersiapkan santri untuk menghadapi tantangan zaman modern," ujar Menteri Agama dalam sambutannya.
+        </p>
+        
+        <div class="my-6">
+          <img src="https://picsum.photos/600/400?random=10" alt="Suasana kunjungan Menteri" class="w-full rounded-lg shadow-md" />
+          <p class="text-sm text-gray-500 mt-2 text-center">Menteri Agama berdialog dengan para santri dan pengasuh pesantren</p>
+        </div>
+        
+        <h3 class="text-xl font-semibold text-gray-900 mt-6 mb-3">Sambutan Hangat dari Pihak Pesantren</h3>
+        <p class="text-gray-700 leading-relaxed">
+          Pengasuh Pondok Pesantren Pabuaran, KH. Ahmad Syafi'i, menyambut baik kunjungan Menteri Agama. "Kami sangat berterima kasih atas perhatian pemerintah terhadap dunia pesantren. Dukungan ini akan semakin memperkuat peran pesantren dalam mencerdaskan bangsa," ungkapnya.
+        </p>
+        
+        <h3 class="text-xl font-semibold text-gray-900 mt-6 mb-3">Makna Kunjungan</h3>
+        <p class="text-gray-700 leading-relaxed">
+          Kunjungan ini merupakan bagian dari program pemerintah untuk memperkuat sinergi antara pendidikan formal dan pesantren. Diharapkan melalui kolaborasi ini, kualitas pendidikan di Indonesia dapat terus meningkat dan menghasilkan generasi yang berakhlak mulia serta kompeten di bidangnya.
+        </p>
+      </div>
+    `,
     category: 'berita',
     tags: ['kunjungan', 'menteri', 'pabuaran', 'pendidikan'],
     featuredImage: 'https://picsum.photos/400/250?random=1',
@@ -283,23 +310,27 @@ export function useNews(filters: NewsFilters = {}) {
   });
 }
 
-export function useNewsDetail(slug: string) {
+export function useNewsDetail(slugOrId: string) {
   return useQuery({
-    queryKey: NEWS_KEYS.slug(slug),
+    queryKey: NEWS_KEYS.slug(slugOrId),
     queryFn: async () => {
       try {
-        const response = await newsService.getNewsBySlug(slug);
+        const response = await newsService.getNewsBySlug(slugOrId);
         return transformNewsToNewsItem(response);
       } catch (error) {
         console.warn('API tidak tersedia, menggunakan data mock untuk news detail');
-        const mockItem = mockNewsData.find(item => item.slug === slug);
+        // Try to find by slug first, then by ID
+        let mockItem = mockNewsData.find(item => item.slug === slugOrId);
+        if (!mockItem) {
+          mockItem = mockNewsData.find(item => item.id === slugOrId);
+        }
         if (!mockItem) {
           throw new Error('News not found');
         }
         return mockItem;
       }
     },
-    enabled: !!slug,
+    enabled: !!slugOrId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: false,
     refetchOnWindowFocus: false,
