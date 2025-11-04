@@ -363,20 +363,20 @@ export function useLatestNews(limit: number = 6) {
     queryFn: async () => {
       try {
         const items = await newsService.getLatestNews(limit);
-        // Fallback to mock data when backend returns empty list
+        // Jika backend mengembalikan kosong, tampilkan kosong tanpa fallback
         if (!items || items.length === 0) {
-          console.warn('Latest news kosong, menggunakan data mock');
-          return mockNewsData.slice(0, limit);
+          console.warn('Latest news kosong dari backend');
+          return [];
         }
         return items.map(transformNewsToNewsItem);
       } catch (error) {
-        // Silently return mock data on API failure
-        console.warn('API tidak tersedia, menggunakan data mock untuk latest news');
-        return mockNewsData.slice(0, limit);
+        // Propagasikan error agar UI menampilkan state error, tanpa mock
+        console.error('Gagal memuat latest news dari backend:', error);
+        throw error;
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
-    retry: false, // Don't retry, use fallback immediately
+    retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });

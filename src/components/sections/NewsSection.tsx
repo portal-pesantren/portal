@@ -3,6 +3,8 @@
 import { ArrowUpRight } from 'lucide-react';
 import { useLatestNews, NewsItem } from '@/hooks/useNews';
 import { Button } from '@/components/ui';
+import React from 'react';
+// Removed debug utilities import after backend integration
 
 interface NewsSectionProps {
   className?: string;
@@ -30,6 +32,14 @@ const NewsSkeleton = () => (
 export default function NewsSection({ className = '' }: NewsSectionProps) {
   const { data: newsData, isLoading, error } = useLatestNews(4);
 
+  React.useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📰 NewsSection state:', { count: newsData?.length || 0, isLoading, error });
+    }
+  }, [newsData, isLoading, error]);
+
+  // Removed Test Backend button handler after backend integration
+
   return (
     <section className={`py-16 bg-white ${className}`}>
       <div className="container mx-auto px-4">
@@ -42,6 +52,7 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit id venenatis pretium risus euismod dictum egestas 
             orci netus feugiat ut egestas ut sagittis tincidunt phasellus elit etiam cursus orci in. Id sed montes.
           </p>
+          {/* Debug test button removed as requested */}
         </div>
 
         {/* Loading State */}
@@ -63,9 +74,9 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
         {/* News Grid */}
         {newsData && newsData.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {newsData.map((news) => (
+            {newsData.map((news, i) => (
             <a 
-              key={news.id} 
+              key={news.slug || news.id || i} 
               href={`/news/${news.slug || news.id}`}
               className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group border border-gray-100 block"
             >
@@ -106,10 +117,10 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
                     {news.category}
                   </span>
                   <span>•</span>
-                  <span>{new Date((news as any).published_at || (news as any).publishDate || (news as any).createdAt || (news as any).publishedAt).toLocaleDateString('id-ID', { 
-                    day: 'numeric', 
-                    month: 'short' 
-                  })}</span>
+                  <span>{(() => {
+                    const published = (news as NewsItem).publishedAt || (news as any).published_at || (news as any).createdAt || (news as any).publishDate;
+                    return new Date(published).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+                  })()}</span>
                 </div>
                 
                 <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
@@ -125,12 +136,12 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
                     <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
                       <span className="text-xs font-medium text-gray-600">
                         {(() => {
-                          const authorName = (news as any).authorName || (news as any).author?.name || (news as any).author || 'Admin';
+                          const authorName = (news as NewsItem).author?.name || (news as any).authorName || (typeof (news as any).author === 'string' ? (news as any).author : 'Admin');
                           return typeof authorName === 'string' ? authorName.charAt(0).toUpperCase() : 'A';
                         })()}
                       </span>
                     </div>
-                    <span className="text-xs text-gray-500">{(news as any).authorName || (news as any).author?.name || (news as any).author || 'Admin'}</span>
+                    <span className="text-xs text-gray-500">{(news as NewsItem).author?.name || (news as any).authorName || (typeof (news as any).author === 'string' ? (news as any).author : 'Admin')}</span>
                   </div>
                   <span className="text-xs text-gray-500">{news.readingTime || 5} min baca</span>
                 </div>

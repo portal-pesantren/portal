@@ -267,19 +267,35 @@ export const newsService = {
 
   // Get featured news
   async getFeaturedNews(limit: number = 5): Promise<News[]> {
-    const response = await api.get<PaginatedResponse<ApiNews>>(
+    const wrapper = await api.get<ApiResponse<{ 
+      data: ApiNews[]; 
+      pagination: { 
+        page: number; 
+        limit: number; 
+        total: number; 
+        total_pages: number; 
+      } 
+    }>>(
       `${API_CONFIG.ENDPOINTS.NEWS.FEATURED}?limit=${limit}`
     );
-    return response.data.map(transformApiNewsToNews);
+    return wrapper.data.data.map(transformApiNewsToNews);
   },
 
   // Get latest news
   async getLatestNews(limit: number = 10): Promise<News[]> {
-    // Use general LIST endpoint with published filter and sort by latest publish date
-    const response = await api.get<PaginatedResponse<ApiNews>>(
+    // Gunakan endpoint LIST dengan filter published dan sort terbaru
+    const wrapper = await api.get<ApiResponse<{ 
+      data: ApiNews[]; 
+      pagination: { 
+        page: number; 
+        limit: number; 
+        total: number; 
+        total_pages: number; 
+      } 
+    }>>(
       `${API_CONFIG.ENDPOINTS.NEWS.LIST}?is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
     );
-    return response.data.map(transformApiNewsToNews);
+    return wrapper.data.data.map(transformApiNewsToNews);
   },
 
   // Get news by category
