@@ -248,7 +248,30 @@ const ContentTable = ({ title, data, type }: {
 
 export default function AdminDashboard() {
   const { user } = useAuth();
+  // Initialize activeTab with 'overview' to ensure consistency
+  // Always start with overview to maintain consistent user experience
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Ensure consistent state and cleanup on unmount
+  useEffect(() => {
+    // Set consistent default state
+    if (typeof window !== 'undefined') {
+      // Ensure overview is always the default when dashboard loads
+      sessionStorage.setItem('adminDashboardTab', 'overview');
+    }
+
+    // Cleanup function
+    return () => {
+      // Optional: cleanup if needed
+    };
+  }, []); // Empty dependency array - only run on mount/unmount
+
+  // Update session storage when tab changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('adminDashboardTab', activeTab);
+    }
+  }, [activeTab]);
 
   // Simulasi pengecekan role admin
   const isAdmin = user?.role === 'admin' || true; // Sementara true untuk demo
@@ -280,7 +303,7 @@ export default function AdminDashboard() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-1">
-              Dashboard Admin
+              Dashboard
             </h1>
             <p className="text-gray-600">
               Kelola konten dan data Portal Pesantren
@@ -292,7 +315,7 @@ export default function AdminDashboard() {
             <div className="border-b border-gray-200">
               <nav className="-mb-px flex space-x-8">
                 {[
-                  { id: 'overview', label: 'Overview', icon: BarChart3 },
+                  { id: 'overview', label: 'Dashboard', icon: BarChart3 },
                   { id: 'content', label: 'Konten', icon: FileText },
                   { id: 'users', label: 'Pengguna', icon: Users },
                   { id: 'settings', label: 'Pengaturan', icon: Settings }
@@ -302,7 +325,7 @@ export default function AdminDashboard() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
+                      className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-all duration-200 ${
                         activeTab === tab.id
                           ? 'border-[#042558] text-[#042558]'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
