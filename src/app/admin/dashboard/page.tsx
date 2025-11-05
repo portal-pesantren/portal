@@ -116,19 +116,19 @@ const StatCard = ({ title, value, icon: Icon, trend, color = 'blue' }: {
   return (
     <Card className="border-l-4 border-l-[#042558]">
       <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex items-center justify-between h-full">
+          <div className="flex-1">
             <p className="text-sm font-medium text-gray-600">{title}</p>
-            <p className="text-2xl font-bold text-gray-900">{value}</p>
+            <p className="text-3xl font-bold text-gray-900">{value}</p>
             {trend && (
-              <p className="text-sm text-green-600 flex items-center mt-1">
+              <p className="text-sm text-green-600 flex items-center mt-2">
                 <TrendingUp className="w-4 h-4 mr-1" />
                 {trend}
               </p>
             )}
           </div>
-          <div className={`p-3 rounded-full ${colorClasses[color as keyof typeof colorClasses]}`}>
-            <Icon className="w-6 h-6" />
+          <div className={`p-4 rounded-full ${colorClasses[color as keyof typeof colorClasses]} ml-4`}>
+            <Icon className="w-8 h-8" />
           </div>
         </div>
       </CardContent>
@@ -279,7 +279,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 mb-1">
               Dashboard Admin
             </h1>
             <p className="text-gray-600">
