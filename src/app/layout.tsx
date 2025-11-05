@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from '@/providers/QueryProvider';
@@ -19,7 +19,11 @@ export const metadata: Metadata = {
   description: "Platform terpercaya untuk menemukan pesantren terbaik di Indonesia. Cari, bandingkan, dan pilih pesantren yang sesuai dengan kebutuhan pendidikan anak Anda.",
   keywords: "pesantren, pondok pesantren, pendidikan islam, boarding school, tahfidz, santri",
   authors: [{ name: "Portal Pesantren" }],
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -31,6 +35,7 @@ export default function RootLayout({
     <html lang="id">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
       >
         <QueryProvider>
           <AuthProvider>

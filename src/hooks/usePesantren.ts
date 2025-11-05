@@ -26,9 +26,17 @@ export function usePesantren(params?: {
 export function usePesantrenDetail(id: string) {
   return useQuery({
     queryKey: queryKeys.pesantren.detail(id),
-    queryFn: () => pesantrenService.getPesantrenById(id),
+    queryFn: () => pesantrenService.getPesantrenByIdentifier(id),
     enabled: !!id,
     staleTime: 10 * 60 * 1000, // 10 minutes
+    retry: (failureCount, error: any) => {
+      // Don't retry on 404 or 400 errors (invalid ID format)
+      if (error?.response?.status === 404 || error?.response?.status === 400) {
+        return false;
+      }
+      // Retry up to 2 times for other errors
+      return failureCount < 2;
+    },
   });
 }
 

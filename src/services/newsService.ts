@@ -1,5 +1,6 @@
 import { api } from '@/lib/api';
-import type { ApiResponse, PaginatedResponse } from '@/types';
+import { API_CONFIG } from '@/lib/constants';
+import type { ApiResponse, PaginatedResponse, NewsStats } from '@/types';
 
 // News interfaces based on backend DTO
 export interface NewsData {
@@ -75,15 +76,15 @@ export interface News {
   pesantrenName?: string;
   isPublished: boolean;
   isFeatured: boolean;
-  publishDate?: Date;
+  publishDate?: string;
   views: number;
   likes: number;
   dislikes: number;
   readingTime: number;
   metaTitle?: string;
   metaDescription?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface NewsSearchParams {
@@ -96,6 +97,8 @@ export interface NewsSearchParams {
   is_published?: boolean;
   published_from?: string;
   published_to?: string;
+  date_from?: string;
+  date_to?: string;
   sort_by?: 'created_at' | 'published_at' | 'views' | 'likes' | 'title';
   sort_order?: 'asc' | 'desc';
   page?: number;
@@ -152,15 +155,15 @@ function transformApiNewsToNews(apiNews: ApiNews): News {
     pesantrenName: apiNews.pesantren_name,
     isPublished: apiNews.is_published,
     isFeatured: apiNews.is_featured,
-    publishDate: apiNews.publish_date ? new Date(apiNews.publish_date) : undefined,
+    publishDate: apiNews.publish_date || undefined,
     views: apiNews.views,
     likes: apiNews.likes,
     dislikes: apiNews.dislikes,
     readingTime: apiNews.reading_time,
     metaTitle: apiNews.meta_title,
     metaDescription: apiNews.meta_description,
-    createdAt: new Date(apiNews.created_at),
-    updatedAt: new Date(apiNews.updated_at),
+    createdAt: apiNews.created_at,
+    updatedAt: apiNews.updated_at,
   };
 }
 
@@ -223,48 +226,82 @@ export const newsService = {
     if (params.page) searchParams.append('page', params.page.toString());
     if (params.limit) searchParams.append('limit', params.limit.toString());
     
-    const response = await api.get<PaginatedResponse<ApiNews>>(
-      `/api/v1/news?${searchParams.toString()}`
+    const wrapper = await api.get<ApiResponse<{ 
+      data: ApiNews[]; 
+      pagination: { 
+        page: number; 
+        limit: number; 
+        total: number; 
+        total_pages: number; 
+        has_next?: boolean; 
+        has_prev?: boolean; 
+      } 
+    }>>(
+      `${API_CONFIG.ENDPOINTS.NEWS.LIST}?${searchParams.toString()}`
     );
+
+    const payload = wrapper.data;
     
     return {
-      data: response.data.map(transformApiNewsToNews),
-      pagination: response.pagination,
+      data: payload.data.map(transformApiNewsToNews),
+      pagination: {
+        page: payload.pagination.page,
+        limit: payload.pagination.limit,
+        total: payload.pagination.total,
+        totalPages: payload.pagination.total_pages,
+      },
     };
   },
 
   // Get news by ID
   async getNewsById(id: string): Promise<News> {
-    const response = await api.get<ApiResponse<ApiNews>>(`/api/v1/news/${id}`);
+    const response = await api.get<ApiResponse<ApiNews>>(`${API_CONFIG.ENDPOINTS.NEWS.DETAIL}/${id}`);
     return transformApiNewsToNews(response.data);
   },
 
   // Get news by slug
   async getNewsBySlug(slug: string): Promise<News> {
-    const response = await api.get<ApiResponse<ApiNews>>(`/api/v1/news/slug/${slug}`);
+    const response = await api.get<ApiResponse<ApiNews>>(`${API_CONFIG.ENDPOINTS.NEWS.BY_SLUG}/${slug}`);
     return transformApiNewsToNews(response.data);
   },
 
   // Get featured news
   async getFeaturedNews(limit: number = 5): Promise<News[]> {
-    const response = await api.get<PaginatedResponse<ApiNews>>(
-      `/api/v1/news?is_featured=true&is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
+    const wrapper = await api.get<ApiResponse<{ 
+      data: ApiNews[]; 
+      pagination: { 
+        page: number; 
+        limit: number; 
+        total: number; 
+        total_pages: number; 
+      } 
+    }>>(
+      `${API_CONFIG.ENDPOINTS.NEWS.FEATURED}?limit=${limit}`
     );
-    return response.data.map(transformApiNewsToNews);
+    return wrapper.data.data.map(transformApiNewsToNews);
   },
 
   // Get latest news
   async getLatestNews(limit: number = 10): Promise<News[]> {
-    const response = await api.get<PaginatedResponse<ApiNews>>(
-      `/api/v1/news?is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
+    // Gunakan endpoint LIST dengan filter published dan sort terbaru
+    const wrapper = await api.get<ApiResponse<{ 
+      data: ApiNews[]; 
+      pagination: { 
+        page: number; 
+        limit: number; 
+        total: number; 
+        total_pages: number; 
+      } 
+    }>>(
+      `${API_CONFIG.ENDPOINTS.NEWS.LIST}?is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
     );
-    return response.data.map(transformApiNewsToNews);
+    return wrapper.data.data.map(transformApiNewsToNews);
   },
 
   // Get news by category
   async getNewsByCategory(category: string, limit: number = 10): Promise<News[]> {
     const response = await api.get<PaginatedResponse<ApiNews>>(
-      `/api/v1/news?category=${category}&is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
+      `${API_CONFIG.ENDPOINTS.NEWS.LIST}?category=${category}&is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
     );
     return response.data.map(transformApiNewsToNews);
   },
@@ -272,7 +309,7 @@ export const newsService = {
   // Get news by pesantren
   async getNewsByPesantren(pesantrenId: string, limit: number = 10): Promise<News[]> {
     const response = await api.get<PaginatedResponse<ApiNews>>(
-      `/api/v1/news?pesantren_id=${pesantrenId}&is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
+      `${API_CONFIG.ENDPOINTS.NEWS.LIST}?pesantren_id=${pesantrenId}&is_published=true&limit=${limit}&sort_by=published_at&sort_order=desc`
     );
     return response.data.map(transformApiNewsToNews);
   },
@@ -280,64 +317,114 @@ export const newsService = {
   // Create news (admin only)
   async createNews(data: NewsCreateData): Promise<News> {
     const apiData = transformNewsCreateDataToApi(data);
-    const response = await api.post<ApiResponse<ApiNews>>('/api/v1/news', apiData);
+    const response = await api.post<ApiResponse<ApiNews>>(API_CONFIG.ENDPOINTS.NEWS.CREATE, apiData);
     return transformApiNewsToNews(response.data);
   },
 
   // Update news (admin only)
   async updateNews(id: string, data: NewsUpdateData): Promise<News> {
     const apiData = transformNewsUpdateDataToApi(data);
-    const response = await api.put<ApiResponse<ApiNews>>(`/api/v1/news/${id}`, apiData);
+    const response = await api.put<ApiResponse<ApiNews>>(`${API_CONFIG.ENDPOINTS.NEWS.UPDATE}/${id}`, apiData);
     return transformApiNewsToNews(response.data);
   },
 
   // Delete news (admin only)
   async deleteNews(id: string): Promise<void> {
-    await api.delete(`/api/v1/news/${id}`);
+    await api.delete(`${API_CONFIG.ENDPOINTS.NEWS.DELETE}/${id}`);
+  },
+
+  // Get news statistics
+  async getNewsStats(): Promise<NewsStats> {
+    const response = await api.get<ApiResponse<{
+      total_news: number;
+      published_news: number;
+      featured_news: number;
+      total_views: number;
+      total_likes: number;
+      categories_count: number;
+    }>>(API_CONFIG.ENDPOINTS.NEWS.STATS);
+    
+    return {
+      total: response.data.total_news,
+      total_news: response.data.total_news,
+      total_views: response.data.total_views,
+      totalViews: response.data.total_views,
+      totalLikes: response.data.total_likes,
+      featured_count: response.data.featured_news,
+      featured: response.data.featured_news,
+      published: response.data.published_news,
+      published_today: 0, // Default value
+      published_this_week: 0, // Default value
+      published_this_month: 0, // Default value
+      categoriesCount: response.data.categories_count,
+      popular_categories: [] // Default empty array
+    };
   },
 
   // Publish news (admin only)
   async publishNews(id: string): Promise<News> {
-    const response = await api.patch<ApiResponse<ApiNews>>(`/api/v1/news/${id}/publish`);
+    const response = await api.patch<ApiResponse<ApiNews>>(`${API_CONFIG.ENDPOINTS.NEWS.PUBLISH}/${id}`);
     return transformApiNewsToNews(response.data);
   },
 
   // Unpublish news (admin only)
   async unpublishNews(id: string): Promise<News> {
-    const response = await api.patch<ApiResponse<ApiNews>>(`/api/v1/news/${id}/unpublish`);
+    const response = await api.patch<ApiResponse<ApiNews>>(`${API_CONFIG.ENDPOINTS.NEWS.UNPUBLISH}/${id}`);
     return transformApiNewsToNews(response.data);
   },
 
   // Increment view count
   async incrementViews(id: string): Promise<void> {
-    await api.patch(`/api/v1/news/${id}/view`);
+    await api.patch(`${API_CONFIG.ENDPOINTS.NEWS.VIEWS}/${id}`);
   },
 
   // Like news
   async likeNews(id: string): Promise<void> {
-    await api.patch(`/api/v1/news/${id}/like`);
+    await api.patch(`${API_CONFIG.ENDPOINTS.NEWS.LIKE}/${id}`);
   },
 
   // Unlike news
   async unlikeNews(id: string): Promise<void> {
-    await api.patch(`/api/v1/news/${id}/unlike`);
+    await api.patch(`${API_CONFIG.ENDPOINTS.NEWS.UNLIKE}/${id}`);
   },
 
   // Get news categories
   async getCategories(): Promise<string[]> {
-    const response = await api.get<ApiResponse<string[]>>('/api/v1/news/categories');
+    const response = await api.get<ApiResponse<string[]>>(API_CONFIG.ENDPOINTS.NEWS.CATEGORIES);
     return response.data;
   },
 
   // Get popular tags
   async getPopularTags(limit: number = 20): Promise<string[]> {
-    const response = await api.get<ApiResponse<string[]>>(`/api/v1/news/tags?limit=${limit}`);
+    const response = await api.get<ApiResponse<string[]>>(`${API_CONFIG.ENDPOINTS.NEWS.TAGS}?limit=${limit}`);
     return response.data;
   },
 
-  // Search news
-  async searchNews(query: string, params: Omit<NewsSearchParams, 'query'> = {}): Promise<PaginatedResponse<News>> {
-    return this.getNews({ ...params, query });
+  // Search news with advanced filters
+  async searchNews(params: NewsSearchParams): Promise<PaginatedResponse<News>> {
+    const searchParams = new URLSearchParams();
+    
+    if (params.query) searchParams.append('query', params.query);
+    if (params.category) searchParams.append('category', params.category);
+    if (params.tags && params.tags.length > 0) searchParams.append('tags', params.tags.join(','));
+    if (params.pesantren_id) searchParams.append('pesantren_id', params.pesantren_id);
+    if (params.is_published !== undefined) searchParams.append('is_published', params.is_published.toString());
+    if (params.is_featured !== undefined) searchParams.append('is_featured', params.is_featured.toString());
+    if (params.published_from) searchParams.append('published_from', params.published_from);
+    if (params.published_to) searchParams.append('published_to', params.published_to);
+    if (params.sort_by) searchParams.append('sort_by', params.sort_by);
+    if (params.sort_order) searchParams.append('sort_order', params.sort_order);
+    if (params.page) searchParams.append('page', params.page.toString());
+    if (params.limit) searchParams.append('limit', params.limit.toString());
+
+    const response = await api.get<PaginatedResponse<ApiNews>>(
+      `${API_CONFIG.ENDPOINTS.NEWS.SEARCH}?${searchParams.toString()}`
+    );
+
+    return {
+      ...response,
+      data: response.data.map(transformApiNewsToNews)
+    };
   },
 };
 

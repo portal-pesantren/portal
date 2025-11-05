@@ -1,4 +1,6 @@
 import { api } from '@/lib/api';
+import { API_CONFIG } from '@/lib/constants';
+import { ApplicationStats } from '@/types';
 
 // Application interfaces
 export interface ApplicationData {
@@ -160,7 +162,7 @@ export const applicationService = {
    */
   submitApplication: async (applicationData: ApplicationData): Promise<Application> => {
     try {
-      const response = await api.post<{ data: ApiApplication }>('/applications', applicationData);
+      const response = await api.post<{ data: ApiApplication }>(API_CONFIG.ENDPOINTS.APPLICATIONS.CREATE, applicationData);
       return transformApplication(response.data);
     } catch (error: any) {
       console.error('Submit application error:', error);
@@ -206,7 +208,7 @@ export const applicationService = {
         page: number;
         limit: number;
         total_pages: number;
-      }>(`/applications?${queryParams.toString()}`);
+      }>(`${API_CONFIG.ENDPOINTS.APPLICATIONS.LIST}?${queryParams.toString()}`);
       
       return {
         applications: response.data.map(transformApplication),
@@ -226,7 +228,7 @@ export const applicationService = {
    */
   getApplicationById: async (applicationId: string): Promise<Application> => {
     try {
-      const response = await api.get<{ data: ApiApplication }>(`/applications/${applicationId}`);
+      const response = await api.get<{ data: ApiApplication }>(`${API_CONFIG.ENDPOINTS.APPLICATIONS.DETAIL}/${applicationId}`);
       return transformApplication(response.data);
     } catch (error) {
       console.error('Get application by ID error:', error);
@@ -239,7 +241,7 @@ export const applicationService = {
    */
   updateApplication: async (applicationId: string, applicationData: Partial<ApplicationData>): Promise<Application> => {
     try {
-      const response = await api.put<{ data: ApiApplication }>(`/applications/${applicationId}`, applicationData);
+      const response = await api.put<{ data: ApiApplication }>(`${API_CONFIG.ENDPOINTS.APPLICATIONS.UPDATE}/${applicationId}`, applicationData);
       return transformApplication(response.data);
     } catch (error: any) {
       console.error('Update application error:', error);
@@ -259,7 +261,7 @@ export const applicationService = {
    */
   cancelApplication: async (applicationId: string): Promise<void> => {
     try {
-      await api.delete(`/applications/${applicationId}`);
+      await api.delete(`${API_CONFIG.ENDPOINTS.APPLICATIONS.DELETE}/${applicationId}`);
     } catch (error: any) {
       console.error('Cancel application error:', error);
       
@@ -304,7 +306,7 @@ export const applicationService = {
    */
   updateApplicationStatus: async (applicationId: string, status: Application['status'], reviewerNotes?: string): Promise<Application> => {
     try {
-      const response = await api.patch<{ data: ApiApplication }>(`/applications/${applicationId}/status`, {
+      const response = await api.patch<{ data: ApiApplication }>(`${API_CONFIG.ENDPOINTS.APPLICATIONS.STATUS}/${applicationId}`, {
         status,
         reviewer_notes: reviewerNotes
       });
@@ -325,7 +327,7 @@ export const applicationService = {
    */
   scheduleInterview: async (applicationId: string, interviewDate: string): Promise<Application> => {
     try {
-      const response = await api.patch<{ data: ApiApplication }>(`/applications/${applicationId}/interview`, {
+      const response = await api.patch<{ data: ApiApplication }>(`${API_CONFIG.ENDPOINTS.APPLICATIONS.INTERVIEW}/${applicationId}`, {
         interview_date: interviewDate,
         interview_scheduled: true
       });
@@ -352,7 +354,7 @@ export const applicationService = {
         headers['Authorization'] = `Bearer ${token}`;
       }
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/${applicationId}/documents`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${API_CONFIG.ENDPOINTS.APPLICATIONS.DOCUMENTS}/${applicationId}`, {
         method: 'POST',
         headers,
         body: formData
@@ -373,18 +375,32 @@ export const applicationService = {
   /**
    * Get application statistics
    */
-  getApplicationStats: async (pesantrenId?: string): Promise<{
-    total: number;
-    pending: number;
-    under_review: number;
-    accepted: number;
-    rejected: number;
-    waitlisted: number;
-  }> => {
+  getApplicationStats: async (pesantrenId?: string): Promise<ApplicationStats> => {
     try {
-      const url = pesantrenId ? `/applications/stats?pesantren_id=${pesantrenId}` : '/applications/stats';
-      const response = await api.get<{ data: any }>(url);
-      return response.data;
+      const url = pesantrenId 
+        ? `${API_CONFIG.ENDPOINTS.APPLICATIONS.STATS}?pesantren_id=${pesantrenId}` 
+        : API_CONFIG.ENDPOINTS.APPLICATIONS.STATS;
+      
+      const response = await api.get<{ data: {
+        total_applications: number;
+        pending_applications: number;
+        under_review_applications: number;
+        accepted_applications: number;
+        rejected_applications: number;
+        waitlisted_applications: number;
+      } }>(url);
+      
+      return {
+        total: response.data.total_applications,
+        pending: response.data.pending_applications,
+        approved: 0, // Default value
+        accepted: response.data.accepted_applications,
+        rejected: response.data.rejected_applications,
+        completed: 0, // Default value
+        underReview: response.data.under_review_applications,
+        waitlisted: response.data.waitlisted_applications,
+        this_month: 0 // Default value
+      };
     } catch (error) {
       console.error('Get application stats error:', error);
       throw new Error('Gagal mengambil statistik aplikasi');

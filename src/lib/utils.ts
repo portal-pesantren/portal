@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { API_CONFIG } from './constants';
 
 /**
  * Utility function to merge Tailwind CSS classes
@@ -138,4 +139,54 @@ export function scrollToElement(elementId: string): void {
       block: 'start',
     });
   }
+}
+
+/**
+ * Test backend connectivity and basic endpoints
+ */
+export async function testBackendConnection(baseUrl?: string): Promise<{
+  ok: boolean;
+  usedUrl: string;
+  health?: any;
+  newsCount?: number;
+  error?: string;
+}> {
+  const url = baseUrl || API_CONFIG.BASE_URL;
+  const apiBase = `${url}/api/${API_CONFIG.VERSION}`;
+  try {
+    const healthRes = await fetch(`${url}${API_CONFIG.ENDPOINTS.HEALTH}`);
+    const health = await healthRes.json().catch(() => ({}));
+
+    const newsRes = await fetch(`${apiBase}${API_CONFIG.ENDPOINTS.NEWS.LIST}?is_published=true&limit=3&sort_by=published_at&sort_order=desc`);
+    const newsJson = await newsRes.json().catch(() => ({}));
+    const newsCount = Array.isArray(newsJson?.data) ? newsJson.data.length : Array.isArray(newsJson) ? newsJson.length : 0;
+
+    return {
+      ok: healthRes.ok && newsRes.ok,
+      usedUrl: url,
+      health,
+      newsCount,
+    };
+  } catch (err: any) {
+    return {
+      ok: false,
+      usedUrl: url,
+      error: err?.message || 'Unknown error while testing backend',
+    };
+  }
+}
+
+/**
+ * Debug current API configuration in development
+ */
+export function debugApiConfig(): void {
+  if (process.env.NODE_ENV !== 'development') return;
+  const apiBase = `${API_CONFIG.BASE_URL}/api/${API_CONFIG.VERSION}`;
+  console.log('🔧 API Debug Config:', {
+    BASE_URL: API_CONFIG.BASE_URL,
+    VERSION: API_CONFIG.VERSION,
+    TIMEOUT: API_CONFIG.TIMEOUT,
+    NEWS_LIST: `${apiBase}${API_CONFIG.ENDPOINTS.NEWS.LIST}`,
+    HEALTH: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.HEALTH}`,
+  });
 }

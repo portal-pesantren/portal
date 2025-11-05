@@ -1,0 +1,218 @@
+{
+  "featuredNews": [
+    {
+      "id": "featured-1",
+      "title": "Pesantren Al-Hikmah Raih Juara 1 Kompetisi Tahfidz Nasional 2024",
+      "slug": "pesantren-al-hikmah-juara-tahfidz-nasional-2024",
+      "excerpt": "Santri Pesantren Al-Hikmah berhasil meraih juara pertama dalam Kompetisi Tahfidz Al-Quran tingkat nasional yang diselenggarakan di Jakarta. Prestasi gemilang ini membuktikan kualitas pendidikan tahfidz yang unggul.",
+      "content": "Prestasi membanggakan kembali ditorehkan oleh Pesantren Al-Hikmah...",
+      "category": "prestasi",
+      "tags": ["tahfidz", "kompetisi", "nasional", "prestasi"],
+      "featuredImage": "https://picsum.photos/600/400?random=101",
+      "author": {
+        "id": "author-1",
+        "name": "Ahmad Fauzi",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-20T08:00:00Z",
+      "views": 1250,
+      "likes": 89,
+      "readingTime": 5,
+      "isPublished": true,
+      "isFeatured": true
+    },
+    {
+      "id": "featured-2", 
+      "title": "Program Beasiswa Santri Berprestasi Dibuka untuk 1000 Calon Santri",
+      "slug": "program-beasiswa-santri-berprestasi-2024",
+      "excerpt": "Kementerian Agama membuka program beasiswa khusus untuk 1000 calon santri berprestasi dari keluarga kurang mampu. Program ini mencakup biaya pendidikan, asrama, dan kebutuhan sehari-hari.",
+      "content": "Dalam upaya meningkatkan akses pendidikan pesantren...",
+      "category": "pengumuman",
+      "tags": ["beasiswa", "santri", "kemenag", "pendidikan"],
+      "featuredImage": "https://picsum.photos/600/400?random=102",
+      "author": {
+        "id": "author-2",
+        "name": "Siti Nurhaliza",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-19T10:30:00Z",
+      "views": 2100,
+      "likes": 156,
+      "readingTime": 7,
+      "isPublished": true,
+      "isFeatured": true
+    }
+  ],
+  "popularNews": [
+    {
+      "id": "popular-1",
+      "title": "Tips Memilih Pesantren yang Tepat untuk Anak",
+      "slug": "tips-memilih-pesantren-tepat-anak",
+      "excerpt": "Panduan lengkap untuk orang tua dalam memilih pesantren yang sesuai dengan karakter dan kebutuhan anak.",
+      "content": "Memilih pesantren untuk anak merupakan keputusan penting...",
+      "category": "artikel",
+      "tags": ["tips", "orang-tua", "pemilihan-pesantren"],
+      "featuredImage": "https://picsum.photos/200/200?random=201",
+      "author": {
+        "id": "author-3",
+        "name": "Dr. Mahmud Yunus",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-18T14:00:00Z",
+      "views": 3200,
+      "likes": 245,
+      "readingTime": 6,
+      "isPublished": true,
+      "isFeatured": false
+    },
+    {
+      "id": "popular-2",
+      "title": "Modernisasi Kurikulum Pesantren di Era Digital",
+      "slug": "modernisasi-kurikulum-pesantren-era-digital",
+      "excerpt": "Bagaimana pesantren modern mengintegrasikan teknologi dalam pembelajaran tanpa meninggalkan nilai-nilai tradisional.",
+      "content": "Era digitalisasi menuntut pesantren untuk beradaptasi...",
+      "category": "artikel",
+      "tags": ["kurikulum", "digital", "modernisasi", "teknologi"],
+      "featuredImage": "https://picsum.photos/200/200?random=202",
+      "author": {
+        "id": "author-4",
+        "name": "Prof. Azyumardi Azra",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-17T09:15:00Z",
+      "views": 2800,
+      "likes": 198,
+      "readingTime": 8,
+      "isPublished": true,
+      "isFeatured": false
+    },
+    {
+      "id": "popular-3",
+      "title": "Peran Pesantren dalam Pembentukan Karakter Bangsa",
+      "slug": "peran-pesantren-pembentukan-karakter-bangsa",
+      "excerpt": "Kontribusi pesantren dalam mencetak generasi yang berkarakter dan berakhlak mulia untuk kemajuan bangsa.",
+      "content": "Pesantren telah lama menjadi pilar pendidikan karakter...",
+      "category": "artikel",
+      "tags": ["karakter", "bangsa", "pendidikan", "akhlak"],
+      "featuredImage": "https://picsum.photos/200/200?random=203",
+      "author": {
+        "id": "author-5",
+        "name": "KH. Said Aqil Siradj",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-16T16:45:00Z",
+      "views": 2650,
+      "likes": 187,
+      "readingTime": 5,
+      "isPublished": true,
+      "isFeatured": false
+    },
+    {
+      "id": "popular-4",
+      "title": "Alumni Pesantren Sukses di Berbagai Bidang Profesi",
+      "slug": "alumni-pesantren-sukses-berbagai-profesi",
+      "excerpt": "Profil inspiratif alumni pesantren yang berhasil meraih kesuksesan di dunia bisnis, politik, dan akademisi.",
+      "content": "Banyak alumni pesantren yang telah membuktikan...",
+      "category": "berita",
+      "tags": ["alumni", "sukses", "profesi", "inspirasi"],
+      "featuredImage": "https://picsum.photos/200/200?random=204",
+      "author": {
+        "id": "author-6",
+        "name": "Redaksi Portal Pesantren",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-15T11:20:00Z",
+      "views": 2400,
+      "likes": 165,
+      "readingTime": 4,
+      "isPublished": true,
+      "isFeatured": false
+    }
+  ],
+  "pesantrenNews": [
+    {
+      "id": "pesantren-1",
+      "title": "Aries Baswadan di Pabuaran",
+      "slug": "aries-baswadan-pabuaran",
+      "excerpt": "Menteri Agama Gumawan Kartoasasmita mengunjungi Pondok Pesantren Pabuaran untuk melihat langsung program pendidikan yang telah berjalan.",
+      "content": "Kunjungan Menteri Agama ke Pondok Pesantren Pabuaran...",
+      "category": "berita",
+      "tags": ["menteri", "kunjungan", "pabuaran"],
+      "featuredImage": "https://picsum.photos/200/200?random=301",
+      "author": {
+        "id": "author-7",
+        "name": "Tim Redaksi",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-14T07:30:00Z",
+      "views": 1800,
+      "likes": 125,
+      "readingTime": 4,
+      "isPublished": true,
+      "isFeatured": false
+    },
+    {
+      "id": "pesantren-2",
+      "title": "Program Beasiswa Santri Berprestasi",
+      "slug": "program-beasiswa-santri-berprestasi",
+      "excerpt": "Kementerian Agama meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia dengan total dana 50 miliar rupiah.",
+      "content": "Program beasiswa santri berprestasi diluncurkan...",
+      "category": "pengumuman",
+      "tags": ["beasiswa", "santri", "prestasi"],
+      "featuredImage": "https://picsum.photos/200/200?random=302",
+      "author": {
+        "id": "author-8",
+        "name": "Humas Kemenag",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-13T13:00:00Z",
+      "views": 2200,
+      "likes": 178,
+      "readingTime": 6,
+      "isPublished": true,
+      "isFeatured": false
+    },
+    {
+      "id": "pesantren-3",
+      "title": "Modernisasi Kurikulum Pesantren",
+      "slug": "modernisasi-kurikulum-pesantren",
+      "excerpt": "Transformasi era digital mulai mengintegrasikan teknologi dalam pembelajaran untuk mempersiapkan santri menghadap tantangan masa depan.",
+      "content": "Modernisasi kurikulum pesantren menjadi kebutuhan...",
+      "category": "artikel",
+      "tags": ["kurikulum", "modernisasi", "teknologi"],
+      "featuredImage": "https://picsum.photos/200/200?random=303",
+      "author": {
+        "id": "author-9",
+        "name": "Dr. Ahmad Syafi'i",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-12T15:30:00Z",
+      "views": 1950,
+      "likes": 142,
+      "readingTime": 7,
+      "isPublished": true,
+      "isFeatured": false
+    },
+    {
+      "id": "pesantren-4",
+      "title": "Festival Seni Budaya Pesantren",
+      "slug": "festival-seni-budaya-pesantren",
+      "excerpt": "Ratusan santri dari berbagai pesantren se-Jawa Barat mengikuti festival seni budaya untuk melestarikan warisan budaya Islam.",
+      "content": "Festival seni budaya pesantren digelar untuk...",
+      "category": "kegiatan",
+      "tags": ["festival", "seni", "budaya"],
+      "featuredImage": "https://picsum.photos/200/200?random=304",
+      "author": {
+        "id": "author-10",
+        "name": "Panitia Festival",
+        "avatar": "/api/placeholder/40/40"
+      },
+      "publishedAt": "2024-01-11T12:00:00Z",
+      "views": 1650,
+      "likes": 98,
+      "readingTime": 5,
+      "isPublished": true,
+      "isFeatured": false
+    }
+  ]
+}

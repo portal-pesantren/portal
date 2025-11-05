@@ -7,7 +7,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsCard from '@/components/cards/NewsCard';
 import Button from '@/components/ui/Button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 import { ArrowLeftIcon, CalendarIcon, UserIcon, ClockIcon, ShareIcon } from '@heroicons/react/24/outline';
+import { useNewsDetail, useLatestNews, useIncrementNewsViews } from '@/hooks/useNews';
 
 interface NewsItem {
   id: string;
@@ -15,7 +18,7 @@ interface NewsItem {
   excerpt: string;
   content: string;
   featuredImage?: string;
-  publishedAt: Date;
+  publishedAt: string;
   category: string;
   author: {
     id: string;
@@ -26,106 +29,21 @@ interface NewsItem {
   tags: string[];
 }
 
-const dummyNewsDetail: NewsItem = {
-  id: '1',
-  title: 'Aries Baswadan di Pabuaran',
-  excerpt: 'Menteri Agus Gumiwang Kartasasmita mengunjungi Pondok Pesantren Pabuaran untuk melihat langsung program pendidikan yang telah berjalan.',
-  content: `
-    <p>Menteri Agus Gumiwang Kartasasmita melakukan kunjungan kerja ke Pondok Pesantren Pabuaran, Bogor, Jawa Barat pada hari Senin (15/1/2024). Kunjungan ini bertujuan untuk melihat langsung implementasi program pendidikan yang telah berjalan di pesantren tersebut.</p>
-    
-    <p>Dalam kunjungannya, Menteri didampingi oleh jajaran pejabat Kementerian Agama dan pimpinan pesantren. Beliau menyempatkan diri untuk berkeliling melihat fasilitas pendidikan, asrama santri, dan berbagai kegiatan pembelajaran yang sedang berlangsung.</p>
-    
-    <h3>Program Unggulan Pesantren</h3>
-    <p>Pondok Pesantren Pabuaran memiliki beberapa program unggulan yang menjadi perhatian khusus Menteri, antara lain:</p>
-    <ul>
-      <li>Program tahfidz Al-Quran dengan metode modern</li>
-      <li>Pendidikan keterampilan dan kewirausahaan santri</li>
-      <li>Integrasi teknologi dalam pembelajaran</li>
-      <li>Program beasiswa untuk santri berprestasi</li>
-    </ul>
-    
-    <p>Menteri mengapresiasi inovasi-inovasi yang telah dilakukan oleh pesantren dalam mengembangkan sistem pendidikan yang tidak hanya fokus pada aspek keagamaan, tetapi juga mempersiapkan santri untuk menghadapi tantangan zaman.</p>
-    
-    <h3>Komitmen Pemerintah</h3>
-    <p>Dalam sambutannya, Menteri menegaskan komitmen pemerintah untuk terus mendukung pengembangan pesantren di seluruh Indonesia. "Pesantren memiliki peran strategis dalam mencerdaskan bangsa dan mencetak generasi yang berakhlak mulia," ujar Menteri.</p>
-    
-    <p>Pemerintah akan terus memberikan dukungan melalui berbagai program, termasuk bantuan infrastruktur, peningkatan kualitas tenaga pendidik, dan pengembangan kurikulum yang sesuai dengan kebutuhan zaman.</p>
-  `,
-  featuredImage: '/api/placeholder/800/400',
-  publishedAt: new Date('2024-01-15'),
-  category: 'Kunjungan',
-  author: {
-    id: '1',
-    name: 'Admin Portal',
-    avatar: '/api/placeholder/40/40'
-  },
-  readingTime: 3,
-  tags: ['Kunjungan Menteri', 'Pesantren', 'Pendidikan', 'Pabuaran']
-};
-
-const relatedNews: NewsItem[] = [
-  {
-    id: '2',
-    title: 'Program Beasiswa Santri Berprestasi',
-    excerpt: 'Kementerian Agama meluncurkan program beasiswa untuk santri berprestasi di seluruh Indonesia.',
-    content: '',
-    featuredImage: 'https://picsum.photos/400/250?random=7',
-    publishedAt: new Date('2024-01-14'),
-    category: 'Beasiswa',
-    author: {
-      id: '2',
-      name: 'Tim Redaksi',
-      avatar: '/api/placeholder/40/40'
-    },
-    readingTime: 5,
-    tags: ['Beasiswa', 'Santri']
-  },
-  {
-    id: '3',
-    title: 'Modernisasi Kurikulum Pesantren',
-    excerpt: 'Pesantren di era digital mulai mengintegrasikan teknologi dalam pembelajaran.',
-    content: '',
-    featuredImage: 'https://picsum.photos/400/250?random=8',
-    publishedAt: new Date('2024-01-13'),
-    category: 'Pendidikan',
-    author: {
-      id: '3',
-      name: 'Dr. Ahmad Syafi\'i',
-      avatar: '/api/placeholder/40/40'
-    },
-    readingTime: 4,
-    tags: ['Pendidikan', 'Teknologi']
-  },
-  {
-    id: '4',
-    title: 'Festival Seni Budaya Pesantren',
-    excerpt: 'Ratusan santri dari berbagai pesantren se-Jawa Barat mengikuti festival seni budaya.',
-    content: '',
-    featuredImage: 'https://picsum.photos/400/250?random=9',
-    publishedAt: new Date('2024-01-12'),
-    category: 'Budaya',
-    author: {
-      id: '4',
-      name: 'Humas Pesantren',
-      avatar: '/api/placeholder/40/40'
-    },
-    readingTime: 6,
-    tags: ['Budaya', 'Festival']
-  }
-];
-
 export default function NewsDetailPage() {
   const params = useParams();
-  const [news, setNews] = useState<NewsItem | null>(null);
-  const [loading, setLoading] = useState(true);
+  const slug = params.id as string;
+  
+  // Fetch news detail using the hook
+  const { data: news, isLoading, error, refetch } = useNewsDetail(slug);
+  const { data: relatedNews } = useLatestNews(3);
+  const incrementViews = useIncrementNewsViews();
 
+  // Increment views when news is loaded
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setNews(dummyNewsDetail);
-      setLoading(false);
-    }, 500);
-  }, [params.id]);
+    if (news && news.id) {
+      incrementViews.mutate(news.id);
+    }
+  }, [news, incrementViews]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -150,7 +68,38 @@ export default function NewsDetailPage() {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex justify-center items-center min-h-[400px]">
+            <LoadingSpinner size="lg" />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !news) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex justify-center items-center min-h-[400px]">
+            <ErrorMessage 
+              message="Gagal memuat detail berita"
+              onRetry={() => refetch()}
+            />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
@@ -193,78 +142,70 @@ export default function NewsDetailPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      {/* Breadcrumb */}
-      <nav className="bg-white border-b py-4">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <Link href="/news" className="inline-flex items-center text-blue-600 hover:text-blue-800">
-              <ArrowLeftIcon className="h-5 w-5 mr-2" />
-              Kembali ke Berita
-            </Link>
+      {/* Hero Section with Background Image */}
+      <section className="relative h-96 bg-gray-900 overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={news.featuredImage || 'https://picsum.photos/1200/600?random=1'}
+            alt={news.title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = 'https://picsum.photos/1200/600?random=1';
+            }}
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        </div>
+        
+        <div className="relative z-10 container mx-auto px-4 h-full flex items-end pb-8">
+          <div className="max-w-4xl">
+            {/* Breadcrumb */}
+            <nav className="mb-4">
+              <Link href="/news" className="inline-flex items-center text-white/80 hover:text-white text-sm">
+                <ArrowLeftIcon className="h-4 w-4 mr-2" />
+                Kembali ke Berita
+              </Link>
+            </nav>
+            
+            {/* Category */}
+            <div className="mb-4">
+              <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                {news.category}
+              </span>
+            </div>
+            
+            {/* Title */}
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
+              {news.title}
+            </h1>
+            
+            {/* Meta Info */}
+            <div className="flex flex-wrap items-center gap-6 text-white/80">
+              <div className="flex items-center">
+                <CalendarIcon className="h-5 w-5 mr-2" />
+                <span>{formatDate(news.publishedAt)}</span>
+              </div>
+              <div className="flex items-center">
+                <UserIcon className="h-5 w-5 mr-2" />
+                <span>{news.author.name}</span>
+              </div>
+              <div className="flex items-center">
+                <ClockIcon className="h-5 w-5 mr-2" />
+                <span>{news.readingTime} min</span>
+              </div>
+            </div>
           </div>
         </div>
-      </nav>
+      </section>
 
       {/* Main Content with Sidebar */}
       <main className="py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               {/* Main Article - Left Side */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-3">
                 <article className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  {/* Header */}
-                  <div className="p-6 md:p-8">
-                    {/* Category */}
-                    <div className="mb-4">
-                      <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        {news.category}
-                      </span>
-                    </div>
-                    
-                    {/* Title */}
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                      {news.title}
-                    </h1>
-                    
-                    {/* Meta Info */}
-                    <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
-                      <div className="flex items-center">
-                        <CalendarIcon className="h-5 w-5 mr-2" />
-                        <span>{formatDate(news.publishedAt.toISOString().split('T')[0])}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <UserIcon className="h-5 w-5 mr-2" />
-                        <span>{news.author.name}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <ClockIcon className="h-5 w-5 mr-2" />
-                        <span>{news.readingTime} min</span>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleShare}
-                        leftIcon={<ShareIcon className="h-4 w-4" />}
-                      >
-                        Bagikan
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  {/* Featured Image */}
-                  <div className="relative h-64 md:h-96">
-                    <img
-                      src={news.featuredImage || 'https://picsum.photos/800/400?random=1'}
-                      alt={news.title}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = 'https://picsum.photos/800/400?random=1';
-                      }}
-                    />
-                  </div>
-                  
                   {/* Content */}
                   <div className="p-6 md:p-8">
                     <div 
@@ -272,13 +213,24 @@ export default function NewsDetailPage() {
                       dangerouslySetInnerHTML={{ __html: news.content }}
                     />
                     
-                    {/* Tags */}
+                    {/* Share Button */}
                     <div className="mt-8 pt-6 border-t">
+                      <Button
+                        variant="outline"
+                        onClick={handleShare}
+                        leftIcon={<ShareIcon className="h-4 w-4" />}
+                      >
+                        Bagikan Artikel
+                      </Button>
+                    </div>
+                    
+                    {/* Tags */}
+                    <div className="mt-6">
                       <h4 className="text-sm font-medium text-gray-900 mb-3">Tags:</h4>
                       <div className="flex flex-wrap gap-2">
-                        {news.tags.map((tag, index) => (
+                        {news.tags.map((tag) => (
                           <span
-                            key={index}
+                            key={`tag-${tag}`}
                             className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
                           >
                             {tag}
@@ -290,6 +242,47 @@ export default function NewsDetailPage() {
                 </article>
               </div>
 
+              {/* Sidebar - Right Side */}
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-lg shadow-lg p-6 sticky top-8">
+                  <h3 className="text-lg font-bold text-gray-900 mb-6">Berita Terkait</h3>
+                  
+                  <div className="space-y-4">
+                    {relatedNews?.slice(0, 5).map((article) => (
+                      <Link 
+                        key={article.id} 
+                        href={`/news/${article.slug || article.id}`}
+                        className="block group"
+                      >
+                        <article className="flex gap-3 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
+                          <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                            <img
+                              src={article.featuredImage || 'https://picsum.photos/100/100?random=' + article.id}
+                              alt={article.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = 'https://picsum.photos/100/100?random=' + article.id;
+                              }}
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                              {article.title}
+                            </h4>
+                            <p className="text-xs text-gray-500 mb-1">
+                              {formatDate(article.publishedAt)}
+                            </p>
+                            <span className="text-xs text-blue-600 font-medium">
+                              Baca Berita
+                            </span>
+                          </div>
+                        </article>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -318,8 +311,8 @@ export default function NewsDetailPage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedNews.map((item) => (
-                <Link key={item.id} href={`/news/${item.id}`} className="group">
+              {relatedNews && relatedNews.map((item) => (
+                <Link key={item.id} href={`/news/${item.slug || item.id}`} className="group">
                   <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div className="relative h-48">
                       <img
@@ -347,7 +340,7 @@ export default function NewsDetailPage() {
                       <div className="flex items-center justify-between text-xs text-gray-500">
                         <div className="flex items-center">
                           <CalendarIcon className="h-3 w-3 mr-1" />
-                          <span>{formatDate(item.publishedAt.toISOString().split('T')[0])}</span>
+                          <span>{formatDate((item as any).published_at || (item as any).publishDate || (item as any).createdAt || (item as any).publishedAt)}</span>
                         </div>
                         <div className="flex items-center">
                           <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">

@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button, Card, CardContent } from '@/components/ui';
 import Image from 'next/image';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import {
   DropdownSection,
   BeritaTerkait,
@@ -74,6 +75,51 @@ export default function PesantrenDetailPage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Handle error states
+  if (pesantrenError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center p-6">
+          <div className="mb-4">
+            <ExclamationTriangleIcon className="h-16 w-16 text-red-500 mx-auto" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Pesantren Tidak Ditemukan
+          </h1>
+          <p className="text-gray-600 mb-6">
+            {pesantrenError?.message || 'Maaf, pesantren yang Anda cari tidak dapat ditemukan atau terjadi kesalahan pada server.'}
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={() => router.back()}
+              className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Kembali
+            </button>
+            <button
+              onClick={() => router.push('/')}
+              className="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Ke Beranda
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle loading state
+  if (pesantrenLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Memuat detail pesantren...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Mock data for fallback
   const mockPesantren = {
     id: pesantrenId,
@@ -87,7 +133,7 @@ export default function PesantrenDetailPage() {
       registration: 2500000,
       dormitory: 1200000
     },
-    image: '/pesantren-contemporary.svg',
+    image: '/pesantren-1.svg',
     type: 'Pondok Campuran',
     isVerified: true,
     contact: {

@@ -297,9 +297,9 @@ export default function ConsultationStatusPage() {
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold mb-6">Timeline Konsultasi</h2>
                   <div className="space-y-0">
-                    {getTimelineSteps().map((step, index) => (
+                    {getTimelineSteps().map((step) => (
                       <TimelineStep
-                        key={index}
+                        key={`${step.title}-${step.date || ''}`}
                         title={step.title}
                         description={step.description}
                         date={step.date}

@@ -1,16 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-
-// API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION || 'v1';
+import { API_CONFIG } from './constants';
 
 // Create axios instance
 export const apiClient: AxiosInstance = axios.create({
-  baseURL: `${API_BASE_URL}/api/${API_VERSION}`,
+  baseURL: `${API_CONFIG.BASE_URL}/api/${API_CONFIG.VERSION}`,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 seconds timeout
+  timeout: API_CONFIG.TIMEOUT,
 });
 
 // Request interceptor untuk menambahkan auth token
@@ -138,7 +135,7 @@ export const api = {
 // Health check function
 export const checkApiHealth = async (): Promise<boolean> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/health`);
+    const response = await axios.get(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.HEALTH}`);
     return response.data.status === 'healthy';
   } catch (error) {
     console.error('❌ API Health Check Failed:', error);

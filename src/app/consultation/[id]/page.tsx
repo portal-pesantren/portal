@@ -232,8 +232,8 @@ export default function ConsultationDetailPage() {
                     <div className="mt-4">
                       <label className="text-sm font-medium text-gray-700">Program yang Diminati</label>
                       <div className="mt-2 flex flex-wrap gap-2">
-                        {consultation.preferredPrograms.map((program, index) => (
-                          <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+                        {consultation.preferredPrograms.map((program) => (
+                          <span key={`program-${program}`} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
                             {program}
                           </span>
                         ))}
