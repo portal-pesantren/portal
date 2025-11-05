@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success' | 'warning';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -23,21 +23,23 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ...props
   }, ref) => {
     const baseStyles = 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
-    
+
     const variants = {
-      primary: 'bg-[#042558] text-white hover:bg-[#031a3d] focus:ring-[#042558] shadow-sm hover:shadow-md',
-      secondary: 'bg-gray-200 text-[#042558] hover:bg-gray-300 focus:ring-gray-500',
-      outline: 'border-2 border-[#042558] text-[#042558] hover:bg-[#042558] hover:text-white focus:ring-[#042558]',
-      ghost: 'text-[#042558] hover:bg-gray-100 focus:ring-gray-500',
-      danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm hover:shadow-md'
+      primary: 'bg-[#042558] text-white hover:bg-[#042558]/90 hover:shadow-lg active:bg-[#042558]/95 focus:ring-[#042558]/50 shadow-sm',
+      secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200/80 hover:shadow-md active:bg-gray-200 focus:ring-gray-500/50 border border-gray-200',
+      outline: 'border-2 border-[#042558] text-[#042558] hover:bg-[#042558] hover:text-white hover:shadow-md active:bg-[#042558]/95 focus:ring-[#042558]/50 bg-white',
+      ghost: 'text-gray-700 hover:bg-gray-100/80 hover:shadow-sm active:bg-gray-100 focus:ring-gray-500/50',
+      danger: 'bg-red-600 text-white hover:bg-red-600/90 hover:shadow-lg active:bg-red-600/95 focus:ring-red-500/50 shadow-sm',
+      success: 'bg-green-600 text-white hover:bg-green-600/90 hover:shadow-lg active:bg-green-600/95 focus:ring-green-500/50 shadow-sm',
+      warning: 'bg-yellow-500 text-white hover:bg-yellow-500/90 hover:shadow-lg active:bg-yellow-500/95 focus:ring-yellow-500/50 shadow-sm'
     };
-    
+
     const sizes = {
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-4 py-2 text-base',
-      lg: 'px-6 py-3 text-lg'
+      sm: 'px-4 py-1.5 text-sm h-8',
+      md: 'px-6 py-2.5 text-sm h-10',
+      lg: 'px-8 py-3 text-base h-12'
     };
-    
+
     const isDisabled = disabled || isLoading;
     
     return (

@@ -161,7 +161,7 @@ const ContentTable = ({ title, data, type }: {
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-          <Button className="bg-[#042558] hover:bg-[#031a3d] text-white">
+          <Button size="default">
             <PlusCircle className="w-4 h-4 mr-2" />
             Tambah {type === 'news' ? 'Berita' : 'Pesantren'}
           </Button>
@@ -261,7 +261,7 @@ export default function AdminDashboard() {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Akses Ditolak</h1>
             <p className="text-gray-600 mb-4">Anda tidak memiliki akses ke halaman admin.</p>
-            <Button onClick={() => window.location.href = '/'}>
+            <Button size="default" onClick={() => window.location.href = '/'}>
               Kembali ke Beranda
             </Button>
           </div>
@@ -383,19 +383,19 @@ export default function AdminDashboard() {
                       Quick Actions
                     </h3>
                     <div className="grid grid-cols-2 gap-4">
-                      <Button className="bg-[#042558] hover:bg-[#031a3d] text-white justify-start">
+                      <Button size="default" className="justify-start">
                         <PlusCircle className="w-4 h-4 mr-2" />
                         Tambah Berita
                       </Button>
-                      <Button className="bg-[#042558] hover:bg-[#031a3d] text-white justify-start">
+                      <Button size="default" className="justify-start">
                         <PlusCircle className="w-4 h-4 mr-2" />
                         Tambah Pesantren
                       </Button>
-                      <Button className="bg-gray-600 hover:bg-gray-700 text-white justify-start">
+                      <Button variant="secondary" size="default" className="justify-start">
                         <Users className="w-4 h-4 mr-2" />
                         Kelola Pengguna
                       </Button>
-                      <Button className="bg-gray-600 hover:bg-gray-700 text-white justify-start">
+                      <Button variant="secondary" size="default" className="justify-start">
                         <Settings className="w-4 h-4 mr-2" />
                         Pengaturan
                       </Button>
