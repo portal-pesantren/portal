@@ -16,8 +16,8 @@ export function middleware(request: NextRequest) {
   
   // Jika user sudah login dan mencoba akses halaman auth (login/register)
   if (isAuthenticated && authRoutes.includes(pathname)) {
-    // Redirect ke dashboard atau home
-    return NextResponse.redirect(new URL('/', request.url));
+    // Redirect ke dashboard
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
   
   // Jika user belum login dan mencoba akses halaman protected
