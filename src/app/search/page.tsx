@@ -10,6 +10,7 @@ import PesantrenCard from '@/components/cards/PesantrenCard';
 import SearchForm from '@/components/forms/SearchForm';
 import { Button, Card, CardContent } from '@/components/ui';
 import { SearchFilters } from '@/types';
+import { loadFilterData, type FilterOption } from '@/lib/utils';
 
 // Loading skeleton
 const SearchSkeleton = () => (
@@ -36,16 +37,20 @@ const FilterSidebar = ({
   filters: SearchFilters;
   onFiltersChange: (filters: SearchFilters) => void;
 }) => {
-  const provinces = [
-    'Jawa Barat', 'Jawa Tengah', 'Jawa Timur', 'DKI Jakarta',
-    'Banten', 'Yogyakarta', 'Sumatera Utara', 'Sumatera Barat',
-    'Sumatera Selatan', 'Lampung', 'Kalimantan Timur', 'Sulawesi Selatan'
-  ];
+  const [provinces, setProvinces] = useState<FilterOption[]>([]);
+  const [programs, setPrograms] = useState<FilterOption[]>([]);
 
-  const programs = [
-    'Tahfidz', 'Kitab Kuning', 'Modern', 'Terpadu',
-    'Salafiyah', 'Khalafiyah', 'Boarding School'
-  ];
+  useEffect(() => {
+    let mounted = true;
+    loadFilterData().then(data => {
+      if (!mounted) return;
+      setProvinces(data.locations.provinces);
+      setPrograms(data.curriculum);
+    }).catch(() => {
+      // Fallback handled in util
+    });
+    return () => { mounted = false; };
+  }, []);
 
   const facilities = [
     'Asrama', 'Masjid', 'Perpustakaan', 'Lab Komputer',
@@ -68,7 +73,7 @@ const FilterSidebar = ({
         >
           <option value="">Semua Provinsi</option>
           {provinces.map(province => (
-            <option key={province} value={province}>{province}</option>
+            <option key={province.value} value={province.label}>{province.label}</option>
           ))}
         </select>
       </div>
@@ -85,7 +90,7 @@ const FilterSidebar = ({
         >
           <option value="">Semua Program</option>
           {programs.map(program => (
-            <option key={program} value={program}>{program}</option>
+            <option key={program.value} value={program.label}>{program.label}</option>
           ))}
         </select>
       </div>

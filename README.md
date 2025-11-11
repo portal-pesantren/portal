@@ -46,7 +46,7 @@ cp .env.example .env.local
 Edit `.env.local` sesuai dengan konfigurasi backend:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXT_PUBLIC_API_VERSION=v1
 NEXT_PUBLIC_APP_NAME=Portal Pesantren
 ```
@@ -61,7 +61,7 @@ Buka [http://localhost:3000](http://localhost:3000) di browser.
 
 ### 4. Pastikan Backend Berjalan
 
-Pastikan backend FastAPI berjalan di `http://localhost:8000`.
+Pastikan backend FastAPI berjalan di `http://localhost:5000`.
 
 ## 📁 Struktur Proyek
 
@@ -132,8 +132,8 @@ npm run export
 ### Test Backend Connection
 
 ```bash
-curl http://localhost:8000/health
-curl http://localhost:8000/api/v1/pesantren?limit=3
+curl http://localhost:5000/health
+curl http://localhost:5000/api/v1/pesantren?limit=3
 ```
 
 ## 🚀 Deployment

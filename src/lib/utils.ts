@@ -2,6 +2,14 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { API_CONFIG } from './constants';
 
+// Local types for filter data
+export interface FilterOption { value: string; label: string }
+export interface FilterData {
+  locations: { provinces: FilterOption[] };
+  curriculum: FilterOption[];
+  education_status: FilterOption[];
+}
+
 /**
  * Utility function to merge Tailwind CSS classes
  * Combines clsx and tailwind-merge for optimal class handling
@@ -189,4 +197,60 @@ export function debugApiConfig(): void {
     NEWS_LIST: `${apiBase}${API_CONFIG.ENDPOINTS.NEWS.LIST}`,
     HEALTH: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.HEALTH}`,
   });
+}
+
+/**
+ * Load filter data from public JSON with simple in-memory cache
+ */
+let __filterDataCache: FilterData | null = null;
+export async function loadFilterData(): Promise<FilterData> {
+  if (__filterDataCache) return __filterDataCache;
+
+  try {
+    const res = await fetch('/data/filters.json', { cache: 'force-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    // Basic structure validation
+    const data: FilterData = {
+      locations: { provinces: Array.isArray(json?.locations?.provinces) ? json.locations.provinces : [] },
+      curriculum: Array.isArray(json?.curriculum) ? json.curriculum : [],
+      education_status: Array.isArray(json?.education_status) ? json.education_status : [],
+    };
+    __filterDataCache = data;
+    return data;
+  } catch (err) {
+    // Fallback to sensible defaults mirroring current UI
+    const fallback: FilterData = {
+      locations: {
+        provinces: [
+          { value: 'Jakarta', label: 'DKI Jakarta' },
+          { value: 'Jawa Barat', label: 'Jawa Barat' },
+          { value: 'Jawa Tengah', label: 'Jawa Tengah' },
+          { value: 'Jawa Timur', label: 'Jawa Timur' },
+          { value: 'Yogyakarta', label: 'Yogyakarta' },
+          { value: 'Sumatera Utara', label: 'Sumatera Utara' },
+          { value: 'Sumatera Selatan', label: 'Sumatera Selatan' },
+          { value: 'Lampung', label: 'Lampung' },
+          { value: 'Kalimantan Timur', label: 'Kalimantan Timur' },
+          { value: 'Sulawesi Selatan', label: 'Sulawesi Selatan' }
+        ],
+      },
+      curriculum: [
+        { value: 'Salaf', label: 'Kurikulum Salaf' },
+        { value: 'Modern', label: 'Kurikulum Modern' },
+        { value: 'Terpadu', label: 'Kurikulum Terpadu' },
+        { value: 'Nasional', label: 'Kurikulum Nasional' },
+        { value: 'Internasional', label: 'Kurikulum Internasional' },
+      ],
+      education_status: [
+        { value: 'SD', label: 'Pondok Pesantren SD' },
+        { value: 'SMP', label: 'Pondok Pesantren SMP' },
+        { value: 'SMP_SMA', label: 'Pondok Pesantren Campuran SMP-SMA' },
+        { value: 'Terpisah', label: 'Pondok Pesantren Terpisah' },
+        { value: 'Mahasiswa', label: 'Pondok Pesantren Mahasiswa' },
+      ],
+    };
+    __filterDataCache = fallback;
+    return fallback;
+  }
 }

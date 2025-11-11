@@ -76,8 +76,8 @@ export default function NewsSection({ className = '' }: NewsSectionProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {newsData.map((news, i) => (
             <a 
-              key={news.slug || news.id || i} 
-              href={`/news/${news.slug || news.id}`}
+              key={news.id || news.slug || i} 
+              href={`/news/${news.id}`}
               className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group border border-gray-100 block"
             >
               {/* Featured Image */}

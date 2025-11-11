@@ -1,0 +1,36 @@
+{
+  "locations": {
+    "provinces": [
+      { "value": "Aceh", "label": "Aceh" },
+      { "value": "Sumatera Utara", "label": "Sumatera Utara" },
+      { "value": "Sumatera Barat", "label": "Sumatera Barat" },
+      { "value": "Sumatera Selatan", "label": "Sumatera Selatan" },
+      { "value": "Lampung", "label": "Lampung" },
+      { "value": "DKI Jakarta", "label": "DKI Jakarta" },
+      { "value": "Banten", "label": "Banten" },
+      { "value": "Jawa Barat", "label": "Jawa Barat" },
+      { "value": "Jawa Tengah", "label": "Jawa Tengah" },
+      { "value": "DI Yogyakarta", "label": "Yogyakarta" },
+      { "value": "Jawa Timur", "label": "Jawa Timur" },
+      { "value": "Bali", "label": "Bali" },
+      { "value": "Kalimantan Timur", "label": "Kalimantan Timur" },
+      { "value": "Kalimantan Selatan", "label": "Kalimantan Selatan" },
+      { "value": "Sulawesi Selatan", "label": "Sulawesi Selatan" },
+      { "value": "Sulawesi Utara", "label": "Sulawesi Utara" }
+    ]
+  },
+  "curriculum": [
+    { "value": "Salaf", "label": "Kurikulum Salaf" },
+    { "value": "Modern", "label": "Kurikulum Modern" },
+    { "value": "Terpadu", "label": "Kurikulum Terpadu" },
+    { "value": "Nasional", "label": "Kurikulum Nasional" },
+    { "value": "Internasional", "label": "Kurikulum Internasional" }
+  ],
+  "education_status": [
+    { "value": "SD", "label": "Pondok Pesantren SD" },
+    { "value": "SMP", "label": "Pondok Pesantren SMP" },
+    { "value": "SMP_SMA", "label": "Pondok Pesantren Campuran SMP-SMA" },
+    { "value": "Terpisah", "label": "Pondok Pesantren Terpisah" },
+    { "value": "Mahasiswa", "label": "Pondok Pesantren Mahasiswa" }
+  ]
+}
