@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearch } from '@/hooks/useSearch';
 import { SearchFormData } from '@/types';
+import { loadFilterData, type FilterOption } from '@/lib/utils';
 
 interface FilterPortalSectionProps {
   className?: string;
@@ -15,34 +16,23 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
   const [selectedEducationStatus, setSelectedEducationStatus] = useState('Pilih status pendidikan');
   const [localSearchQuery, setLocalSearchQuery] = useState('');
 
-  const locations = [
-    'Pilih Lokasi',
-    'Jakarta',
-    'Bandung',
-    'Surabaya',
-    'Yogyakarta',
-    'Semarang',
-    'Medan',
-    'Makassar'
-  ];
+  // Dynamic options loaded from JSON
+  const [provinceOptions, setProvinceOptions] = useState<FilterOption[]>([]);
+  const [curriculumOptions, setCurriculumOptions] = useState<FilterOption[]>([]);
+  const [educationStatusOptions, setEducationStatusOptions] = useState<FilterOption[]>([]);
 
-  const curriculums = [
-    'Pilih kurikulum pondok',
-    'Kurikulum Salaf',
-    'Kurikulum Modern',
-    'Kurikulum Terpadu',
-    'Kurikulum Nasional',
-    'Kurikulum Internasional'
-  ];
-
-  const educationStatuses = [
-    'Pilih status pendidikan',
-    'Pondok Pesantren SD',
-    'Pondok Pesantren SMP',
-    'Pondok Pesantren Campuran SMP-SMA',
-    'Pondok Pesantren Terpisah',
-    'Pondok Pesantren Mahasiswa'
-  ];
+  useEffect(() => {
+    let mounted = true;
+    loadFilterData().then((data) => {
+      if (!mounted) return;
+      setProvinceOptions(data.locations.provinces);
+      setCurriculumOptions(data.curriculum);
+      setEducationStatusOptions(data.education_status);
+    }).catch(() => {
+      // Fallback handled inside loadFilterData
+    });
+    return () => { mounted = false; };
+  }, []);
 
   const router = useRouter();
   const { setSearchQuery } = useSearch();
@@ -93,9 +83,10 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
               onChange={(e) => setSelectedLocation(e.target.value)}
               className="w-full lg:w-40 px-4 py-3 bg-white border border-gray-300 rounded-full text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
             >
-              {locations.map((location, index) => (
-                <option key={index} value={location}>
-                  {location}
+              <option key="placeholder-location" value="Pilih Lokasi">Pilih Lokasi</option>
+              {provinceOptions.map((opt) => (
+                <option key={opt.value} value={opt.label}>
+                  {opt.label}
                 </option>
               ))}
             </select>
@@ -148,9 +139,10 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
               onChange={(e) => setSelectedCurriculum(e.target.value)}
               className="w-full lg:w-56 px-4 py-2.5 bg-white border border-gray-300 rounded-full text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
             >
-              {curriculums.map((curriculum, index) => (
-                <option key={index} value={curriculum}>
-                  {curriculum}
+              <option key="placeholder-curriculum" value="Pilih kurikulum pondok">Pilih kurikulum pondok</option>
+              {curriculumOptions.map((opt) => (
+                <option key={opt.value} value={opt.label}>
+                  {opt.label}
                 </option>
               ))}
             </select>
@@ -169,9 +161,10 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
               onChange={(e) => setSelectedEducationStatus(e.target.value)}
               className="w-full lg:w-64 px-4 py-2.5 bg-white border border-gray-300 rounded-full text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
             >
-              {educationStatuses.map((status, index) => (
-                <option key={index} value={status}>
-                  {status}
+              <option key="placeholder-edu" value="Pilih status pendidikan">Pilih status pendidikan</option>
+              {educationStatusOptions.map((opt) => (
+                <option key={opt.value} value={opt.label}>
+                  {opt.label}
                 </option>
               ))}
             </select>

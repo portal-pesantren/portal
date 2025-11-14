@@ -180,7 +180,7 @@ export default function BeritaTerkait({ pesantrenId }: BeritaTerkaitProps) {
           const color = getNewsColor(news.category);
           
           return (
-            <Link key={news.id} href={`/news/${news.slug || news.id}`}>
+            <Link key={news.id} href={`/news/${news.id}`}>
               <div className="bg-gray-50 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow duration-300 cursor-pointer">
                 <div className="flex items-start space-x-3 sm:space-x-4">
                   <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-${color}-100 rounded-lg flex-shrink-0 flex items-center justify-center`}>

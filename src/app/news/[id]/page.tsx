@@ -31,10 +31,10 @@ interface NewsItem {
 
 export default function NewsDetailPage() {
   const params = useParams();
-  const slug = params.id as string;
+  const id = params.id as string;
   
-  // Fetch news detail using the hook
-  const { data: news, isLoading, error, refetch } = useNewsDetail(slug);
+  // Fetch news detail using the hook (berdasarkan ID)
+  const { data: news, isLoading, error, refetch } = useNewsDetail(id);
   const { data: relatedNews } = useLatestNews(3);
   const incrementViews = useIncrementNewsViews();
 
@@ -251,7 +251,7 @@ export default function NewsDetailPage() {
                     {relatedNews?.slice(0, 5).map((article) => (
                       <Link 
                         key={article.id} 
-                        href={`/news/${article.slug || article.id}`}
+                        href={`/news/${article.id}`}
                         className="block group"
                       >
                         <article className="flex gap-3 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
@@ -312,7 +312,7 @@ export default function NewsDetailPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedNews && relatedNews.map((item) => (
-                <Link key={item.id} href={`/news/${item.slug || item.id}`} className="group">
+                <Link key={item.id} href={`/news/${item.id}`} className="group">
                   <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div className="relative h-48">
                       <img

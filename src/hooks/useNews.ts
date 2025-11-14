@@ -310,27 +310,21 @@ export function useNews(filters: NewsFilters = {}) {
   });
 }
 
-export function useNewsDetail(slugOrId: string) {
+export function useNewsDetail(id: string) {
   return useQuery({
-    queryKey: NEWS_KEYS.slug(slugOrId),
+    queryKey: NEWS_KEYS.detail(id),
     queryFn: async () => {
       try {
-        const response = await newsService.getNewsBySlug(slugOrId);
-        return transformNewsToNewsItem(response);
-      } catch (error) {
-        console.warn('API tidak tersedia, menggunakan data mock untuk news detail');
-        // Try to find by slug first, then by ID
-        let mockItem = mockNewsData.find(item => item.slug === slugOrId);
-        if (!mockItem) {
-          mockItem = mockNewsData.find(item => item.id === slugOrId);
-        }
-        if (!mockItem) {
-          throw new Error('News not found');
-        }
-        return mockItem;
+        const byId = await newsService.getNewsById(id);
+        return transformNewsToNewsItem(byId);
+      } catch (e) {
+        // Fallback: jika ID tidak ditemukan di API, coba cari di mock
+        const mockItem = mockNewsData.find((item) => item.id === id);
+        if (mockItem) return mockItem;
+        throw e;
       }
     },
-    enabled: !!slugOrId,
+    enabled: !!id,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: false,
     refetchOnWindowFocus: false,
