@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSubmitConsultation, useConsultationTypes, useAvailableConsultationSlots } from '@/hooks/useConsultation';
 import { usePesantren } from '@/hooks/usePesantren';
 import { useAuth } from '@/hooks/useAuth';
@@ -289,7 +288,6 @@ const ConsultationForm = ({ onSubmit, isLoading }: {
 };
 
 export default function ConsultationPage() {
-  const router = useRouter();
   const { user } = useAuth();
   
   const submitConsultationMutation = useSubmitConsultation();
@@ -297,7 +295,9 @@ export default function ConsultationPage() {
   const handleSubmit = async (formData: ConsultationData) => {
     try {
       await submitConsultationMutation.mutateAsync(formData);
-      router.push('/dashboard?tab=consultations');
+      if (typeof window !== 'undefined') {
+        window.location.href = '/dashboard?tab=consultations';
+      }
     } catch (error) {
       console.error('Error submitting consultation:', error);
     }
@@ -311,7 +311,7 @@ export default function ConsultationPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Login Diperlukan</h1>
             <p className="text-gray-600 mb-4">Anda harus login untuk mengajukan konsultasi.</p>
-            <Button onClick={() => router.push('/login')}>Login</Button>
+            <Button onClick={() => { if (typeof window !== 'undefined') { window.location.href = '/login'; } }}>Login</Button>
           </div>
         </div>
         <Footer />

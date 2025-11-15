@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Button } from '@/components/ui';
 
 interface SidebarSectionProps {
@@ -144,11 +143,10 @@ const MobileNewsSidebar = ({ pesantrenId }: { pesantrenId: string }) => {
         <div className="space-y-3 sm:space-y-4">
           <div className="flex space-x-2 sm:space-x-3">
             <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-lg flex-shrink-0 relative overflow-hidden">
-              <Image
+              <img
                 src={`/pesantren-${((parseInt(pesantrenId as string) - 1) % 3) + 1}.svg`}
                 alt="Kegiatan Tahfidz"
-                fill
-                className="object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
             <div className="flex-1 min-w-0">
@@ -159,11 +157,10 @@ const MobileNewsSidebar = ({ pesantrenId }: { pesantrenId: string }) => {
           </div>
           <div className="flex space-x-2 sm:space-x-3">
             <div className="w-14 h-14 sm:w-16 sm:h-16 bg-green-100 rounded-lg flex-shrink-0 relative overflow-hidden">
-              <Image
+              <img
                 src={`/pesantren-${((parseInt(pesantrenId as string) - 1) % 3) + 1}.svg`}
                 alt="Wisuda Santri"
-                fill
-                className="object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
             <div className="flex-1">

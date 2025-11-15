@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 interface NewsItem {
   id: string;
@@ -36,7 +36,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
       'bg-white rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 group',
       className
     )}>
-      <Link href={`/news/${news.id}`} className="block">
+      <Link to={`/news/${news.id}`} className="block">
         {/* Image */}
         <div className="relative h-48 bg-gray-200 rounded-lg overflow-hidden mb-4">
           <img

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardFooter, Button } from '@/components/ui';
 import { Pesantren } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
@@ -60,7 +59,6 @@ export default function PesantrenCard({
 }: PesantrenCardProps) {
   const { isAuthenticated } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const router = useRouter();
 
   const handleViewDetail = () => {
     if (!isAuthenticated) {
@@ -69,7 +67,9 @@ export default function PesantrenCard({
     }
 
     // Navigate to detail page without pesantren ID
-    router.push('/pesantren/detail');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/pesantren/detail';
+    }
   };
 
   if (variant === 'compact') {

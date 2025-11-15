@@ -1,13 +1,12 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { usePesantrenDetail } from '@/hooks/usePesantren';
 import { useReviewsByPesantren } from '@/hooks/useReviews';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button, Card, CardContent } from '@/components/ui';
-import Image from 'next/image';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import {
   DropdownSection,
@@ -51,7 +50,6 @@ const DetailSkeleton = () => (
 
 export default function PesantrenDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const pesantrenId = params?.id as string;
   
   const [activeSection, setActiveSection] = useState('tentang-pondok');
@@ -91,13 +89,13 @@ export default function PesantrenDetailPage() {
           </p>
           <div className="space-y-3">
             <button
-              onClick={() => router.back()}
+              onClick={() => window.history.back()}
               className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Kembali
             </button>
             <button
-              onClick={() => router.push('/')}
+              onClick={() => { if (typeof window !== 'undefined') { window.location.href = '/'; } }}
               className="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
             >
               Ke Beranda
@@ -185,7 +183,7 @@ export default function PesantrenDetailPage() {
   };
 
   const handleRegistration = () => {
-    router.push('/apply');
+    if (typeof window !== 'undefined') { window.location.href = `/apply/${pesantrenId}`; }
   };
 
   const handleWebsiteVisit = () => {
@@ -213,7 +211,7 @@ export default function PesantrenDetailPage() {
         <div className="container mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Pesantren Tidak Ditemukan</h1>
           <p className="text-gray-600 mb-6">Maaf, pesantren yang Anda cari tidak dapat ditemukan.</p>
-          <Button onClick={() => router.push('/')} className="bg-[#042558] hover:bg-[#031a3d]">
+          <Button onClick={() => { if (typeof window !== 'undefined') { window.location.href = '/'; } }} className="bg-[#042558] hover:bg-[#031a3d]">
             Kembali ke Beranda
           </Button>
         </div>
@@ -246,12 +244,10 @@ export default function PesantrenDetailPage() {
         <div className="lg:col-span-2 order-1 lg:order-2 bg-white rounded-lg shadow-md overflow-hidden">
           {/* Header Image */}
           <div className="relative w-full h-48 sm:h-64 lg:h-80 bg-gray-100">
-            <Image
-              src={displayPesantren.image || `/pesantren-${((parseInt(pesantrenId as string) - 1) % 3) + 1}.svg`}
+            <img
+              src={displayPesantren.image || `/pesantren-${(isNaN(parseInt(pesantrenId as string)) ? 1 : ((parseInt(pesantrenId as string) - 1) % 3) + 1)}.svg`}
               alt={`Foto ${displayPesantren.name}`}
-              fill
-              className="object-cover"
-              priority
+              className="absolute inset-0 w-full h-full object-cover"
             />
             {/* Interaction Icons */}
             <div className="absolute top-4 right-4 flex gap-2">
@@ -387,11 +383,10 @@ export default function PesantrenDetailPage() {
             {/* Featured News Item */}
             <div className="px-4 pb-4">
               <div className="relative w-full h-48 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl mb-4 overflow-hidden">
-                <Image
+                <img
                   src="/news-1.jpg"
                   alt="Anies Baswedan di Pabejan"
-                  fill
-                  className="object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = '/pesantren-1.svg';

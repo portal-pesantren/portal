@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { Button } from '@/components/ui';
 
 interface GaleriPondokProps {
@@ -158,12 +157,10 @@ export default function GaleriPondok({ pesantrenId }: GaleriPondokProps) {
         <div className="flex-1 lg:w-2/3">
           <div className="relative group">
             <div className="relative w-full h-64 sm:h-80 lg:h-96 bg-gray-200 rounded-lg overflow-hidden">
-              <Image
+              <img
                 src={galleryImages[currentImageIndex].src}
                 alt={galleryImages[currentImageIndex].alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 66vw"
+                className="absolute inset-0 w-full h-full object-cover"
               />
               
               
@@ -191,12 +188,10 @@ export default function GaleriPondok({ pesantrenId }: GaleriPondokProps) {
                 }`}
                 onClick={() => selectImage(index)}
               >
-                <Image
+                <img
                   src={image.src}
                   alt={image.alt}
-                  fill
-                  className="object-cover transition-transform duration-300 hover:scale-110"
-                  sizes="(max-width: 1024px) 25vw, 16vw"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-300" />
               </div>
@@ -235,12 +230,10 @@ export default function GaleriPondok({ pesantrenId }: GaleriPondokProps) {
 
             {/* Image */}
             <div className="relative w-full h-96 sm:h-[500px] lg:h-[600px]">
-              <Image
+              <img
                 src={selectedImage.src}
                 alt={selectedImage.alt}
-                fill
-                className="object-contain"
-                sizes="(max-width: 1024px) 100vw, 80vw"
+                className="absolute inset-0 w-full h-full object-contain"
               />
             </div>
 

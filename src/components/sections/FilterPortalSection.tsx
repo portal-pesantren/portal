@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSearch } from '@/hooks/useSearch';
 import { SearchFormData } from '@/types';
 import { loadFilterData, type FilterOption } from '@/lib/utils';
@@ -34,7 +33,6 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
     return () => { mounted = false; };
   }, []);
 
-  const router = useRouter();
   const { setSearchQuery } = useSearch();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -44,12 +42,14 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
       
       const params = new URLSearchParams();
       params.set('q', localSearchQuery);
-      
-      if (selectedLocation !== 'Pilih Lokasi') {
-        params.set('province', selectedLocation);
-      }
-      
-      router.push(`/search?${params.toString()}`);
+    
+    if (selectedLocation !== 'Pilih Lokasi') {
+      params.set('province', selectedLocation);
+    }
+    
+    if (typeof window !== 'undefined') {
+      window.location.href = `/search?${params.toString()}`;
+    }
     }
   };
 
@@ -68,7 +68,9 @@ export default function FilterPortalSection({ className = '' }: FilterPortalSect
       params.set('program', selectedCurriculum);
     }
     
-    router.push(`/search?${params.toString()}`);
+    if (typeof window !== 'undefined') {
+      window.location.href = `/search?${params.toString()}`;
+    }
   };
 
   return (

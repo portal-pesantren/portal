@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { usePesantrenDetail } from '@/hooks/usePesantren';
 import { useSubmitApplication, useCanUserApply, useCanUserApplyByCode } from '@/hooks/useApplication';
@@ -211,9 +211,8 @@ const ApplicationForm = ({ pesantrenId, pesantrenCode, onSubmit, isLoading }: {
 
 export default function ApplicationPage() {
   const params = useParams();
-  const router = useRouter();
   const { user } = useAuth();
-  const applicationId = params.id as string;
+  const applicationId = (params as any).id as string;
   
   // Try to get pesantren detail using the ID (could be UUID v7 or legacy ID)
   const { data: pesantren, isLoading: pesantrenLoading, error: pesantrenError } = usePesantrenDetail(applicationId);
@@ -229,7 +228,9 @@ export default function ApplicationPage() {
   const handleSubmit = async (formData: ApplicationData) => {
     try {
       await submitApplicationMutation.mutateAsync(formData);
-      router.push('/dashboard?tab=applications');
+      if (typeof window !== 'undefined') {
+        window.location.href = '/dashboard?tab=applications';
+      }
     } catch (error) {
       console.error('Error submitting application:', error);
     }
@@ -243,7 +244,7 @@ export default function ApplicationPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Login Diperlukan</h1>
             <p className="text-gray-600 mb-4">Anda harus login untuk mengajukan aplikasi.</p>
-            <Button onClick={() => router.push('/login')}>Login</Button>
+            <Button onClick={() => { if (typeof window !== 'undefined') { window.location.href = '/login'; } }}>Login</Button>
           </div>
         </div>
         <Footer />
@@ -274,7 +275,7 @@ export default function ApplicationPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Pesantren Tidak Ditemukan</h1>
             <p className="text-gray-600 mb-4">Pesantren yang Anda cari tidak ditemukan.</p>
-            <Button onClick={() => router.push('/search')}>Cari Pesantren Lain</Button>
+            <Button onClick={() => { if (typeof window !== 'undefined') { window.location.href = '/search'; } }}>Cari Pesantren Lain</Button>
           </div>
         </div>
         <Footer />
@@ -290,7 +291,7 @@ export default function ApplicationPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Tidak Dapat Mengajukan Aplikasi</h1>
             <p className="text-gray-600 mb-4">Anda sudah memiliki aplikasi aktif untuk pesantren ini atau tidak memenuhi syarat.</p>
-            <Button onClick={() => router.push(`/pesantren/${applicationId}`)}>Kembali ke Detail Pesantren</Button>
+            <Button onClick={() => { if (typeof window !== 'undefined') { window.location.href = `/pesantren/${applicationId}`; } }}>Kembali ke Detail Pesantren</Button>
           </div>
         </div>
         <Footer />

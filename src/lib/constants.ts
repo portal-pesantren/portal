@@ -1,9 +1,12 @@
 import { NavigationItem, Feature, ContactInfo } from '@/types';
 
 // API Configuration
+const viteEnv: any = typeof import.meta !== 'undefined' ? (import.meta as any).env : undefined
+const nextEnv: any = typeof process !== 'undefined' && (process as any).env ? (process as any).env : {}
+
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000',
-  VERSION: process.env.NEXT_PUBLIC_API_VERSION || 'v1',
+  BASE_URL: viteEnv?.VITE_API_URL || viteEnv?.VITE_API_BASE_URL || nextEnv?.NEXT_PUBLIC_API_URL || nextEnv?.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8005',
+  VERSION: viteEnv?.VITE_API_VERSION || nextEnv?.NEXT_PUBLIC_API_VERSION || 'v1',
   TIMEOUT: 10000, // 10 seconds
   ENDPOINTS: {
     // Health & Info

@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
+import { useParams, Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsCard from '@/components/cards/NewsCard';
@@ -31,7 +30,7 @@ interface NewsItem {
 
 export default function NewsDetailPage() {
   const params = useParams();
-  const id = params.id as string;
+  const id = (params as any).id as string;
   
   // Fetch news detail using the hook (berdasarkan ID)
   const { data: news, isLoading, error, refetch } = useNewsDetail(id);
@@ -128,7 +127,7 @@ export default function NewsDetailPage() {
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Berita tidak ditemukan</h1>
-            <Link href="/news">
+            <Link to="/news">
               <Button variant="primary">Kembali ke Berita</Button>
             </Link>
           </div>
@@ -161,7 +160,7 @@ export default function NewsDetailPage() {
           <div className="max-w-4xl">
             {/* Breadcrumb */}
             <nav className="mb-4">
-              <Link href="/news" className="inline-flex items-center text-white/80 hover:text-white text-sm">
+              <Link to="/news" className="inline-flex items-center text-white/80 hover:text-white text-sm">
                 <ArrowLeftIcon className="h-4 w-4 mr-2" />
                 Kembali ke Berita
               </Link>
@@ -251,7 +250,7 @@ export default function NewsDetailPage() {
                     {relatedNews?.slice(0, 5).map((article) => (
                       <Link 
                         key={article.id} 
-                        href={`/news/${article.id}`}
+                        to={`/news/${article.id}`}
                         className="block group"
                       >
                         <article className="flex gap-3 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
@@ -312,7 +311,7 @@ export default function NewsDetailPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedNews && relatedNews.map((item) => (
-                <Link key={item.id} href={`/news/${item.id}`} className="group">
+                <Link key={item.id} to={`/news/${item.id}`} className="group">
                   <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div className="relative h-48">
                       <img

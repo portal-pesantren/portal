@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useRegister } from '@/hooks/useAuth';
 import { RegisterData } from '@/types';
 
@@ -13,7 +12,6 @@ interface FormErrors {
 }
 
 const RegisterForm: React.FC = () => {
-  const router = useRouter();
   const registerMutation = useRegister();
   
   const [formData, setFormData] = useState<RegisterData>({
@@ -90,8 +88,9 @@ const RegisterForm: React.FC = () => {
       await registerMutation.mutateAsync(submitData);
       
       // Registrasi berhasil - redirect ke halaman verifikasi email
-      console.log('Registrasi berhasil');
-      router.push('/verify-email');
+      if (typeof window !== 'undefined') {
+        window.location.href = '/verify-email';
+      }
       
     } catch (error: any) {
       console.error('Registrasi gagal:', error);

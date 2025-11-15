@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import Image from 'next/image';
 import { 
   Star, 
   MapPin, 
@@ -331,11 +330,9 @@ export default function PesantrenDetailPage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Galeri Pondok Pesantren</h2>
                 <div className="relative">
                   <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
-                    <Image
+                    <img
                       src={dummyPesantren.gallery[currentImageIndex].image}
                       alt={dummyPesantren.gallery[currentImageIndex].title}
-                      width={600}
-                      height={400}
                       className="w-full h-full object-cover"
                     />
                   </div>

@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useAuthStatus, useLogout } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
 import { User, LogOut, Settings, Bell, Edit3, Bookmark, Heart, MessageCircle } from 'lucide-react';
 
 interface HeaderProps {
@@ -11,7 +10,7 @@ interface HeaderProps {
 }
 
 export default function Header({ className = '' }: HeaderProps) {
-  const pathname = usePathname();
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState('explore');
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -82,7 +81,7 @@ export default function Header({ className = '' }: HeaderProps) {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <img 
               src="/logo-biru.png" 
               alt="Portal Pesantren Logo" 
@@ -93,7 +92,7 @@ export default function Header({ className = '' }: HeaderProps) {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link 
-              href="/" 
+              to="/" 
               onClick={() => handleMenuClick('explore')}
               className={`hover:text-[#031a3d] transition-colors font-medium pb-1 ${
                 activeMenu === 'explore' 
@@ -104,7 +103,7 @@ export default function Header({ className = '' }: HeaderProps) {
               Explore
             </Link>
             <Link 
-              href="/news" 
+              to="/news" 
               onClick={() => handleMenuClick('berita')}
               className={`hover:text-[#031a3d] transition-colors font-medium pb-1 ${
                 activeMenu === 'berita' 
@@ -115,7 +114,7 @@ export default function Header({ className = '' }: HeaderProps) {
               Berita
             </Link>
             <Link 
-              href="/about" 
+              to="/about" 
               onClick={() => handleMenuClick('tentang-kami')}
               className={`hover:text-[#031a3d] transition-colors font-medium pb-1 ${
                 activeMenu === 'tentang-kami' 
@@ -218,7 +217,7 @@ export default function Header({ className = '' }: HeaderProps) {
                     {/* Menu Items */}
                     <div className="border-t border-gray-200 pt-2">
                       <Link
-                        href="/profile"
+                        to="/profile"
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
@@ -226,7 +225,7 @@ export default function Header({ className = '' }: HeaderProps) {
                         <span>Tentang Akun</span>
                       </Link>
                       <Link
-                        href="/switch-account"
+                        to="/switch-account"
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
@@ -245,7 +244,7 @@ export default function Header({ className = '' }: HeaderProps) {
                     {/* Separator */}
                     <div className="border-t border-gray-200 mt-2 pt-2">
                       <Link
-                        href="/bookmarks"
+                        to="/bookmarks"
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
@@ -253,7 +252,7 @@ export default function Header({ className = '' }: HeaderProps) {
                         <span>Disimpan</span>
                       </Link>
                       <Link
-                        href="/liked"
+                        to="/liked"
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
@@ -261,7 +260,7 @@ export default function Header({ className = '' }: HeaderProps) {
                         <span>Disukai</span>
                       </Link>
                       <Link
-                        href="/comments"
+                        to="/comments"
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
@@ -273,7 +272,7 @@ export default function Header({ className = '' }: HeaderProps) {
                     {/* Separator */}
                     <div className="border-t border-gray-200 mt-2 pt-2">
                       <Link
-                        href="/settings"
+                        to="/settings"
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
@@ -287,10 +286,10 @@ export default function Header({ className = '' }: HeaderProps) {
               </>
             ) : (
               <>
-                <Link href="/register" className="bg-[#042558] hover:bg-[#031a3d] text-white px-6 py-2 rounded-full transition-colors font-medium inline-block">
+                <Link to="/register" className="bg-[#042558] hover:bg-[#031a3d] text-white px-6 py-2 rounded-full transition-colors font-medium inline-block">
                   Daftar
                 </Link>
-                <Link href="/login" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-full transition-colors font-medium inline-block">
+                <Link to="/login" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-full transition-colors font-medium inline-block">
                   Masuk
                 </Link>
               </>
@@ -320,7 +319,7 @@ export default function Header({ className = '' }: HeaderProps) {
           <div className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-4">
               <Link 
-                href="/" 
+                to="/" 
                 onClick={() => handleMenuClick('explore')}
                 className={`transition-colors px-2 py-1 font-medium ${
                   activeMenu === 'explore' 
@@ -331,7 +330,7 @@ export default function Header({ className = '' }: HeaderProps) {
                 Explore
               </Link>
               <Link 
-                href="/news" 
+                to="/news" 
                 onClick={() => handleMenuClick('berita')}
                 className={`transition-colors px-2 py-1 font-medium ${
                   activeMenu === 'berita' 
@@ -342,7 +341,7 @@ export default function Header({ className = '' }: HeaderProps) {
                 Berita
               </Link>
               <Link 
-                href="/about" 
+                to="/about" 
                 onClick={() => handleMenuClick('tentang-kami')}
                 className={`transition-colors px-2 py-1 font-medium ${
                   activeMenu === 'tentang-kami' 
@@ -372,11 +371,11 @@ export default function Header({ className = '' }: HeaderProps) {
                         </span>
                       )}
                     </button>
-                    <Link href="/dashboard" className="bg-[#042558] hover:bg-[#031a3d] text-white px-4 py-2 rounded-full transition-colors font-medium text-center flex items-center justify-center space-x-2">
+                    <Link to="/dashboard" className="bg-[#042558] hover:bg-[#031a3d] text-white px-4 py-2 rounded-full transition-colors font-medium text-center flex items-center justify-center space-x-2">
                       <User className="w-4 h-4" />
                       <span>Dashboard</span>
                     </Link>
-                    <Link href="/profile" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-full transition-colors font-medium text-center flex items-center justify-center space-x-2">
+                    <Link to="/profile" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-full transition-colors font-medium text-center flex items-center justify-center space-x-2">
                       <Settings className="w-4 h-4" />
                       <span>Pengaturan</span>
                     </Link>
@@ -390,10 +389,10 @@ export default function Header({ className = '' }: HeaderProps) {
                   </>
                 ) : (
                   <>
-                    <Link href="/register" className="bg-[#042558] hover:bg-[#031a3d] text-white px-4 py-2 rounded-full transition-colors font-medium text-center">
+                    <Link to="/register" className="bg-[#042558] hover:bg-[#031a3d] text-white px-4 py-2 rounded-full transition-colors font-medium text-center">
                       Daftar
                     </Link>
-                    <Link href="/login" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-full transition-colors font-medium text-center">
+                    <Link to="/login" className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-full transition-colors font-medium text-center">
                       Masuk
                     </Link>
                   </>

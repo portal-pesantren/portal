@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams } from 'react-router-dom';
 import { useApplicationDetail, useApplicationDetailByCode } from '@/hooks/useApplication';
 import { usePesantrenDetail } from '@/hooks/usePesantren';
 import { useAuth } from '@/hooks/useAuth';
@@ -80,7 +80,7 @@ const StatusBadge = ({ status }: { status: Application['status'] }) => {
 export default function ApplicationStatusPage() {
   const params = useParams();
   const { user } = useAuth();
-  const applicationId = params.id as string;
+  const applicationId = (params as any).id as string;
 
   // Try to get application by UUID v7 first, then fallback to legacy ID
   const { data: applicationByCode, isLoading: loadingByCode, error: errorByCode } = useApplicationDetailByCode(

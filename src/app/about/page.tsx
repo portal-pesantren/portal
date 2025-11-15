@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAboutUs } from '@/hooks/useAbout';
@@ -67,12 +66,10 @@ export default function AboutPage() {
               <div className="order-2 lg:order-1">
                 <div className="relative">
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
-                    <Image
+                    <img
                       src={aboutData?.image_url || "/placeholder-pesantren.jpg"}
                       alt="Balai Pendidikan Pondok Pesantren"
-                      fill
-                      className="object-cover"
-                      priority
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   </div>
                 </div>

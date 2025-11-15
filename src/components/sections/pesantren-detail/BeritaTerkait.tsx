@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui';
 import { useNewsByPesantren, type NewsItem } from '@/hooks/useNews';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 interface BeritaTerkaitProps {
   pesantrenId: string;
@@ -168,7 +168,7 @@ export default function BeritaTerkait({ pesantrenId }: BeritaTerkaitProps) {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 space-y-2 sm:space-y-0">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Berita & Kegiatan</h2>
         <Link 
-          href={`/news?pesantren=${pesantrenId}`}
+          to={`/news?pesantren=${pesantrenId}`}
           className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base lg:text-lg self-start sm:self-auto"
         >
           Lihat Semua
@@ -180,7 +180,7 @@ export default function BeritaTerkait({ pesantrenId }: BeritaTerkaitProps) {
           const color = getNewsColor(news.category);
           
           return (
-            <Link key={news.id} href={`/news/${news.id}`}>
+            <Link key={news.id} to={`/news/${news.id}`}>
               <div className="bg-gray-50 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow duration-300 cursor-pointer">
                 <div className="flex items-start space-x-3 sm:space-x-4">
                   <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-${color}-100 rounded-lg flex-shrink-0 flex items-center justify-center`}>
@@ -209,7 +209,7 @@ export default function BeritaTerkait({ pesantrenId }: BeritaTerkaitProps) {
         })}
       </div>
       <div className="mt-4 sm:mt-6 text-center">
-        <Link href={`/news?pesantren=${pesantrenId}`}>
+        <Link to={`/news?pesantren=${pesantrenId}`}>
           <Button variant="outline" className="w-full sm:w-auto text-sm sm:text-base lg:text-lg">
             Lihat Semua Berita & Kegiatan
           </Button>

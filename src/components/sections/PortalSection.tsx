@@ -5,10 +5,8 @@ import { Heart, Bookmark, Star } from 'lucide-react';
 import { usePesantren } from '@/hooks/usePesantren';
 import { Pesantren } from '@/types';
 import { Button } from '@/components/ui';
-import { useRouter } from 'next/navigation';
 
 const PortalSection = () => {
-  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('Terekomendasi');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [bookmarks, setBookmarks] = useState<string[]>([]);

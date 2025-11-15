@@ -7,7 +7,10 @@
     "build": "next build",
     "export": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "react:dev": "vite",
+    "react:build": "vite build",
+    "react:preview": "vite preview"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -20,6 +23,7 @@
     "next": "15.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-router-dom": "^7.0.2",
     "tailwind-merge": "^3.3.1",
     "uuid": "^11.1.0"
   },
@@ -33,6 +37,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^5.4.9",
+    "@vitejs/plugin-react": "^4.3.4"
   }
 }

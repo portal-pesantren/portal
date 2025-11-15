@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui';
 
 interface AuthModalProps {
@@ -10,17 +9,20 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const router = useRouter();
 
   if (!isOpen) return null;
 
   const handleLogin = () => {
-    router.push('/login');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
     onClose();
   };
 
   const handleRegister = () => {
-    router.push('/register');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/register';
+    }
     onClose();
   };
 

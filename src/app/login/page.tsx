@@ -1,21 +1,19 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { LoginForm } from '@/components/forms';
 import { Header, Footer } from '@/components';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
-  const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
     // Jika user sudah login, redirect ke home
-    if (!isLoading && isAuthenticated) {
-      router.replace('/');
+    if (!isLoading && isAuthenticated && typeof window !== 'undefined') {
+      window.location.replace('/');
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading]);
 
   // Tampilkan loading saat mengecek status autentikasi
   if (isLoading) {

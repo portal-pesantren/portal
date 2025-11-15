@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsCard from '@/components/cards/NewsCard';
@@ -105,7 +105,7 @@ export default function NewsPage() {
           ) : (
             <div className="grid lg:grid-cols-2 gap-8 mb-16">
               {featuredItems.map((news: NewsItem, index: number) => (
-                  <Link key={news.id} href={`/news/${news.id}`} className="group">
+                  <Link key={news.id} to={`/news/${news.id}`} className="group">
                     <article className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
                       <div className="relative h-72 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                         <img
@@ -188,7 +188,7 @@ export default function NewsPage() {
               </div>
               <div className="space-y-6">
                 {popularItems.map((news: NewsItem, index: number) => (
-                  <Link key={news.id} href={`/news/${news.id}`} className="group">
+                  <Link key={news.id} to={`/news/${news.id}`} className="group">
                     <article className="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors">
                       <div className="relative w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                         <img
@@ -239,7 +239,7 @@ export default function NewsPage() {
               </div>
               <div className="space-y-6">
                 {pesantrenItems.map((news: NewsItem, index: number) => (
-                  <Link key={news.id} href={`/news/${news.id}`} className="group">
+                  <Link key={news.id} to={`/news/${news.id}`} className="group">
                     <article className="bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow">
                       <div className="flex items-start gap-4">
                         <div className="relative w-20 h-20 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">

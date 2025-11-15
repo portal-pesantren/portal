@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { FC } from 'react';
 
 interface FeaturedNewsCardProps {
@@ -21,11 +20,10 @@ const FeaturedNewsCard: FC<FeaturedNewsCardProps> = ({
   return (
     <div className={`px-4 pb-4 ${className}`}>
       <div className="relative w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl mb-4 overflow-hidden">
-        <Image
+        <img
           src={imageUrl}
           alt={imageAlt}
-          fill
-          className="object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = '/pesantren-1.svg';

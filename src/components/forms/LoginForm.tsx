@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
 import { useLogin } from '@/hooks/useAuth';
 import type { LoginCredentials } from '@/types';
@@ -13,7 +11,6 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSuccess, redirectTo = '/' }: LoginFormProps) {
-  const router = useRouter();
   const loginMutation = useLogin();
   
   const [formData, setFormData] = useState<LoginCredentials>({
@@ -73,7 +70,9 @@ export default function LoginForm({ onSuccess, redirectTo = '/' }: LoginFormProp
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push(redirectTo);
+        if (typeof window !== 'undefined') {
+          window.location.href = redirectTo;
+        }
       }
     } catch (error: any) {
       // Handle different types of errors
@@ -238,12 +237,12 @@ export default function LoginForm({ onSuccess, redirectTo = '/' }: LoginFormProp
                 Ingatkan saya
               </label>
             </div>
-            <Link
+            <a
               href="/forgot-password"
               className="text-sm text-orange-500 hover:text-orange-600 font-medium"
             >
               Lupa Password?
-            </Link>
+            </a>
           </div>
 
           {/* Submit Button */}
@@ -283,12 +282,12 @@ export default function LoginForm({ onSuccess, redirectTo = '/' }: LoginFormProp
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 belum punya akun?{' '}
-                <Link
+                <a
                   href="/register"
                   className="text-blue-900 hover:text-blue-800 font-medium"
                 >
                   Daftar sekarang
-                </Link>
+                </a>
               </p>
             </div>
           </form>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { usePesantren } from '@/hooks/usePesantren';
 import { useSearch } from '@/hooks/useSearch';
 import Header from '@/components/layout/Header';
@@ -240,8 +240,8 @@ const Pagination = ({
 };
 
 function SearchPageContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { searchQuery, setSearchQuery } = useSearch();
   
   const [currentPage, setCurrentPage] = useState(1);
@@ -285,7 +285,7 @@ function SearchPageContent() {
     if (newFilters.programs?.[0]) params.set('program', newFilters.programs[0]);
     if (newPage > 1) params.set('page', newPage.toString());
     
-    router.push(`/search?${params.toString()}`);
+    navigate(`/search?${params.toString()}`);
   };
 
   const handleFiltersChange = (newFilters: SearchFilters) => {
@@ -393,7 +393,7 @@ function SearchPageContent() {
                       onViewDetail={(pesantren) => {
                         const pesantrenId = pesantren.code || pesantren.id;
                         const pesantrenIdStr = typeof pesantrenId === 'string' ? pesantrenId : String(pesantrenId);
-                        router.push(`/pesantren/${pesantrenIdStr}`);
+                        navigate(`/pesantren/${pesantrenIdStr}`);
                       }}
                     />
                   ))}
@@ -424,7 +424,7 @@ function SearchPageContent() {
                       setSearchQuery('');
                       setFilters({});
                       setCurrentPage(1);
-                      router.push('/search');
+                      navigate('/search');
                     }}
                   >
                     Reset Pencarian

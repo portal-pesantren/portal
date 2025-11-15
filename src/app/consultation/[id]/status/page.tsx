@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams } from 'react-router-dom';
 import { useConsultationDetail, useConsultationDetailByCode } from '@/hooks/useConsultation';
 import { useAuth } from '@/hooks/useAuth';
 import Header from '@/components/layout/Header';
@@ -130,7 +130,7 @@ const TimelineStep = ({
 export default function ConsultationStatusPage() {
   const params = useParams();
   const { user } = useAuth();
-  const consultationId = params.id as string;
+  const consultationId = (params as any).id as string;
 
   // Try to get consultation by UUID v7 first, then fallback to legacy ID
   const { data: consultationByCode, isLoading: loadingByCode, error: errorByCode } = useConsultationDetailByCode(

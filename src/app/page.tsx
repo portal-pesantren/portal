@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuthStatus } from '@/hooks/useAuth';
 import {
   Header,
@@ -16,15 +15,14 @@ import {
 } from '@/components';
 
 export default function Home() {
-  const router = useRouter();
   const { isAuthenticated, isLoading } = useAuthStatus();
 
   useEffect(() => {
     // If user is authenticated, redirect to dashboard
-    if (isAuthenticated) {
-      router.push('/dashboard');
+    if (isAuthenticated && typeof window !== 'undefined') {
+      window.location.href = '/dashboard';
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated]);
 
   // Show loading while checking authentication
   if (isLoading) {

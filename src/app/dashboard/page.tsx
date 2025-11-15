@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserApplications, useUserApplicationsByCode } from '@/hooks/useApplication';
 import { useUserConsultations, useUserConsultationsByCode } from '@/hooks/useConsultation';
@@ -206,7 +206,7 @@ const ConsultationCard = ({ consultation }: { consultation: Consultation }) => {
 
 function DashboardPageContent() {
   const { user } = useAuth();
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('applications');
 
   // Get applications using both ID types for compatibility
